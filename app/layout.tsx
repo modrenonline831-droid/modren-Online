@@ -8,10 +8,61 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Modren Online",
+  title: {
+    default: "Modren Online | أثاث مودرن راقي من دمياط",
+    template: "%s | Modren Online",
+  },
   description:
-    "Discover beautifully handcrafted custom furniture that transforms your space with timeless design and exceptional craftsmanship.",
-  generator: "v0.app",
+    "مودرن أونلاين – مصنع أثاث مودرن من دمياط يقدم انتريهات، كنب، كراسي، غرف نوم وسفرة بتصميمات راقية وخامات عالية الجودة. تصنيع محلي، تشطيب فاخر، وأسعار مناسبة.",
+  keywords: [
+    // أساسية
+    "أثاث",
+    "أثاث مودرن",
+    "أثاث منزلي",
+    "أثاث راقي",
+    "مصانع أثاث",
+
+    // دمياط
+    "أثاث دمياط",
+    "مصانع دمياط",
+    "أثاث دمياط مودرن",
+    "ورش أثاث دمياط",
+
+    // منتجات
+    "انتريه",
+    "انتريهات مودرن",
+    "كنب",
+    "كنب مودرن",
+    "كراسي",
+    "كراسي مودرن",
+    "أثاث مغلف",
+    "غرف نوم",
+    "غرف سفرة",
+    "صالونات",
+    "ركنات",
+
+    // خامات وتشطيب
+    "خشب زان",
+    "خشب طبيعي",
+    "تشطيب راقي",
+    "تفصيل أثاث",
+    "تصميم أثاث",
+
+    // تجاري
+    "شراء أثاث",
+    "سعر انتريه",
+    "أفضل مصنع أثاث",
+    "أثاث مودرن في مصر",
+
+    // براند
+    "Modren Online",
+    "مودرن أونلاين",
+  ],
+  applicationName: "Modren Online",
+  authors: [{ name: "Modren Online Furniture" }],
+  creator: "Modren Online",
+  publisher: "Modren Online",
+  generator: "Next.js",
   icons: {
     icon: [
       {
@@ -37,8 +88,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
+    <html lang="ar" dir="rtl">
+      <body className="font-sans antialiased">
         {children}
         <Analytics />
       </body>
