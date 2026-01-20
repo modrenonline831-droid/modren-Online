@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export function HeroSection() {
   return (
     <section className="relative py-20 md:py-32 overflow-hidden">
@@ -11,18 +13,22 @@ export function HeroSection() {
               تصاميم تختف الانظار و جودة تدوم لأجيال , أثاث دمياط أعلي الخامات و افضل الأسعار تحت رعاية مودرن أونلاين 
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a
-                href="/portfolio"
-                className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity"
-              >
-                كتالوج
-              </a>
-              <a
-                href="/portfolio"
-                className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
-               أخترالتصميم ال ينسبك 
-              </a>
+             <div className="flex flex-col sm:flex-row gap-4 pt-4">
+  <Link
+    href="/portfolio"
+    className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity"
+  >
+    كتالوج
+  </Link>
+
+  <Link
+    href="/contact"
+    className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
+  >
+    اختر التصميم اللي يناسبك
+  </Link>
+</div>
+
             </div>
           </div>
           <div className="relative aspect-square rounded-lg overflow-hidden bg-secondary">
