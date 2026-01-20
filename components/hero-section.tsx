@@ -18,7 +18,7 @@ export function HeroSection() {
                 كتالوج
               </a>
               <a
-                href="/contact"
+                href="/portfolio"
                 className="inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-primary-foreground transition-colors"
               >
                أخترالتصميم ال ينسبك 
