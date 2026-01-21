@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+
 
 const portfolioItems = [
   {
@@ -302,12 +304,36 @@ const categories = [
   ]
 
 export function PortfolioGrid() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const copyProductLink = (id: number) => {
+  const link = `${window.location.origin}?product=${id}`
+  navigator.clipboard.writeText(link)
+}
+
+
   const [activeCategory, setActiveCategory] = useState("الكل")
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [activeImage, setActiveImage] = useState("")
   const [selectedColor, setSelectedColor] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [showToast, setShowToast] = useState(false)
+  useEffect(() => {
+  const productId = searchParams.get("product")
+
+  if (productId) {
+    const item = portfolioItems.find(
+      (p) => p.id === Number(productId)
+    )
+
+    if (item) {
+      setSelectedItem(item)
+      setActiveImage(item.image)
+    }
+  }
+}, [searchParams])
+
+
   
 
  const filteredItems = portfolioItems.filter((item) => {
@@ -322,24 +348,34 @@ export function PortfolioGrid() {
   return matchesCategory && matchesSearch
 })
 
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    setShowToast(true)
+ const handleWhatsAppClick = (e: React.MouseEvent) => {
+  e.preventDefault()
+  setShowToast(true)
 
-    setTimeout(() => {
-      setShowToast(false)
-      if (selectedItem) {
-        const whatsappLink = `https://wa.me/201015262864?text=${encodeURIComponent(
-          `مرحبا، أريد الاستفسار عن المنتج التالي:\n\n` +
-            `📌 اسم المنتج: ${selectedItem.title}\n` +
-            `🎨 اللون المختار: ${selectedColor || "لم يتم الاختيار"}\n` +
-            `💰 السعر الحالي: ${selectedItem.priceNew} ج.م\n\n` +
-            `يرجى التواصل معي.`
-        )}`
-        window.open(whatsappLink, "_blank")
-      }
-    }, 3000)
-  }
+  // 🔗 لينك المنتج
+  const productLink =
+    typeof window !== "undefined"
+      ? `${window.location.origin}?product=${selectedItem.id}`
+      : ""
+
+  setTimeout(() => {
+    setShowToast(false)
+
+    if (selectedItem) {
+      const whatsappLink = `https://wa.me/201015262864?text=${encodeURIComponent(
+        `مرحبا، أريد الاستفسار عن المنتج التالي:\n\n` +
+        `📌 اسم المنتج: ${selectedItem.title}\n` +
+        `🎨 اللون المختار: ${selectedColor || "لم يتم الاختيار"}\n` +
+        `💰 السعر الحالي: ${selectedItem.priceNew} ج.م\n` +
+        `🔗 رابط المنتج: ${productLink}\n\n` +
+        `يرجى التواصل معي.`
+      )}`
+
+      window.open(whatsappLink, "_blank")
+    }
+  }, 3000)
+}
+
 
   return (
     <div className="space-y-12 px-4 md:px-0">
@@ -380,13 +416,24 @@ export function PortfolioGrid() {
       <div className="flex flex-wrap gap-3 justify-center">
         {categories.map((category) => (
           <button
-            key={category}
-            onClick={() => setActiveCategory(category)}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${
-              activeCategory === category
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary hover:bg-secondary/80"
-            }`}
+           key={category}
+onClick={() => {
+  setActiveCategory(category)
+
+  if (category === "الكل") {
+    router.push("?", { scroll: false })
+  } else {
+    router.push(`?category=${encodeURIComponent(category)}`, {
+      scroll: false,
+    })
+  }
+}}
+className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${
+  activeCategory === category
+    ? "bg-primary text-primary-foreground"
+    : "bg-secondary hover:bg-secondary/80"
+}`}
+
           >
             {category}
           </button>
@@ -395,46 +442,71 @@ export function PortfolioGrid() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {filteredItems.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => {
-              setSelectedItem(item)
-              setActiveImage(item.image)
-              setSelectedColor("")
-            }}
-            className="cursor-pointer rounded-lg overflow-hidden bg-card hover:shadow-lg transition"
-          >
-            <div className="aspect-square overflow-hidden">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover hover:scale-105 transition"
-              />
-            </div>
-            <div className="p-4 space-y-2">
-              <p className="text-sm text-primary font-medium uppercase">
-                {item.category}
-              </p>
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="text-sm text-muted-foreground">
-                {item.description}
-              </p>
-            </div>
-          </div>
-        ))}
+  {filteredItems.map((item) => (
+    <div
+      key={item.id}
+      className="rounded-lg overflow-hidden bg-card hover:shadow-lg transition"
+    >
+      <div
+        onClick={() => {
+          setSelectedItem(item)
+          setActiveImage(item.image)
+          setSelectedColor("")
+          router.push(`?product=${item.id}`, { scroll: false })
+        }}
+        className="cursor-pointer"
+      >
+        <div className="aspect-square overflow-hidden">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full object-cover hover:scale-105 transition"
+          />
+        </div>
+
+        <div className="p-4 space-y-2">
+          <p className="text-sm text-primary font-medium uppercase">
+            {item.category}
+          </p>
+          <h3 className="text-lg font-semibold">{item.title}</h3>
+          <p className="text-sm text-muted-foreground">
+            {item.description}
+          </p>
+        </div>
       </div>
+
+      {/* 🔗 زر نسخ الرابط */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          const link = `${window.location.origin}?product=${item.id}`
+          navigator.clipboard.writeText(link)
+          alert("✅ تم نسخ رابط المنتج")
+        }}
+        className="w-full bg-secondary hover:bg-secondary/80 text-sm py-2 font-medium transition"
+      >
+        🔗 نسخ رابط المنتج
+      </button>
+    </div>
+  ))}
+</div>
+
 
       {/* Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-auto">
-          <div className="bg-background w-full max-w-xl rounded-xl relative">
-            <button
-              onClick={() => setSelectedItem(null)}
-              className="absolute top-4 right-4 text-xl"
-            >
-              ✕
-            </button>
+  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-auto">
+    <div className="bg-background w-full max-w-xl rounded-xl relative">
+
+      <button
+        onClick={() => {
+          setSelectedItem(null)
+          router.push("?", { scroll: false })
+        }}
+        className="absolute top-4 right-4 text-xl"
+      >
+        ✕
+      </button>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
               {/* Images */}
