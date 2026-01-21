@@ -1,6 +1,7 @@
+import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { PortfolioGrid } from "@/components/portfolio-grid"
+import PortfolioGrid from "@/components/portfolio-grid"
 
 export default function PortfolioPage() {
   return (
@@ -10,10 +11,9 @@ export default function PortfolioPage() {
         {/* Page Header */}
         <section className="py-12 md:py-20 bg-secondary/30 border-b border-border">
           <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-balance mb-4">كتالوج </h1>
+            <h1 className="text-5xl md:text-6xl font-bold text-balance mb-4">كتالوج</h1>
             <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
-             أستكشف تميزنا ف الخامات و الاشكال الراقية و التصاميم الجديدة متميزين في اجود الخامات و الخشب الزان الاحمر الطبيعيتم تأكيد الحجز، برجاء دفع العربون
-
+              أستكشف تميزنا في الخامات والأشكال الراقية والتصاميم الجديدة متميزين في أجود الخامات والخشب الزان الأحمر الطبيعي، تم تأكيد الحجز، برجاء دفع العربون
             </p>
           </div>
         </section>
@@ -21,7 +21,14 @@ export default function PortfolioPage() {
         {/* Portfolio Grid Section */}
         <section className="py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
-            <PortfolioGrid />
+            <Suspense fallback={
+              <div className="text-center py-20">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+                <p className="text-lg text-muted-foreground">جاري تحميل المنتجات...</p>
+              </div>
+            }>
+              <PortfolioGrid />
+            </Suspense>
           </div>
         </section>
       </main>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const portfolioItems = [
   {
@@ -294,9 +294,8 @@ const portfolioItems = [
 
 const categories = ["الكل", "أنترية مغلف", "ركن", "طرابيزات", "جزمات", "فوتية", "كراسي"]
 
-export function PortfolioGrid() {
+export default function PortfolioGrid() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const [activeCategory, setActiveCategory] = useState("الكل")
   const [selectedItem, setSelectedItem] = useState<any>(null)
@@ -304,7 +303,6 @@ export function PortfolioGrid() {
   const [selectedColor, setSelectedColor] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [showToast, setShowToast] = useState(false)
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   // دالة نسخ رابط المنتج
   const copyProductLink = (id: number) => {
@@ -321,24 +319,22 @@ export function PortfolioGrid() {
 
   // قراءة الـ URL parameters عند التحميل الأول
   useEffect(() => {
-    if (isInitialLoad) {
-      const productId = searchParams.get("product")
-      if (productId) {
-        const item = portfolioItems.find((p) => p.id === Number(productId))
-        if (item) {
-          setSelectedItem(item)
-          setActiveImage(item.image)
-        }
+    const params = new URLSearchParams(window.location.search)
+    const productId = params.get("product")
+    
+    if (productId) {
+      const item = portfolioItems.find((p) => p.id === Number(productId))
+      if (item) {
+        setSelectedItem(item)
+        setActiveImage(item.image)
       }
-
-      const categoryParam = searchParams.get("category")
-      if (categoryParam) {
-        setActiveCategory(decodeURIComponent(categoryParam))
-      }
-
-      setIsInitialLoad(false)
     }
-  }, [searchParams, isInitialLoad])
+
+    const categoryParam = params.get("category")
+    if (categoryParam) {
+      setActiveCategory(decodeURIComponent(categoryParam))
+    }
+  }, [])
 
   const filteredItems = portfolioItems.filter((item) => {
     const matchesCategory = activeCategory === "الكل" || item.category === activeCategory
