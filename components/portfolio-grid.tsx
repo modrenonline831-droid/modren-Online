@@ -476,20 +476,28 @@ className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm md:text-b
       </div>
 
       {/* 🔗 زر نسخ الرابط */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation()
-          const link = `${window.location.origin}?product=${item.id}`
-          navigator.clipboard.writeText(link)
-          alert("✅ تم نسخ رابط المنتج")
-        }}
-        className="w-full bg-secondary hover:bg-secondary/80 text-sm py-2 font-medium transition"
-      >
-        🔗 نسخ رابط المنتج
-      </button>
-    </div>
-  ))}
-</div>
+<button
+  onClick={(e) => {
+    e.stopPropagation()
+
+    if (typeof window === "undefined") return
+
+    const link = `${window.location.origin}?product=${item.id}`
+
+    navigator.clipboard
+      .writeText(link)
+      .then(() => {
+        alert("✅ تم نسخ رابط المنتج")
+      })
+      .catch(() => {
+        alert("❌ فشل نسخ الرابط")
+      })
+  }}
+  className="w-full bg-secondary hover:bg-secondary/80 text-sm py-2 font-medium transition"
+>
+  🔗 نسخ رابط المنتج
+</button>
+
 
 
       {/* Modal */}
