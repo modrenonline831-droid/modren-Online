@@ -4,6 +4,11 @@ import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 
+// أضف واجهة Props
+interface PortfolioGridProps {
+  viewMode: 'grid' | 'list';
+}
+
 const portfolioItems = [
   {
     id: 1,
@@ -324,7 +329,7 @@ const sortOptions = [
   { value: "discount", label: "أكبر خصم" }
 ]
 
-export default function PortfolioGrid() {
+export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
   const router = useRouter()
 
   const [activeCategory, setActiveCategory] = useState("الكل")
@@ -480,6 +485,17 @@ export default function PortfolioGrid() {
 
   return (
     <div className="space-y-8 px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* عرض mode banner */}
+      <div className={`p-3 rounded-lg text-center font-medium mb-4 ${
+        viewMode === 'grid' 
+          ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+          : 'bg-green-50 text-green-700 border border-green-200'
+      }`}>
+        {viewMode === 'grid' 
+          ? '📊 عرض الشبكة: عرض منتظم للمنتجات' 
+          : '📋 عرض القائمة: تفاصيل أكثر للمنتجات'}
+      </div>
+
       {/* 🔧 زر شغل العمولة - ثابت في الأعلى */}
       <div className="flex justify-center mb-4 sticky top-4 z-40">
         <button
@@ -615,7 +631,7 @@ export default function PortfolioGrid() {
         ))}
       </div>
 
-      {/* Grid */}
+      {/* Grid/List View */}
       {currentItems.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-5xl mb-4">😔</div>
@@ -624,136 +640,317 @@ export default function PortfolioGrid() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {currentItems.map((item) => {
-              const discount = calculateDiscount(item.priceOld, item.priceNew)
-              const isFavorite = favoriteItems.includes(item.id)
-              
-              return (
-                <div 
-                  key={item.id} 
-                  className="group rounded-xl overflow-hidden bg-card border hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                >
-                  {/* Image Container */}
-                  <div
-                    onClick={() => {
-                      setSelectedItem(item)
-                      setActiveImage(item.image)
-                      setSelectedColor("")
-                      router.push(`/portfolio?product=${item.id}`, { scroll: false })
-                    }}
-                    className="cursor-pointer relative"
+          {viewMode === 'grid' ? (
+            // Grid View
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {currentItems.map((item) => {
+                const discount = calculateDiscount(item.priceOld, item.priceNew)
+                const isFavorite = favoriteItems.includes(item.id)
+                
+                return (
+                  <div 
+                    key={item.id} 
+                    className="group rounded-xl overflow-hidden bg-card border hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
-                    {/* Tags */}
-                    {item.tags.length > 0 && (
-                      <div className="absolute top-3 right-3 z-10 flex flex-col gap-1">
-                        {item.tags.map((tag, idx) => (
-                          <span 
-                            key={idx}
-                            className="px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Favorite Button */}
-                    <button
-                      onClick={(e) => toggleFavorite(item.id, e)}
-                      className="absolute top-3 left-3 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+                    {/* Image Container */}
+                    <div
+                      onClick={() => {
+                        setSelectedItem(item)
+                        setActiveImage(item.image)
+                        setSelectedColor("")
+                        router.push(`/portfolio?product=${item.id}`, { scroll: false })
+                      }}
+                      className="cursor-pointer relative"
                     >
-                      {isFavorite ? "❤️" : "🤍"}
-                    </button>
-                    
-                    {/* Discount Badge */}
-                    {discount > 0 && (
-                      <div className="absolute top-3 left-1/2 transform -translate-x-1/2 z-10 px-3 py-1 bg-red-500 text-white font-bold rounded-full text-sm">
-                        خصم {discount}%
-                      </div>
-                    )}
-                    
-                    {/* Stock Status */}
-                    {!item.inStock && (
-                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                        <span className="bg-white text-black px-4 py-2 rounded-lg font-bold">
-                          غير متوفر حالياً
-                        </span>
-                      </div>
-                    )}
-                    
-                    <div className="aspect-square overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        width={400}
-                        height={400}
-                        className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-4 space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-xs text-primary font-semibold uppercase tracking-wider">
-                          {item.category}
-                        </p>
-                        <h3 className="text-lg font-bold mt-1 line-clamp-1">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Price */}
-                    <div className="flex items-center gap-2">
-                      {item.priceOld > item.priceNew && (
-                        <span className="text-sm line-through text-gray-500">
-                          {item.priceOld.toLocaleString()} ج.م
-                        </span>
+                      {/* Tags */}
+                      {item.tags.length > 0 && (
+                        <div className="absolute top-3 right-3 z-10 flex flex-col gap-1">
+                          {item.tags.map((tag, idx) => (
+                            <span 
+                              key={idx}
+                              className="px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       )}
-                      <span className="text-xl font-bold text-primary">
-                        {item.priceNew.toLocaleString()} ج.م
-                      </span>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-2 pt-2">
+                      
+                      {/* Favorite Button */}
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          copyProductLink(item.id)
-                        }}
-                        className={`flex-1 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm ${
-                          copiedItemId === item.id
-                            ? "bg-green-500 text-white"
-                            : "bg-secondary hover:bg-secondary/80"
-                        }`}
+                        onClick={(e) => toggleFavorite(item.id, e)}
+                        className="absolute top-3 left-3 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
                       >
-                        {copiedItemId === item.id ? "✅ تم النسخ" : "🔗 نسخ الرابط"}
+                        {isFavorite ? "❤️" : "🤍"}
                       </button>
                       
-                      <button
-                        onClick={() => {
-                          setSelectedItem(item)
-                          setActiveImage(item.image)
-                          setSelectedColor("")
-                        }}
-                        className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm"
-                      >
-                        عرض التفاصيل
-                      </button>
+                      {/* Discount Badge */}
+                      {discount > 0 && (
+                        <div className="absolute top-3 left-1/2 transform -translate-x-1/2 z-10 px-3 py-1 bg-red-500 text-white font-bold rounded-full text-sm">
+                          خصم {discount}%
+                        </div>
+                      )}
+                      
+                      {/* Stock Status */}
+                      {!item.inStock && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                          <span className="bg-white text-black px-4 py-2 rounded-lg font-bold">
+                            غير متوفر حالياً
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="aspect-square overflow-hidden">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-xs text-primary font-semibold uppercase tracking-wider">
+                            {item.category}
+                          </p>
+                          <h3 className="text-lg font-bold mt-1 line-clamp-1">
+                            {item.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Price */}
+                      <div className="flex items-center gap-2">
+                        {item.priceOld > item.priceNew && (
+                          <span className="text-sm line-through text-gray-500">
+                            {item.priceOld.toLocaleString()} ج.م
+                          </span>
+                        )}
+                        <span className="text-xl font-bold text-primary">
+                          {item.priceNew.toLocaleString()} ج.م
+                        </span>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 pt-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            copyProductLink(item.id)
+                          }}
+                          className={`flex-1 py-2 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm ${
+                            copiedItemId === item.id
+                              ? "bg-green-500 text-white"
+                              : "bg-secondary hover:bg-secondary/80"
+                          }`}
+                        >
+                          {copiedItemId === item.id ? "✅ تم النسخ" : "🔗 نسخ الرابط"}
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            setSelectedItem(item)
+                            setActiveImage(item.image)
+                            setSelectedColor("")
+                          }}
+                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm"
+                        >
+                          عرض التفاصيل
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          ) : (
+            // List View
+            <div className="space-y-4">
+              {currentItems.map((item) => {
+                const discount = calculateDiscount(item.priceOld, item.priceNew)
+                const isFavorite = favoriteItems.includes(item.id)
+                
+                return (
+                  <div 
+                    key={item.id} 
+                    className="group flex flex-col md:flex-row gap-4 rounded-xl overflow-hidden bg-card border hover:shadow-xl transition-all duration-300 p-4"
+                  >
+                    {/* Image Container */}
+                    <div
+                      onClick={() => {
+                        setSelectedItem(item)
+                        setActiveImage(item.image)
+                        setSelectedColor("")
+                        router.push(`/portfolio?product=${item.id}`, { scroll: false })
+                      }}
+                      className="cursor-pointer relative md:w-1/3"
+                    >
+                      {/* Tags */}
+                      {item.tags.length > 0 && (
+                        <div className="absolute top-3 right-3 z-10 flex flex-col gap-1">
+                          {item.tags.map((tag, idx) => (
+                            <span 
+                              key={idx}
+                              className="px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {/* Favorite Button */}
+                      <button
+                        onClick={(e) => toggleFavorite(item.id, e)}
+                        className="absolute top-3 left-3 z-10 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
+                      >
+                        {isFavorite ? "❤️" : "🤍"}
+                      </button>
+                      
+                      {/* Discount Badge */}
+                      {discount > 0 && (
+                        <div className="absolute top-3 left-1/2 transform -translate-x-1/2 z-10 px-3 py-1 bg-red-500 text-white font-bold rounded-full text-sm">
+                          خصم {discount}%
+                        </div>
+                      )}
+                      
+                      {/* Stock Status */}
+                      {!item.inStock && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                          <span className="bg-white text-black px-4 py-2 rounded-lg font-bold">
+                            غير متوفر حالياً
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="aspect-square overflow-hidden rounded-lg">
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 p-2 space-y-4">
+                      <div>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
+                          <div>
+                            <p className="text-xs text-primary font-semibold uppercase tracking-wider">
+                              {item.category}
+                            </p>
+                            <h3 className="text-xl font-bold mt-1">
+                              {item.title}
+                            </h3>
+                          </div>
+                          
+                          <div className="flex flex-col items-end">
+                            <div className="flex items-center gap-2">
+                              {item.priceOld > item.priceNew && (
+                                <span className="text-sm line-through text-gray-500">
+                                  {item.priceOld.toLocaleString()} ج.م
+                                </span>
+                              )}
+                              <span className="text-2xl font-bold text-primary">
+                                {item.priceNew.toLocaleString()} ج.م
+                              </span>
+                            </div>
+                            {discount > 0 && (
+                              <span className="text-sm bg-red-100 text-red-700 px-2 py-1 rounded mt-1">
+                                وفر {discount}%
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <p className="text-muted-foreground mb-4">
+                          {item.description}
+                        </p>
+                        
+                        {/* Details */}
+                        {item.details[0] && (
+                          <div className="space-y-1 mb-4">
+                            <h4 className="font-semibold text-sm">المواصفات:</h4>
+                            <ul className="text-sm space-y-1">
+                              {item.details.map((detail: string, index: number) => (
+                                <li key={index} className="flex items-start gap-2">
+                                  <span className="text-primary mt-1">•</span>
+                                  <span>{detail}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {/* Colors */}
+                        <div className="mb-4">
+                          <h4 className="font-semibold text-sm mb-2">الألوان المتاحة:</h4>
+                          <div className="flex gap-2 flex-wrap">
+                            {item.colors.map((color: string, index: number) => (
+                              <span
+                                key={index}
+                                className="px-3 py-1 rounded-full bg-secondary text-sm"
+                              >
+                                {color}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            copyProductLink(item.id)
+                          }}
+                          className={`flex-1 md:flex-none py-2 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2 text-sm ${
+                            copiedItemId === item.id
+                              ? "bg-green-500 text-white"
+                              : "bg-secondary hover:bg-secondary/80"
+                          }`}
+                        >
+                          {copiedItemId === item.id ? "✅ تم النسخ" : "🔗 نسخ الرابط"}
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            setSelectedItem(item)
+                            setActiveImage(item.image)
+                            setSelectedColor("")
+                          }}
+                          className="flex-1 md:flex-none py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm"
+                        >
+                          عرض التفاصيل
+                        </button>
+                        
+                        <button
+                          onClick={handleWhatsAppClick}
+                          className="flex-1 md:flex-none py-2 px-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition text-sm flex items-center justify-center gap-2"
+                        >
+                          💬 واتساب
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
 
           {/* Pagination */}
           {totalPages > 1 && (
