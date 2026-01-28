@@ -62,57 +62,57 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white pt-16 pb-8 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+    <footer className="bg-gradient-to-b from-gray-900 to-gray-950 text-white pt-12 md:pt-16 pb-6 md:pb-8 border-t border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* القسم العلوي */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12 mb-12 md:mb-16">
           {/* العمود الأول: معلومات الشركة */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex items-center gap-2 md:gap-3">
               <div className="p-2 bg-gradient-to-r from-primary to-primary/80 rounded-lg">
-                <span className="text-white text-xl">🛋️</span>
+                <span className="text-white text-lg md:text-xl">🛋️</span>
               </div>
-              <h3 className="text-2xl font-bold">
+              <h3 className="text-xl md:text-2xl font-bold">
                 <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                   Modern Online
                 </span>
               </h3>
             </div>
             
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-gray-300 leading-relaxed text-sm md:text-base">
               أثاث دمياطي مصنوع يدويًا بأعلى جودة، يرفع مستوى منزلك بأناقة خالدة. 
               خبرة 30+ سنة في صناعة الأثاث الدمياطي الأصيل.
             </p>
             
             {/* شارات الثقة */}
-            <div className="grid grid-cols-2 gap-3 pt-4">
-              <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
-                <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm">ضمان 20 سنة</span>
+            <div className="grid grid-cols-2 gap-2 md:gap-3 pt-3 md:pt-4">
+              <div className="flex items-center gap-2 p-2 md:p-3 bg-white/5 rounded-lg text-xs md:text-sm">
+                <Shield className="w-3 h-3 md:w-4 md:h-4 text-green-400 flex-shrink-0" />
+                <span>ضمان 5 سنوات</span>
               </div>
-              <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
-                <Truck className="w-4 h-4 text-blue-400" />
-                <span className="text-sm">توصيل سريع</span>
+              <div className="flex items-center gap-2 p-2 md:p-3 bg-white/5 rounded-lg text-xs md:text-sm">
+                <Truck className="w-3 h-3 md:w-4 md:h-4 text-blue-400 flex-shrink-0" />
+                <span>شحن لجميع المحافظات</span>
               </div>
             </div>
           </div>
 
           {/* العمود الثاني: الروابط السريعة */}
           <div>
-            <h4 className="text-xl font-bold mb-6 pb-3 border-b border-gray-800 flex items-center gap-2">
+            <h4 className="text-lg md:text-xl font-bold mb-4 md:mb-6 pb-2 md:pb-3 border-b border-gray-800 flex items-center gap-2">
               <span>🔗</span>
-              التنقل السريع
+              <span className="text-sm md:text-base">التنقل السريع</span>
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link
                     href={link.href}
-                    className="flex items-center gap-3 text-gray-300 hover:text-primary transition-colors group p-2 rounded-lg hover:bg-white/5"
+                    className="flex items-center gap-2 md:gap-3 text-gray-300 hover:text-primary transition-colors group p-2 rounded-lg hover:bg-white/5 text-sm md:text-base"
                   >
-                    <span className="text-lg">{link.icon}</span>
-                    <span>{link.name}</span>
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                    <span className="text-base md:text-lg">{link.icon}</span>
+                    <span className="flex-1">{link.name}</span>
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-sm">→</span>
                   </Link>
                 </li>
               ))}
@@ -121,22 +121,22 @@ export function Footer() {
 
           {/* العمود الثالث: الفئات */}
           <div>
-            <h4 className="text-xl font-bold mb-6 pb-3 border-b border-gray-800 flex items-center gap-2">
+            <h4 className="text-lg md:text-xl font-bold mb-4 md:mb-6 pb-2 md:pb-3 border-b border-gray-800 flex items-center gap-2">
               <span>📁</span>
-              فئات المنتجات
+              <span className="text-sm md:text-base">فئات المنتجات</span>
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 md:space-y-3">
               {categories.map((category, index) => (
                 <li key={index}>
                   <Link
                     href={category.href}
-                    className="flex items-center justify-between text-gray-300 hover:text-primary transition-colors group p-2 rounded-lg hover:bg-white/5"
+                    className="flex items-center justify-between text-gray-300 hover:text-primary transition-colors group p-2 rounded-lg hover:bg-white/5 text-sm md:text-base"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <div className="flex items-center gap-2 md:gap-3">
+                      <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full flex-shrink-0"></div>
                       <span>{category.name}</span>
                     </div>
-                    <span className="text-sm bg-white/10 px-2 py-1 rounded-full">
+                    <span className="text-xs md:text-sm bg-white/10 px-1.5 py-0.5 md:px-2 md:py-1 rounded-full">
                       {category.count}
                     </span>
                   </Link>
@@ -147,45 +147,45 @@ export function Footer() {
 
           {/* العمود الرابع: التواصل */}
           <div>
-            <h4 className="text-xl font-bold mb-6 pb-3 border-b border-gray-800 flex items-center gap-2">
+            <h4 className="text-lg md:text-xl font-bold mb-4 md:mb-6 pb-2 md:pb-3 border-b border-gray-800 flex items-center gap-2">
               <span>📞</span>
-              تواصل معنا
+              <span className="text-sm md:text-base">تواصل معنا</span>
             </h4>
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {contactInfo.map((info, index) => (
                 <div 
                   key={index}
-                  className={`flex items-center gap-3 text-gray-300 ${info.action ? 'cursor-pointer hover:text-primary' : ''} transition-colors`}
+                  className={`flex items-start gap-2 md:gap-3 text-gray-300 ${info.action ? 'cursor-pointer hover:text-primary' : ''} transition-colors`}
                   onClick={info.action}
                 >
-                  <div className="p-2 bg-white/5 rounded-lg">
+                  <div className="p-1.5 md:p-2 bg-white/5 rounded-lg flex-shrink-0 mt-0.5">
                     {info.icon}
                   </div>
-                  <span className="text-sm">{info.text}</span>
+                  <span className="text-xs md:text-sm flex-1">{info.text}</span>
                 </div>
               ))}
             </div>
 
             {/* النشرة البريدية */}
-            <div className="mt-8 pt-6 border-t border-gray-800">
-              <h5 className="font-bold mb-4 flex items-center gap-2">
+            <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-800">
+              <h5 className="font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
                 <span>📧</span>
                 اشترك في النشرة
               </h5>
-              <form onSubmit={handleSubscribe} className="space-y-3">
+              <form onSubmit={handleSubscribe} className="space-y-2 md:space-y-3">
                 <div className="relative">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="بريدك الإلكتروني"
-                    className="w-full bg-white/10 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full bg-white/10 border border-gray-700 rounded-lg px-3 py-2 md:px-4 md:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm md:text-base"
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-bold py-3 rounded-lg transition-all duration-300 hover:shadow-lg"
+                  className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-white font-bold py-2.5 md:py-3 rounded-lg transition-all duration-300 hover:shadow-lg text-sm md:text-base"
                 >
                   {subscribed ? "✅ تم الاشتراك" : "اشترك الآن"}
                 </button>
@@ -195,19 +195,19 @@ export function Footer() {
         </div>
 
         {/* القسم الأوسط: وسائل التواصل */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="border-t border-gray-800 pt-6 md:pt-8 mb-6 md:mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
             {/* وسائل التواصل الاجتماعي */}
-            <div className="flex items-center gap-4">
-              <span className="text-gray-300">تابعنا على:</span>
-              <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 w-full sm:w-auto">
+              <span className="text-gray-300 text-sm md:text-base">تابعنا على:</span>
+              <div className="flex gap-1.5 md:gap-2">
                 {socialLinks.map((social, index) => (
                   <a
                     key={index}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${social.color} p-3 rounded-xl text-white transition-all duration-300 hover:scale-110 hover:shadow-xl flex items-center justify-center`}
+                    className={`${social.color} p-2 md:p-3 rounded-lg md:rounded-xl text-white transition-all duration-300 hover:scale-105 md:hover:scale-110 hover:shadow-lg md:hover:shadow-xl flex items-center justify-center`}
                     aria-label={social.label}
                   >
                     {social.icon}
@@ -217,13 +217,13 @@ export function Footer() {
             </div>
 
             {/* وسائل الدفع */}
-            <div className="flex items-center gap-4">
-              <span className="text-gray-300">وسائل الدفع:</span>
-              <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 w-full sm:w-auto mt-4 sm:mt-0">
+              <span className="text-gray-300 text-sm md:text-base">وسائل الدفع:</span>
+              <div className="flex gap-1.5 md:gap-2">
                 {["💳", "🏦", "📱", "💰", "💵"].map((method, index) => (
                   <div
                     key={index}
-                    className="p-3 bg-white/5 rounded-xl text-lg hover:bg-white/10 transition-colors cursor-pointer"
+                    className="p-2 md:p-3 bg-white/5 rounded-lg md:rounded-xl text-base md:text-lg hover:bg-white/10 transition-colors cursor-pointer"
                     title={`وسيلة دفع ${index + 1}`}
                   >
                     {method}
@@ -235,20 +235,20 @@ export function Footer() {
         </div>
 
         {/* القسم السفلي */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="border-t border-gray-800 pt-6 md:pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
             {/* حقوق النشر */}
-            <div className="text-center md:text-left">
-              <p className="text-gray-400 text-sm">
+            <div className="text-center md:text-left order-3 md:order-1">
+              <p className="text-gray-400 text-xs md:text-sm">
                 &copy; {new Date().getFullYear()} <span className="text-primary font-bold">Modern Online</span>. جميع الحقوق محفوظة.
               </p>
-              <p className="text-gray-500 text-xs mt-2">
+              <p className="text-gray-500 text-xs mt-1">
                 صنع بكل ❤️ في مصر، دمياط
               </p>
             </div>
 
             {/* روابط إضافية */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <div className="flex flex-wrap justify-center gap-3 md:gap-4 lg:gap-6 text-xs md:text-sm order-2">
               <Link href="/privacy" className="text-gray-400 hover:text-primary transition-colors">
                 سياسة الخصوصية
               </Link>
@@ -269,43 +269,43 @@ export function Footer() {
             {/* العودة للأعلى */}
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="p-3 bg-gradient-to-r from-primary to-primary/80 rounded-xl hover:shadow-xl hover:scale-105 transition-all duration-300"
+              className="p-2.5 md:p-3 bg-gradient-to-r from-primary to-primary/80 rounded-lg md:rounded-xl hover:shadow-lg md:hover:shadow-xl hover:scale-105 transition-all duration-300 order-1 md:order-3"
               aria-label="العودة للأعلى"
             >
-              <span className="text-white">⬆️</span>
+              <span className="text-white text-sm md:text-base">⬆️</span>
             </button>
           </div>
 
           {/* شهادة الجودة */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white/5 rounded-xl">
-                  <Shield className="w-6 h-6 text-green-400" />
+          <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-800">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 md:gap-6">
+              <div className="flex items-center gap-2 md:gap-4">
+                <div className="p-2 md:p-3 bg-white/5 rounded-lg md:rounded-xl">
+                  <Shield className="w-4 h-4 md:w-6 md:h-6 text-green-400" />
                 </div>
-                <div>
-                  <div className="font-bold">جودة معتمدة</div>
-                  <div className="text-gray-400 text-sm">أثاث دمياطي أصيل بمواد خام أوروبية</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white/5 rounded-xl">
-                  <Truck className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <div className="font-bold">توصيل سريع</div>
-                  <div className="text-gray-400 text-sm">جميع أنحاء مصر خلال 3-7 أيام</div>
+                <div className="text-right">
+                  <div className="font-bold text-sm md:text-base">جودة معتمدة</div>
+                  <div className="text-gray-400 text-xs md:text-sm">أثاث دمياطي أصيل بمواد خام أوروبية</div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-white/5 rounded-xl">
-                  <Heart className="w-6 h-6 text-red-400" />
+              <div className="flex items-center gap-2 md:gap-4">
+                <div className="p-2 md:p-3 bg-white/5 rounded-lg md:rounded-xl">
+                  <Truck className="w-4 h-4 md:w-6 md:h-6 text-blue-400" />
                 </div>
-                <div>
-                  <div className="font-bold">رضا مضمون</div>
-                  <div className="text-gray-400 text-sm">98% من عملائنا راضون عن جودة منتجاتنا</div>
+                <div className="text-right">
+                  <div className="font-bold text-sm md:text-base">شحن لجميع المحافظات</div>
+                  <div className="text-gray-400 text-xs md:text-sm">جميع أنحاء مصر خلال 3-7 أيام</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 md:gap-4">
+                <div className="p-2 md:p-3 bg-white/5 rounded-lg md:rounded-xl">
+                  <Heart className="w-4 h-4 md:w-6 md:h-6 text-red-400" />
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-sm md:text-base">رضا مضمون</div>
+                  <div className="text-gray-400 text-xs md:text-sm">98% من عملائنا راضون عن جودة منتجاتنا</div>
                 </div>
               </div>
             </div>
@@ -314,9 +314,9 @@ export function Footer() {
       </div>
 
       {/* شريط القوة */}
-      <div className="mt-8 pt-8 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="text-center text-gray-500 text-sm">
+      <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center text-gray-500 text-xs md:text-sm">
             تم التطوير بكل ❤️ لخدمة صناعة الأثاث الدمياطي الأصيل منذ 1990
           </div>
         </div>
