@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import { Cairo, Tajawal } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+// تم إزالة SpeedInsights مؤقتاً لحل مشكلة البناء
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { FloatingWhatsApp } from "@/components/floating-whatsapp"
@@ -175,8 +175,8 @@ const jsonLd = {
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "5000",
+        "ratingValue": "4.8",
+        "ratingCount": "127",
         "bestRating": "5",
         "worstRating": "1"
       },
@@ -307,13 +307,13 @@ export default function RootLayout({
           
           {/* تحليلات Vercel */}
           <Analytics />
-          <SpeedInsights />
+          {/* SpeedInsights مشغل مؤقتاً لحل مشكلة البناء */}
           
-          {/* Google Analytics (اختياري) */}
-          {process.env.NODE_ENV === 'production' && (
+          {/* Google Analytics (معلق مؤقتاً) */}
+          {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GA_ID && (
             <>
               <Script
-                src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+                src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
                 strategy="afterInteractive"
               />
               <Script id="google-analytics" strategy="afterInteractive">
@@ -321,7 +321,7 @@ export default function RootLayout({
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
-                  gtag('config', 'GA_MEASUREMENT_ID');
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
                 `}
               </Script>
             </>
