@@ -36,7 +36,7 @@ export function Header() {
       ]
     },
     { label: "صمم بنفسك", href: "/pricing", icon: "🎨" },
-    { label: "عنا", href: "/about", icon: "ℹ️" },
+    
     { label: "اتصل بنا", href: "/contact", icon: "📞" }
   ]
 
@@ -58,9 +58,15 @@ export function Header() {
               <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-xs md:text-sm">متصلون الآن</span>
             </div>
+<<<<<<< HEAD
             <div className="md:hidden flex items-center gap-1.5 text-xs">
               <Truck className="w-3 h-3 md:w-4 md:h-4" />
               <span>شحن سريع</span>
+=======
+            <div className="hidden md:flex items-center gap-2">
+              <Truck className="w-4 h-4" />
+              <span></span>
+>>>>>>> 0a78ecc (big update for all)
             </div>
           </div>
           
@@ -201,11 +207,14 @@ export function Header() {
                 <Search className="w-4 h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 text-gray-600" />
               </button>
 
+<<<<<<< HEAD
               {/* حساب المستخدم */}
               <button className="hidden md:flex items-center justify-center w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
                 <User className="w-4 h-4 md:w-4.5 md:h-4.5 lg:w-5 lg:h-5 text-gray-600" />
               </button>
 
+=======
+>>>>>>> 0a78ecc (big update for all)
               
 
               {/* زر التواصل الرئيسي */}
@@ -319,11 +328,19 @@ export function Header() {
               </div>
 
               {/* معلومات سريعة */}
+<<<<<<< HEAD
               <div className="mt-4 md:mt-6 grid grid-cols-2 gap-2 md:gap-3">
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-3 md:p-4 rounded-lg md:rounded-xl">
                   <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
                     <Shield className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
                     <div className="font-bold text-blue-700 text-sm md:text-base">ضمان 5 سنوات</div>
+=======
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="w-5 h-5 text-blue-600" />
+                    <div className="font-bold text-blue-700">ضمان 5 سنوات</div>
+>>>>>>> 0a78ecc (big update for all)
                   </div>
                   <div className="text-xs md:text-sm text-blue-600">جودة مضمونة</div>
                 </div>

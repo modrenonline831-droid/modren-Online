@@ -109,7 +109,7 @@ export default function PricingPage() {
               <div className="flex flex-wrap gap-6 mt-8">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-green-500" />
-                  <span className="font-medium">ضمان حتى 20 سنة</span>
+                  <span className="font-medium">5 سنوات ضمان</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Truck className="w-5 h-5 text-blue-500" />

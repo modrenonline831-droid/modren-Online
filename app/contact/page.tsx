@@ -79,7 +79,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-lg font-semibold text-primary mb-2">عندكم ضمان؟</h3>
                 <p className="text-muted-foreground">
-                  كل القطع بيجي معها ضمان 10 سنين. احنا واقفين ورا شغلنا والتزمين برضاك.
+                  كل القطع بيجي معها ضمان 5 سنوات. احنا واقفين ورا شغلنا والتزمين برضاك.
                 </p>
               </div>
             </div>
