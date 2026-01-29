@@ -33,7 +33,6 @@ export function Footer() {
     { name: "المعرض", href: "/portfolio", icon: "🖼️" },
     { name: "صمم بنفسك", href: "/pricing", icon: "🎨" },
     { name: "تواصل معنا", href: "/contact", icon: "💬" },
-    ,
     { name: "الشروط والأحكام", href: "/terms", icon: "📄" }
   ]
 
