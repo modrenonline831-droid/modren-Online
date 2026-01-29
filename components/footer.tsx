@@ -48,7 +48,7 @@ export function Footer() {
   const contactInfo = [
     { icon: <Phone className="w-5 h-5" />, text: "+20 101 526 2864", action: () => handleContactClick('phone') },
     { icon: <MessageCircle className="w-5 h-5" />, text: "واتساب سريع", action: () => handleContactClick('whatsapp') },
-    { icon: <Mail className="w-5 h-5" />, text: "modren.online@example.com", action: () => handleContactClick('email') },
+    { icon: <Mail className="w-5 h-5" />, text: "modrenonline831@gmail.com", action: () => handleContactClick('email') },
     { icon: <MapPin className="w-5 h-5" />, text: "مصر، دمياط - مركز دمياط، باب الحرس" },
     { icon: <Clock className="w-5 h-5" />, text: "السبت - الخميس: 9ص - 10م | الجمعة: 1ظ - 10م" }
   ]
