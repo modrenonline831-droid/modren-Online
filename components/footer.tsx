@@ -24,7 +24,7 @@ export function Footer() {
     } else if (type === 'phone') {
       window.open('tel:+201015262864', '_blank')
     } else if (type === 'email') {
-      window.open('mailto:modren.online@example.com', '_blank')
+      window.open('mailto:modrenonline831@gmail.com', '_blank')
     }
   }
 
