@@ -90,18 +90,8 @@ export function CTASection() {
                 { icon: "📏", title: "جميع المقاسات", desc: "من الصغير للكبير" },
                 { icon: "🎨", title: "تخصيص كامل", desc: "حسب ذوقك" },
                 { icon: "⚡", title: "تنفيذ سريع", desc: "خلال 15 يوم" },
-<<<<<<< HEAD
                 { icon: "🛡️", title: "5 سنوات ضمان", desc: "جودة مضمونة" },
                 { icon: "🚚", title: "توصيل سريع", desc: "للمدن الكبرى" },
-=======
-<<<<<<< HEAD
-                { icon: "🛡️", title: "ضمان 5 سنوات", desc: "جودة مضمونة" },
-                { icon: "🚚", title: "توصيل مجاني", desc: "للمدن الكبرى" },
-=======
-                { icon: "🛡️", title: "5 سنوات ضمان", desc: "جودة مضمونة" },
-                { icon: "🚚", title: "توصيل سريع", desc: "للمدن الكبرى" },
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
                 { icon: "🎯", title: "استشارة مجانية", desc: "مع متخصص" }
               ].map((feature, idx) => (
                 <div 
@@ -262,12 +252,11 @@ export function CTASection() {
           </div>
 
           {/* Trust Indicators */}
-<<<<<<< HEAD
           <div className="mt-6 md:mt-8 flex flex-wrap justify-center gap-3 md:gap-4 lg:gap-6 text-white/70 text-xs md:text-sm">
             {[
               "استشارة مجانية",
               "تصميم مخصص",
-              "ضمان 5 سنوات ",
+              "ضمان 5 سنوات",
               "توصيل وتركيب"
             ].map((text, idx) => (
               <div key={idx} className="flex items-center gap-1 md:gap-2">
@@ -275,25 +264,6 @@ export function CTASection() {
                 <span>{text}</span>
               </div>
             ))}
-=======
-          <div className="mt-8 flex flex-wrap justify-center gap-6 text-white/70 text-sm">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-300" />
-              <span>استشارة مجانية</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-300" />
-              <span>تصميم مخصص</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-300" />
-              <span>ضمان 5 سنوات</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-300" />
-              <span>توصيل وتركيب</span>
-            </div>
->>>>>>> 0a78ecc (big update for all)
           </div>
         </div>
       </div>

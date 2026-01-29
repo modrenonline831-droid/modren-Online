@@ -97,36 +97,17 @@ export function HeroSection() {
                 <div className="text-xl md:text-2xl lg:text-3xl font-bold text-primary">5000+</div>
                 <div className="text-xs md:text-sm text-muted-foreground">عميل راضي</div>
               </div>
-<<<<<<< HEAD
               <div className="bg-secondary/50 p-3 md:p-4 rounded-lg md:rounded-xl">
                 <div className="text-xl md:text-2xl lg:text-3xl font-bold text-primary">5</div>
                 <div className="text-xs md:text-sm text-muted-foreground">سنوات ضمان</div>
-=======
-              <div className="bg-secondary/50 p-4 rounded-xl">
-                <div className="text-2xl md:text-3xl font-bold text-primary">5</div>
-                <div className="text-sm text-muted-foreground">سنوات ضمان</div>
-<<<<<<< HEAD
-=======
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
               </div>
             </div>
 
             {/* Features */}
-<<<<<<< HEAD
             <div className="flex flex-wrap gap-2 md:gap-3 pt-2 md:pt-4">
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-3 md:py-2 bg-green-50 text-green-700 rounded-lg text-xs md:text-sm">
                 <Shield className="w-3 h-3 md:w-4 md:h-4" />
                 <span>ضمان 5 سنوات</span>
-=======
-            <div className="flex flex-wrap gap-3 pt-4">
-              <div className="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg text-sm">
-                <Shield className="w-4 h-4" />
-                <span>5 سنوات ضمان</span>
-<<<<<<< HEAD
-=======
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-3 md:py-2 bg-blue-50 text-blue-700 rounded-lg text-xs md:text-sm">
                 <Truck className="w-3 h-3 md:w-4 md:h-4" />

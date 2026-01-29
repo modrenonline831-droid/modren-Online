@@ -87,15 +87,7 @@ const pricingPlans = [
     description: "تصميم كامل حسب طلبك ومساحتك",
     features: [
       "أفضل أنواع الخشب المستورد",
-<<<<<<< HEAD
       "ضمان 5 سنوات شامل",
-=======
-<<<<<<< HEAD
-      "ضمان 5 سنوات",
-=======
-      "ضمان 5 سنوات شامل",
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
       "توصيل وتركيب فاخر",
       "جميع المقاسات المتاحة",
     ],
@@ -272,15 +264,7 @@ export function PricingCards() {
             <div className="grid grid-cols-3 gap-3">
               {[
                 { value: "30+", label: "سنة خبرة", icon: "🎯" },
-<<<<<<< HEAD
                 { value: "5,000+", label: "مشروع", icon: "📦" },
-=======
-<<<<<<< HEAD
-                { value: "100%", label: "رضا العملاء", icon: "⭐" },
-=======
-                { value: "5,000+", label: "مشروع", icon: "📦" },
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
                 { value: "5", label: "سنوات ضمان", icon: "🛡️" }
               ].map((stat, idx) => (
                 <div key={idx} className="bg-white p-3 rounded-xl border border-gray-200 text-center shadow-sm">

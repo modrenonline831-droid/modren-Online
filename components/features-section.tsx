@@ -12,16 +12,8 @@ const features = [
   {
     icon: Scissors,
     title: "حرفة تشطيب متقنة",
-<<<<<<< HEAD
     description: "أعلى فنش تشطيب من قلب دمياط بأفضل الخامات وبضمان 5 سنوات على كل قطعة",
     stats: "5 سنوات ضمان",
-=======
-    description: "أعلى فنش تشطيب من قلب دمياط بأفضل الخامات وبضمان 20 سنة على كل قطعة",
-    stats: "ضمان 5 سنوات",
-<<<<<<< HEAD
-=======
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
     color: "emerald"
   },
   {
@@ -134,16 +126,8 @@ export function FeaturesSection() {
           {[
             { value: "5000+", label: "عميل راضي", icon: <Users className="w-5 h-5 md:w-6 md:h-6" /> },
             { value: "30+", label: "سنة خبرة", icon: "🎯" },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-            { value: "5", label: "سنوات ضمان", icon: <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" /> },
-            { value: "98%", label: "رضا العملاء", icon: <Star className="w-5 h-5 md:w-6 md:h-6" /> }
-=======
->>>>>>> temp-branch
             { value: "5", label: "سنوات ضمان", icon: "🛡️" },
             { value: "98%", label: "رضا العملاء", icon: "⭐" }
->>>>>>> 0a78ecc (big update for all)
           ].map((stat, index) => (
             <div
               key={index}

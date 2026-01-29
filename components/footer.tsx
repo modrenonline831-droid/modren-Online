@@ -85,20 +85,10 @@ export function Footer() {
             </p>
             
             {/* شارات الثقة */}
-<<<<<<< HEAD
             <div className="grid grid-cols-2 gap-2 md:gap-3 pt-3 md:pt-4">
               <div className="flex items-center gap-2 p-2 md:p-3 bg-white/5 rounded-lg text-xs md:text-sm">
                 <Shield className="w-3 h-3 md:w-4 md:h-4 text-green-400 flex-shrink-0" />
                 <span>ضمان 5 سنوات</span>
-=======
-            <div className="grid grid-cols-2 gap-3 pt-4">
-              <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
-                <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm">ضمان 5 سنوات</span>
-<<<<<<< HEAD
-=======
->>>>>>> 0a78ecc (big update for all)
->>>>>>> temp-branch
               </div>
               <div className="flex items-center gap-2 p-2 md:p-3 bg-white/5 rounded-lg text-xs md:text-sm">
                 <Truck className="w-3 h-3 md:w-4 md:h-4 text-blue-400 flex-shrink-0" />
