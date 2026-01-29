@@ -68,8 +68,8 @@ export function CTASection() {
                 { icon: "📏", title: "جميع المقاسات", desc: "من الصغير للكبير" },
                 { icon: "🎨", title: "تخصيص كامل", desc: "حسب ذوقك" },
                 { icon: "⚡", title: "تنفيذ سريع", desc: "خلال 15 يوم" },
-                { icon: "🛡️", title: "ضمان 20 سنة", desc: "جودة مضمونة" },
-                { icon: "🚚", title: "توصيل مجاني", desc: "للمدن الكبرى" },
+                { icon: "🛡️", title: "5 سنوات ضمان", desc: "جودة مضمونة" },
+                { icon: "🚚", title: "توصيل سريع", desc: "للمدن الكبرى" },
                 { icon: "🎯", title: "استشارة مجانية", desc: "مع متخصص" }
               ].map((feature, idx) => (
                 <div 
@@ -237,7 +237,7 @@ export function CTASection() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-300" />
-              <span>ضمان 20 سنة</span>
+              <span>ضمان 5 سنوات</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-300" />

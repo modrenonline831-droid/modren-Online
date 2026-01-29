@@ -36,7 +36,7 @@ export function Header() {
       ]
     },
     { label: "صمم بنفسك", href: "/pricing", icon: "🎨" },
-    { label: "عنا", href: "/about", icon: "ℹ️" },
+    
     { label: "اتصل بنا", href: "/contact", icon: "📞" }
   ]
 
@@ -60,7 +60,7 @@ export function Header() {
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Truck className="w-4 h-4" />
-              <span>توصيل مجاني للطلبات فوق 10,000 ج</span>
+              <span></span>
             </div>
           </div>
           
@@ -201,18 +201,7 @@ export function Header() {
                 <Search className="w-5 h-5 text-gray-600" />
               </button>
 
-              {/* حساب المستخدم */}
-              <button className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
-                <User className="w-5 h-5 text-gray-600" />
-              </button>
-
-              {/* سلة المشتريات */}
-              <button className="relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary/10 to-primary/5 text-primary hover:from-primary/20 hover:to-primary/10 transition-all">
-                <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  3
-                </span>
-              </button>
+              
 
               {/* زر التواصل الرئيسي */}
               <button
@@ -329,7 +318,7 @@ export function Header() {
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="w-5 h-5 text-blue-600" />
-                    <div className="font-bold text-blue-700">ضمان 20 سنة</div>
+                    <div className="font-bold text-blue-700">ضمان 5 سنوات</div>
                   </div>
                   <div className="text-sm text-blue-600">جودة مضمونة</div>
                 </div>

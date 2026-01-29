@@ -20,7 +20,7 @@ export function HeroSection() {
       title: "أثاث دمياطي بجودة لا تقارن",
       subtitle: "خشب زان أحمر مستورد بأسعار تنافسية",
       buttonText: "استعرض المنتجات",
-      badge: "🛡️ ضمان 20 سنة"
+      badge: "🛡️ ضمان 5 سنوات"
     },
     {
       image: "/zezo.jpg",
@@ -91,8 +91,8 @@ export function HeroSection() {
                 <div className="text-sm text-muted-foreground">عميل راضي</div>
               </div>
               <div className="bg-secondary/50 p-4 rounded-xl">
-                <div className="text-2xl md:text-3xl font-bold text-primary">20</div>
-                <div className="text-sm text-muted-foreground">سنة ضمان</div>
+                <div className="text-2xl md:text-3xl font-bold text-primary">5</div>
+                <div className="text-sm text-muted-foreground">سنوات ضمان</div>
               </div>
             </div>
 
@@ -100,7 +100,7 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-3 pt-4">
               <div className="flex items-center gap-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg text-sm">
                 <Shield className="w-4 h-4" />
-                <span>ضمان 20 سنة</span>
+                <span>5 سنوات ضمان</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm">
                 <Truck className="w-4 h-4" />

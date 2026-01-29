@@ -33,7 +33,7 @@ export function Footer() {
     { name: "المعرض", href: "/portfolio", icon: "🖼️" },
     { name: "صمم بنفسك", href: "/pricing", icon: "🎨" },
     { name: "تواصل معنا", href: "/contact", icon: "💬" },
-    { name: "عنا", href: "/about", icon: "ℹ️" },
+    ,
     { name: "الشروط والأحكام", href: "/terms", icon: "📄" }
   ]
 
@@ -88,7 +88,7 @@ export function Footer() {
             <div className="grid grid-cols-2 gap-3 pt-4">
               <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
                 <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm">ضمان 20 سنة</span>
+                <span className="text-sm">ضمان 5 سنوات</span>
               </div>
               <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
                 <Truck className="w-4 h-4 text-blue-400" />

@@ -69,7 +69,7 @@ export default function PortfolioPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
               {[
                 { icon: <Award className="w-6 h-6" />, value: "30+", label: "سنة خبرة" },
-                { icon: <Shield className="w-6 h-6" />, value: "20", label: "سنة ضمان" },
+                { icon: <Shield className="w-6 h-6" />, value: "5", label: "سنوات ضمان" },
                 { icon: "🎨", value: "100+", label: "تصميم حصري" },
                 { icon: <Truck className="w-6 h-6" />, value: "24/7", label: "دعم متواصل" }
               ].map((stat, idx) => (
@@ -163,7 +163,7 @@ export default function PortfolioPage() {
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm">ضمان 20 سنة</span>
+                      <span className="text-sm">5 سنوات ضمان</span>
                     </div>
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full">
                       <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
