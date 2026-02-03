@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { Share2, Heart, Filter, Eye, ShoppingBag, Clock, Shield, Truck, Star, GitCompare as Compare, ChevronDown, ChevronUp, Search, X } from "lucide-react"
+import { Share2, Heart, Filter, Eye, ShoppingBag, Clock, Shield, Truck, Star, GitCompare as Compare, ChevronDown, ChevronUp, Search, X, MessageCircle, Phone, Tag, Award, Zap, Sparkles, Gift } from "lucide-react"
 
 // أضف واجهة Props
 interface PortfolioGridProps {
@@ -15,16 +15,16 @@ const portfolioItems = [
     id: 1,
     title: "طقم روسكي",
     category: "أنترية مغلف",
-    description: "مكون من 4 قطع 2 كنب 2 فوتية",
+    description: "مكون من 4 قطع 2 كنب 2 فوتية - تصنيع فاخر بجودة عالية",
     image: "/1515.jpg",
     images: ["/1515.jpg", "/1516.jpg", "/3224.jpg", "/4456.jpg", "/5928.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 30000,
-    priceNew: 25000,
+    details: ["خشب: زان أحمر عالي الجودة", "سفنج: درجة أولى 38", "قماش: وتر بروف مقاوم للمياه والبقع"],
+    priceInfo: "اسعار تنافسية جداً",
+    features: ["ضمان 5 سنوات", "تصميم عصري فاخر", "سهولة في التركيب", "خدمة ما بعد البيع"],
     inStock: true,
-    tags: ["أفضل مبيع"],
-    dimensions: "متاح جميع مقاسات",
+    tags: ["أفضل مبيع", "الأكثر طلباً"],
+    dimensions: "متاح جميع المقاسات حسب طلبك",
     estimatedDelivery: "15-20 يوم",
     views: 245,
     orders: 18,
@@ -38,15 +38,15 @@ const portfolioItems = [
     id: 2,
     title: "طقم بلو باك",
     category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 2 فوتية",
+    description: "مكون من 2 كنبة و 2 فوتية - أناقة واستدامة",
     image: "/momo.jpg",
     images: ["/momo.jpg", "/refo.jpg","/koko.jpg","/elzox.jpg","/plmk.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 32000,
-    priceNew: 26000,
+    details: ["خشب: زان أحمر صلب", "سفنج: ألماني 38", "قماش: وتر بروف مقاوم للماء"],
+    priceInfo: "عروض خاصة للكميات",
+    features: ["توصيل مجاني", "تركيب مجاني", "ضمان شامل"],
     inStock: true,
-    tags: ["جديد"],
+    tags: ["جديد", "مميز"],
     dimensions: "متاح جميع المقاسات",
     estimatedDelivery: "15-20 يوم",
     views: 189,
@@ -61,15 +61,15 @@ const portfolioItems = [
     id: 3,
     title: "طقم أنترية مودرن",
     category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 2 فوتية",
+    description: "مكون من 2 كنبة و 2 فوتية - تصميم عصري راقي",
     image: "/zezo.jpg",
     images: ["/zezo.jpg", "/kkj.jpg", "/zezoo.jpg", "/008866.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 23000,
-    priceNew: 19800,
+    details: ["خشب: زان أحمر درجة أولى", "سفنج: 38 عالي الكثافة", "قماش: وتر بروف ممتاز"],
+    priceInfo: "خصومات للطلبات الكبيرة",
+    features: ["تصميم أوروبي", "مواد صديقة للبيئة", "سهولة الصيانة"],
     inStock: true,
-    tags: ["جديد"],
+    tags: ["جديد", "عصري"],
     dimensions: "متاح جميع المقاسات",
     estimatedDelivery: "15-20 يوم",
     views: 321,
@@ -84,16 +84,16 @@ const portfolioItems = [
     id: 6,
     title: "ركنة ميكانيزم مودرين",
     category: "ركن",
-    description: "ركنة مكانيزم",
+    description: "ركنة مكانيزم - راحة لا مثيل لها",
     image: "/8879.jpg",
     images: ["/8879.jpg", "/98609.jpg", "/0099.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 27000,
-    priceNew: 24000,
+    details: ["خشب: زان أحمر قوي", "سفنج: طبي 38", "قماش: وتر بروف فاخر"],
+    priceInfo: "عروض تمويل متاحة",
+    features: ["ميكانيزم ألماني", "ضمان 7 سنوات", "خدمة صيانة سريعة"],
     inStock: false,
-    tags: [],
-    dimensions: "2×3",
+    tags: ["مميز"],
+    dimensions: "2×3 - متاح مقاسات أخرى",
     estimatedDelivery: "15-20 يوم",
     views: 156,
     orders: 8,
@@ -107,13 +107,13 @@ const portfolioItems = [
     id: 4,
     title: "ركنة بلو باك",
     category: "ركن",
-    description: "ركنة ميكانيزم",
+    description: "ركنة ميكانيزم - أناقة وعملية",
     image: "/2345.jpg",
     images: ["/2345.jpg", "/5647.jpg", "/7777.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 26000,
-    priceNew: 23000,
+    details: ["خشب: زان أحمر ممتاز", "سفنج: 38 مريح", "قماش: وتر بروف مقاوم"],
+    priceInfo: "خصم خاص لأول طلب",
+    features: ["توصيل سريع", "تركيب احترافي", "ضمان شامل"],
     inStock: true,
     tags: ["جديد","أفضل مبيع"],
     dimensions: "2×3",
@@ -130,13 +130,13 @@ const portfolioItems = [
     id: 5,
     title: "ركنة بابلز",
     category: "ركن",
-    description: "ركنة بابلز مقاس",
+    description: "ركنة بابلز - تصميم فريد ومميز",
     image: "/9987.jpg",
     images: ["/9987.jpg", "/0934.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 28300,
-    priceNew: 25000,
+    details: ["خشب: زان أحمر عالي الجودة", "سفنج: 38 فاخر", "قماش: وتر بروف راقي"],
+    priceInfo: "عروض مخفضة لفترة محدودة",
+    features: ["تصميم متميز", "جودة فائقة", "خدمة عملاء ممتازة"],
     inStock: true,
     tags: ["جديد"],
     dimensions: "2×3",
@@ -153,15 +153,15 @@ const portfolioItems = [
     id: 7,
     title: "انترية لاريكس",
     category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 1 فوتية",
+    description: "مكون من 2 كنبة و 1 فوتية - فخامة وإبداع",
     image: "/amr.jpg",
     images: ["/amr.jpg", "/09km.jpg", "/moon.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر", "سفنج: 38", "قماش: وتر بروف ضد المياه"],
-    priceOld: 30000,
-    priceNew: 26000,
+    details: ["خشب: زان أحمر صلب", "سفنج: 38 عالي الجودة", "قماش: وتر بروف فاخر"],
+    priceInfo: "أسعار لا تقبل المنافسة",
+    features: ["تصميم كلاسيكي", "متانة عالية", "راحة مطلقة"],
     inStock: true,
-    tags: [],
+    tags: ["مميز"],
     dimensions: "متاح جميع المقاسات",
     estimatedDelivery: "15-20 يوم",
     views: 167,
@@ -176,15 +176,15 @@ const portfolioItems = [
     id: 9,
     title: "طرابيزة الريشة",
     category: "طرابيزات",
-    description: "من طرابيزة متفرغة علي شكل ريشة",
+    description: "من طرابيزة متفرغة علي شكل ريشة - إبداع في التصميم",
     image: "/n1.jpg",
     images: ["/n1.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 8000,
-    priceNew: 4500,
+    details: ["تصميم فني مبتكر", "خشب زان طبيعي", "تشطيب فاخر"],
+    priceInfo: "عروض شاملة مع الكراسي",
+    features: ["تصميم فريد", "جودة تصنيع عالية", "مناسب لكل المساحات"],
     inStock: true,
-    tags: ["خصم كبير"],
+    tags: ["تصميم فريد"],
     dimensions: "120×80 سم",
     estimatedDelivery: "10-15 يوم",
     views: 89,
@@ -199,15 +199,15 @@ const portfolioItems = [
     id: 10,
     title: "طرابيزة قطعتين",
     category: "طرابيزات",
-    description: "طرابيزة زان كبس",
+    description: "طرابيزة زان كبس - متانة وأناقة",
     image: "/zse.jpg",
     images: ["/zse.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 5500,
-    priceNew: 3500,
+    details: ["زان كبس عالي الجودة", "تشطيب احترافي", "تصميم عملي"],
+    priceInfo: "عروض تركيب مجاني",
+    features: ["متعددة الاستخدامات", "سهلة التنظيف", "مقاسات متنوعة"],
     inStock: true,
-    tags: [],
+    tags: ["عملي"],
     dimensions: "100×60 سم",
     estimatedDelivery: "10-15 يوم",
     views: 76,
@@ -222,15 +222,15 @@ const portfolioItems = [
     id: 11,
     title: "طرابيزة مربعة زان كبس",
     category: "طرابيزات",
-    description: "طرابيزة زان كبس",
+    description: "طرابيزة زان كبس - كلاسيكية وأنيقة",
     image: "/esz.jpg",
     images: ["/esz.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 6000,
-    priceNew: 3500,
+    details: ["خشب زان كبس ممتاز", "تشطيب عالي الجودة", "تصميم متناسق"],
+    priceInfo: "خصم عند الشراء بالجملة",
+    features: ["مناسبة للمكاتب", "تصميم عصري", "سهولة الحركة"],
     inStock: true,
-    tags: [],
+    tags: ["عملي"],
     dimensions: "90×90 سم",
     estimatedDelivery: "10-15 يوم",
     views: 67,
@@ -245,15 +245,15 @@ const portfolioItems = [
     id: 12,
     title: "كولكشن جديد",
     category: "طرابيزات",
-    description: "طرابيزة زان كبس",
+    description: "طرابيزة زان كبس - مجموعة مميزة",
     image: "/wasd.jpg",
     images: ["/wasd.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 6500,
-    priceNew: 3800,
+    details: ["تصميم مبتكر", "جودة عالية", "ألوان متنوعة"],
+    priceInfo: "عروض تمويل مرنة",
+    features: ["مجموعة متكاملة", "تشطيب فاخر", "ضمان الجودة"],
     inStock: true,
-    tags: ["جديد"],
+    tags: ["جديد", "مجموعة"],
     dimensions: "110×70 سم",
     estimatedDelivery: "10-15 يوم",
     views: 92,
@@ -268,15 +268,15 @@ const portfolioItems = [
     id: 13,
     title: "جزامة جرار",
     category: "جزمات",
-    description: "جزامة جرار بمراية",
+    description: "جزامة جرار بمراية - تنظيم وتخزين مثالي",
     image: "/mn.jpg",
     images: ["/mn.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 10000,
-    priceNew: 7300,
+    details: ["تصميم جرار عملي", "مرآة كبيرة", "سعة تخزين كبيرة"],
+    priceInfo: "عروض تركيب مجاني",
+    features: ["تنظيم محكم", "سهولة الوصول", "تصميم مدمج"],
     inStock: true,
-    tags: [],
+    tags: ["عملي"],
     dimensions: "100×40×180 سم",
     estimatedDelivery: "10-15 يوم",
     views: 123,
@@ -291,15 +291,15 @@ const portfolioItems = [
     id: 14,
     title: "جزامة مودرن",
     category: "جزمات",
-    description: "رف أحذية شديد التحمل ذو سعة كبيرة",
+    description: "رف أحذية شديد التحمل ذو سعة كبيرة - أناقة وعملية",
     image: "/qwe.jpg",
     images: ["/qwe.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 12000,
-    priceNew: 9800,
+    details: ["تصميم عصري", "متانة عالية", "سعة تخزين كبيرة"],
+    priceInfo: "خصم خاص للتصميمات المخصصة",
+    features: ["تصميم مودرن", "تنظيم ذكي", "سهولة التركيب"],
     inStock: true,
-    tags: ["مودرن"],
+    tags: ["مودرن", "عملي"],
     dimensions: "120×45×190 سم",
     estimatedDelivery: "10-15 يوم",
     views: 145,
@@ -314,13 +314,13 @@ const portfolioItems = [
     id: 15,
     title: "جزامة مودرن",
     category: "جزمات",
-    description: "جزامة مودرن 100*120 = كعب 10cm",
+    description: "جزامة مودرن 100*120 = كعب 10cm - تصميم عصري",
     image: "/moka.jpg",
     images: ["/moka.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 12000,
-    priceNew: 9800,
+    details: ["تصميم عصري", "قاس مناسب", "جودة تصنيع"],
+    priceInfo: "عروض للطلبات المتعددة",
+    features: ["تصميم فريد", "تنظيم محكم", "سهولة الصيانة"],
     inStock: false,
     tags: ["مودرن"],
     dimensions: "100×40×120 سم",
@@ -337,15 +337,15 @@ const portfolioItems = [
     id: 16,
     title: "فوتية مودرن",
     category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش",
+    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - راحة وأناقة",
     image: "/qwert.jpg",
     images: ["/qwert.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 9000,
-    priceNew: 6500,
+    details: ["خشب زان أحمر", "تشطيب فاخر", "تصميم مريح"],
+    priceInfo: "عروض شاملة مع الطقم",
+    features: ["راحة فائقة", "تصميم عصري", "جودة مواد عالية"],
     inStock: true,
-    tags: ["خصم كبير"],
+    tags: ["مريح"],
     dimensions: "60×60 سم",
     estimatedDelivery: "10-15 يوم",
     views: 112,
@@ -360,15 +360,15 @@ const portfolioItems = [
     id: 17,
     title: "فوتية مودرن2",
     category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش",
+    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - تصميم عملي",
     image: "/poiu.jpg",
     images: ["/poiu.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 8000,
-    priceNew: 6000,
+    details: ["تصميم مدمج", "راحة مثالية", "جودة تصنيع"],
+    priceInfo: "عروض للكميات",
+    features: ["تصميم عملي", "سهولة الحركة", "متانة عالية"],
     inStock: true,
-    tags: [],
+    tags: ["عملي"],
     dimensions: "55×55 سم",
     estimatedDelivery: "10-15 يوم",
     views: 87,
@@ -383,15 +383,15 @@ const portfolioItems = [
     id: 18,
     title: "فوتية مودرن3",
     category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش",
+    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - أناقة وبساطة",
     image: "/sss.jpg",
     images: ["/sss.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 9000,
-    priceNew: 6000,
+    details: ["تصميم متناسق", "راحة مطلقة", "تشطيب دقيق"],
+    priceInfo: "خصومات موسمية",
+    features: ["تصميم متناسق", "جودة فائقة", "سهولة التنظيف"],
     inStock: true,
-    tags: [],
+    tags: ["أنيق"],
     dimensions: "65×65 سم",
     estimatedDelivery: "10-15 يوم",
     views: 94,
@@ -406,15 +406,15 @@ const portfolioItems = [
     id: 19,
     title: "فوتية مودرن4",
     category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش",
+    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - فخامة وجودة",
     image: "/plm.jpg",
     images: ["/plm.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 9500,
-    priceNew: 6500,
+    details: ["مواد فاخرة", "تصميم متميز", "راحة استثنائية"],
+    priceInfo: "عروض تمويل مريحة",
+    features: ["فخامة وجودة", "تصميم متميز", "ضمان طويل الأمد"],
     inStock: true,
-    tags: [],
+    tags: ["فاخر"],
     dimensions: "70×70 سم",
     estimatedDelivery: "10-15 يوم",
     views: 103,
@@ -429,15 +429,15 @@ const portfolioItems = [
     id: 20,
     title: "فوتية مودرن5",
     category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش",
+    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - عملي ومريح",
     image: "/klm.jpg",
     images: ["/klm.jpg", "/klm2.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 9000,
-    priceNew: 5500,
+    details: ["تصميم مبتكر", "راحة فائقة", "جودة تصنيع"],
+    priceInfo: "عروض خاصة للمشاريع",
+    features: ["تصميم مبتكر", "متانة عالية", "تنوع في الألوان"],
     inStock: true,
-    tags: [],
+    tags: ["مبتكر"],
     dimensions: "50×50 سم",
     estimatedDelivery: "10-15 يوم",
     views: 118,
@@ -452,15 +452,15 @@ const portfolioItems = [
     id: 21,
     title: "كرسي مودرن",
     category: "كراسي",
-    description: "كرسي زان قماشة فوطة",
+    description: "كرسي زان قماشة فوطة - راحة وأناقة",
     image: "/meca.jpg",
     images: ["/meca.jpg", "/meca2.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 5500,
-    priceNew: 3000,
+    details: ["زان عالي الجودة", "قماشة فوطة مريحة", "تصميم عصري"],
+    priceInfo: "عروض عند الشراء بكميات",
+    features: ["راحة استثنائية", "تصميم عصري", "متانة فائقة"],
     inStock: true,
-    tags: ["أفضل مبيع"],
+    tags: ["أفضل مبيع", "مريح"],
     dimensions: "50×50×85 سم",
     estimatedDelivery: "10-15 يوم",
     views: 156,
@@ -475,15 +475,15 @@ const portfolioItems = [
     id: 22,
     title: "كرسي مودرن2",
     category: "كراسي",
-    description: "كرسي زان قماشة فوطة",
+    description: "كرسي زان قماشة فوطة - تصميم كلاسيكي معاصر",
     image: "/ioi.jpg",
     images: ["/ioi.jpg", "/ioi2.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 6000,
-    priceNew: 3500,
+    details: ["تصميم متميز", "مواد عالية الجودة", "راحة مثالية"],
+    priceInfo: "خصومات للمطاعم والمقاهي",
+    features: ["مناسب للمكاتب", "راحة طويلة الأمد", "تصميم أنيق"],
     inStock: true,
-    tags: [],
+    tags: ["عملي"],
     dimensions: "55×55×90 سم",
     estimatedDelivery: "10-15 يوم",
     views: 134,
@@ -498,15 +498,15 @@ const portfolioItems = [
     id: 23,
     title: "كرسي مودرن3",
     category: "كراسي",
-    description: "كرسي زان قماشة فوطة",
+    description: "كرسي زان قماشة فوطة - بساطة وأناقة",
     image: "/asd.jpg",
     images: ["/asd.jpg"],
     colors: ["متاح جميع الألوان"],
-    details: [""],
-    priceOld: 4000,
-    priceNew: 3000,
+    details: ["تصميم بسيط وأنيق", "راحة عملية", "جودة تصنيع"],
+    priceInfo: "عروض التوصيل المجاني",
+    features: ["تصميم مدمج", "سهولة التخزين", "متعدد الاستخدامات"],
     inStock: true,
-    tags: [],
+    tags: ["بسيط"],
     dimensions: "45×45×80 سم",
     estimatedDelivery: "10-15 يوم",
     views: 109,
@@ -531,13 +531,10 @@ const categories = [
 
 const sortOptions = [
   { value: "default", label: "الترتيب الافتراضي" },
-  { value: "price-low", label: "السعر: من الأقل للأعلى" },
-  { value: "price-high", label: "السعر: من الأعلى للأقل" },
-  { value: "name", label: "الاسم: أ-ي" },
-  { value: "discount", label: "أكبر خصم" },
-  { value: "rating", label: "أعلى تقييم" },
   { value: "popular", label: "الأكثر طلباً" },
-  { value: "newest", label: "الأحدث أولاً" }
+  { value: "rating", label: "أعلى تقييم" },
+  { value: "newest", label: "الأحدث أولاً" },
+  { value: "views", label: "الأكثر مشاهدة" }
 ]
 
 export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
@@ -550,7 +547,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
   const [selectedColor, setSelectedColor] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [showToast, setShowToast] = useState(false)
-  const [priceRange, setPriceRange] = useState([0, 50000])
   const [sortBy, setSortBy] = useState("default")
   const [inStockOnly, setInStockOnly] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
@@ -586,12 +582,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
     localStorage.setItem('viewedItems', JSON.stringify(viewedItems))
   }, [favoriteItems, compareItems, viewedItems])
 
-  // دالة حساب نسبة الخصم
-  const calculateDiscount = (priceOld: number, priceNew: number) => {
-    if (priceOld <= 0 || priceOld <= priceNew) return 0
-    return Math.round(((priceOld - priceNew) / priceOld) * 100)
-  }
-
   // دالة نسخ رابط المنتج مع تأثير
   const copyProductLink = (id: number) => {
     const link = `${window.location.origin}/portfolio?product=${id}`
@@ -608,7 +598,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
 
   // زر شغل العمولة - يتجه مباشرة للواتساب
   const handleCommissionClick = () => {
-    const whatsappLink = `https://wa.me/201015262864?text=${encodeURIComponent("اريد شغل عمولة")}`
+    const whatsappLink = `https://wa.me/201015262864?text=${encodeURIComponent("مرحبا، أريد الاستفسار عن تصنيع قطعة خاصة (شغل عمولة)")}`
     window.open(whatsappLink, "_blank")
   }
 
@@ -702,32 +692,25 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
           item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.category.toLowerCase().includes(searchQuery.toLowerCase())
-        const matchesPrice = item.priceNew >= priceRange[0] && item.priceNew <= priceRange[1]
         const matchesStock = !inStockOnly || item.inStock
         
-        return matchesCategory && matchesSearch && matchesPrice && matchesStock
+        return matchesCategory && matchesSearch && matchesStock
       })
       .sort((a, b) => {
         switch (sortBy) {
-          case "price-low":
-            return a.priceNew - b.priceNew
-          case "price-high":
-            return b.priceNew - a.priceNew
-          case "name":
-            return a.title.localeCompare(b.title)
-          case "discount":
-            return calculateDiscount(b.priceOld, b.priceNew) - calculateDiscount(a.priceOld, a.priceNew)
-          case "rating":
-            return b.rating - a.rating
           case "popular":
             return b.orders - a.orders
+          case "rating":
+            return b.rating - a.rating
+          case "views":
+            return b.views - a.views
           case "newest":
             return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           default:
             return 0
         }
       })
-  }, [activeCategory, searchQuery, priceRange, sortBy, inStockOnly])
+  }, [activeCategory, searchQuery, sortBy, inStockOnly])
 
   // حساب الصفحات
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
@@ -751,11 +734,10 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             `📌 اسم المنتج: ${selectedItem.title}\n` +
             `🏷️ الفئة: ${selectedItem.category}\n` +
             `🎨 اللون المختار: ${selectedColor || "لم يتم الاختيار"}\n` +
-            `💰 السعر القديم: ${selectedItem.priceOld} ج.م\n` +
-            `💰 السعر الحالي: ${selectedItem.priceNew} ج.م\n` +
-            `🎯 نسبة الخصم: ${calculateDiscount(selectedItem.priceOld, selectedItem.priceNew)}%\n` +
+            `📐 المقاس: ${selectedItem.dimensions}\n` +
+            `⭐ التقييم: ${selectedItem.rating} (${selectedItem.reviews} تقييم)\n` +
             `🔗 رابط المنتج: ${productLink}\n\n` +
-            `يرجى التواصل معي للتفاصيل والطلب.`
+            `يرجى إرسال السعر والتفاصيل المتعلقة بالمنتج.`
         )}`
 
         window.open(whatsappLink, "_blank")
@@ -876,7 +858,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         </div>
                         <div>
                           <div className="font-medium text-sm line-clamp-1">{item.title}</div>
-                          <div className="text-primary font-bold">{item.priceNew.toLocaleString()} ج.م</div>
+                          <div className="text-primary font-bold">{item.priceInfo}</div>
                         </div>
                       </div>
                       <button
@@ -938,6 +920,28 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
         </button>
       </div>
 
+      {/* 📞 شريط الاتصال السريع */}
+      <div className="bg-gradient-to-r from-green-50 to-emerald-100 border border-green-200 rounded-xl p-4 mb-6 text-center">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-green-600 text-white p-3 rounded-full">
+              <Phone className="w-6 h-6" />
+            </div>
+            <div className="text-right">
+              <h3 className="font-bold text-lg">مستعدون للرد على استفساراتك</h3>
+              <p className="text-gray-600">عروض وأسعار تنافسية - جودة عالية - ضمان طويل الأمد</p>
+            </div>
+          </div>
+          <button
+            onClick={handleCommissionClick}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg flex items-center gap-2 transition"
+          >
+            <MessageCircle className="w-5 h-5" />
+            تواصل معنا للاستعلام
+          </button>
+        </div>
+      </div>
+
       {/* المنتجات التي تم عرضها مؤخراً */}
       {recentlyViewed.length > 0 && (
         <div className="bg-secondary/20 p-4 rounded-xl">
@@ -974,7 +978,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                   />
                 </div>
                 <div className="text-xs font-medium line-clamp-2 text-center">{item.title}</div>
-                <div className="text-xs text-primary font-bold text-center">{item.priceNew.toLocaleString()} ج.م</div>
+                <div className="text-xs text-primary font-bold text-center">{item.priceInfo}</div>
               </div>
             ))}
           </div>
@@ -1080,27 +1084,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             </div>
             
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">نطاق السعر (ج.م)</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="number"
-                    value={priceRange[0]}
-                    onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                    className="w-1/2 px-3 py-2 rounded border text-sm"
-                    placeholder="الحد الأدنى"
-                  />
-                  <span>إلى</span>
-                  <input
-                    type="number"
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                    className="w-1/2 px-3 py-2 rounded border text-sm"
-                    placeholder="الحد الأقصى"
-                  />
-                </div>
-              </div>
-              
               <div className="space-y-3">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
@@ -1214,27 +1197,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
       {showFilters && (
         <div className="hidden lg:block bg-secondary/20 p-4 rounded-lg mb-6 animate-fadeIn">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">نطاق السعر</label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number"
-                  value={priceRange[0]}
-                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-24 px-3 py-2 rounded border text-sm"
-                  placeholder="الحد الأدنى"
-                />
-                <span>إلى</span>
-                <input
-                  type="number"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-24 px-3 py-2 rounded border text-sm"
-                  placeholder="الحد الأقصى"
-                />
-              </div>
-            </div>
-            
             <div className="space-y-2">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -1244,16 +1206,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                   className="w-4 h-4"
                 />
                 <span className="text-sm">عرض المتوفر فقط</span>
-              </label>
-              
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={false}
-                  onChange={() => {}}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm">منتجات مخفضة فقط</span>
               </label>
             </div>
             
@@ -1272,7 +1224,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
 
       {/* Category Filter - تصميم جديد مع أيقونات كبيرة */}
       <div className="mb-8">
-        <h3 className="text-lg font-bold mb-4 text-center hidden sm:block">الفئات</h3>
+        <h3 className="text-lg font-bold mb-4 text-center hidden sm:block">تصفح مجموعاتنا</h3>
         <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
           {categories.map((category) => (
             <button
@@ -1318,7 +1270,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             // Grid View
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {currentItems.map((item) => {
-                const discount = calculateDiscount(item.priceOld, item.priceNew)
                 const isFavorite = favoriteItems.includes(item.id)
                 const inCompare = compareItems.includes(item.id)
                 const isRecentlyViewed = viewedItems.includes(item.id)
@@ -1442,13 +1393,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         </div>
                       </div>
                       
-                      {/* Discount Badge */}
-                      {discount > 0 && (
-                        <div className="absolute top-3 left-1/2 transform -translate-x-1/2 z-10 px-3 py-1 bg-red-500 text-white font-bold rounded-full text-sm">
-                          خصم {discount}%
-                        </div>
-                      )}
-                      
                       {/* Stock Status */}
                       {!item.inStock && (
                         <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
@@ -1490,6 +1434,18 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         </div>
                       </div>
 
+                      {/* Features */}
+                      {item.features && item.features.length > 0 && (
+                        <div className="space-y-1">
+                          {item.features.slice(0, 2).map((feature: string, idx: number) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs">
+                              <Sparkles className="w-3 h-3 text-yellow-500" />
+                              <span className="text-gray-600">{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Rating and Stats */}
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-1">
@@ -1505,6 +1461,17 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         </div>
                       </div>
 
+                      {/* Price Info - جاذبة للعميل */}
+                      <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-3 rounded-lg">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Tag className="w-4 h-4 text-primary" />
+                          <span className="font-bold text-primary">{item.priceInfo}</span>
+                        </div>
+                        <p className="text-xs text-gray-600">
+                          اسعار تنافسية وجودة لا تضاهى - تواصل للاستعلام
+                        </p>
+                      </div>
+
                       {/* Details */}
                       <div className="text-xs text-gray-600 space-y-1">
                         <div className="flex items-center gap-2">
@@ -1515,18 +1482,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                           <span className="text-gray-500">المقاس:</span>
                           <span>{item.dimensions}</span>
                         </div>
-                      </div>
-
-                      {/* Price */}
-                      <div className="flex items-center gap-2">
-                        {item.priceOld > item.priceNew && (
-                          <span className="text-sm line-through text-gray-500">
-                            {item.priceOld.toLocaleString()} ج.م
-                          </span>
-                        )}
-                        <span className="text-xl font-bold text-primary">
-                          {item.priceNew.toLocaleString()} ج.م
-                        </span>
                       </div>
 
                       {/* Action Buttons */}
@@ -1551,9 +1506,10 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                             setActiveImage(item.image)
                             setSelectedColor("")
                           }}
-                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm"
+                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm flex items-center justify-center gap-2"
                         >
-                          عرض التفاصيل
+                          <MessageCircle className="w-4 h-4" />
+                          استفسر الآن
                         </button>
                       </div>
                     </div>
@@ -1565,7 +1521,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             // List View
             <div className="space-y-4">
               {currentItems.map((item) => {
-                const discount = calculateDiscount(item.priceOld, item.priceNew)
                 const isFavorite = favoriteItems.includes(item.id)
                 const inCompare = compareItems.includes(item.id)
                 const isNew = new Date(item.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -1621,13 +1576,6 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                           </button>
                         </div>
                         
-                        {/* Discount Badge */}
-                        {discount > 0 && (
-                          <div className="absolute top-3 right-3 z-10 px-3 py-1 bg-red-500 text-white font-bold rounded-full text-sm">
-                            خصم {discount}%
-                          </div>
-                        )}
-                        
                         {/* Stock Status */}
                         {!item.inStock && (
                           <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
@@ -1673,22 +1621,14 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                             </h3>
                           </div>
                           
-                          <div className="flex flex-col items-end">
+                          <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-3 rounded-lg">
                             <div className="flex items-center gap-2">
-                              {item.priceOld > item.priceNew && (
-                                <span className="text-sm line-through text-gray-500">
-                                  {item.priceOld.toLocaleString()} ج.م
-                                </span>
-                              )}
-                              <span className="text-2xl font-bold text-primary">
-                                {item.priceNew.toLocaleString()} ج.م
-                              </span>
+                              <Tag className="w-5 h-5 text-primary" />
+                              <div className="text-right">
+                                <div className="font-bold text-primary text-lg">{item.priceInfo}</div>
+                                <div className="text-sm text-gray-600">تواصل للاستعلام</div>
+                              </div>
                             </div>
-                            {discount > 0 && (
-                              <span className="text-sm bg-red-100 text-red-700 px-2 py-1 rounded mt-1">
-                                وفر {discount}%
-                              </span>
-                            )}
                           </div>
                         </div>
                         
@@ -1712,6 +1652,18 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         <p className="text-muted-foreground mb-4">
                           {item.description}
                         </p>
+                        
+                        {/* Features */}
+                        {item.features && item.features.length > 0 && (
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                            {item.features.map((feature: string, idx: number) => (
+                              <div key={idx} className="flex items-center gap-2 text-sm bg-secondary/50 p-2 rounded">
+                                <Award className="w-3 h-3 text-primary" />
+                                <span>{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                         
                         {/* Details */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
@@ -1787,9 +1739,10 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                             setActiveImage(item.image)
                             setSelectedColor("")
                           }}
-                          className="flex-1 md:flex-none py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm"
+                          className="flex-1 md:flex-none py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition text-sm flex items-center justify-center gap-2"
                         >
-                          عرض التفاصيل
+                          <MessageCircle className="w-4 h-4" />
+                          استفسر الآن
                         </button>
                         
                         <button
@@ -1806,7 +1759,8 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                           onClick={handleWhatsAppClick}
                           className="flex-1 md:flex-none py-2 px-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-medium transition text-sm flex items-center justify-center gap-2"
                         >
-                          💬 واتساب
+                          <MessageCircle className="w-4 h-4" />
+                          واتساب مباشر
                         </button>
                       </div>
                     </div>
@@ -1915,21 +1869,33 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                   
                   <p className="text-gray-600">{quickViewItem.description}</p>
                   
-                  <div className="flex items-center gap-3">
-                    {quickViewItem.priceOld > quickViewItem.priceNew && (
-                      <span className="text-lg line-through text-gray-500">
-                        {quickViewItem.priceOld.toLocaleString()} ج.م
-                      </span>
-                    )}
-                    <span className="text-2xl font-bold text-primary">
-                      {quickViewItem.priceNew.toLocaleString()} ج.م
-                    </span>
-                    {calculateDiscount(quickViewItem.priceOld, quickViewItem.priceNew) > 0 && (
-                      <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">
-                        خصم {calculateDiscount(quickViewItem.priceOld, quickViewItem.priceNew)}%
-                      </span>
-                    )}
+                  {/* Price Info */}
+                  <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Tag className="w-6 h-6 text-primary" />
+                      <div>
+                        <div className="font-bold text-primary text-xl">{quickViewItem.priceInfo}</div>
+                        <p className="text-sm text-gray-600 mt-1">
+                          اسعار تنافسية وجودة عالية - تواصل معنا للاستفسار عن السعر والتفاصيل
+                        </p>
+                      </div>
+                    </div>
                   </div>
+                  
+                  {/* Features */}
+                  {quickViewItem.features && quickViewItem.features.length > 0 && (
+                    <div className="space-y-2">
+                      <h4 className="font-semibold">المميزات:</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {quickViewItem.features.map((feature: string, idx: number) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            <Zap className="w-3 h-3 text-yellow-500" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   
                   <div className="pt-4">
                     <button
@@ -1938,9 +1904,10 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         setActiveImage(quickViewItem.image)
                         setQuickViewItem(null)
                       }}
-                      className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition"
+                      className="w-full py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition flex items-center justify-center gap-2"
                     >
-                      عرض التفاصيل الكاملة
+                      <MessageCircle className="w-5 h-5" />
+                      استفسر عن السعر والتفاصيل
                     </button>
                   </div>
                 </div>
@@ -2041,27 +2008,39 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                   </div>
                 </div>
 
-                {/* Price & Discount */}
-                <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-                  {selectedItem.priceOld > selectedItem.priceNew && (
-                    <>
-                      <span className="text-lg sm:text-xl line-through text-gray-500">
-                        {selectedItem.priceOld.toLocaleString()} ج.م
-                      </span>
-                      <span className="text-2xl sm:text-3xl font-bold text-primary">
-                        {selectedItem.priceNew.toLocaleString()} ج.م
-                      </span>
-                      <span className="bg-red-500 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-full text-sm sm:text-base font-bold">
-                        خصم {calculateDiscount(selectedItem.priceOld, selectedItem.priceNew)}%
-                      </span>
-                    </>
-                  )}
-                  {selectedItem.priceOld <= selectedItem.priceNew && (
-                    <span className="text-2xl sm:text-3xl font-bold text-primary">
-                      {selectedItem.priceNew.toLocaleString()} ج.م
-                    </span>
-                  )}
+                {/* Price Info - جاذبة للعميل */}
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-primary text-white p-2 rounded-lg">
+                      <Tag className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-primary text-lg sm:text-xl">معلومات السعر</h4>
+                      <p className="font-bold text-lg sm:text-xl text-gray-800">{selectedItem.priceInfo}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm sm:text-base text-gray-600 mt-2">
+                    نحن نقدم أفضل الأسعار مع أعلى مستويات الجودة. تواصل معنا للحصول على عرض سعر خاص والتفاصيل الكاملة.
+                  </p>
                 </div>
+
+                {/* Features */}
+                {selectedItem.features && selectedItem.features.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-base sm:text-lg flex items-center gap-2">
+                      <Award className="w-5 h-5 text-yellow-500" />
+                      مميزات المنتج:
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {selectedItem.features.map((feature: string, idx: number) => (
+                        <div key={idx} className="flex items-center gap-2 p-3 bg-secondary/30 rounded-lg">
+                          <Sparkles className="w-4 h-4 text-primary" />
+                          <span className="text-sm sm:text-base">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Details List */}
                 {selectedItem.details[0] && (
@@ -2127,14 +2106,25 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                   </div>
                 </div>
 
+                {/* Call to Action Banner */}
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-lg">هل تريد سعر خاص؟</h4>
+                      <p className="text-sm">تواصل معنا للحصول على أفضل عرض</p>
+                    </div>
+                    <Gift className="w-8 h-8" />
+                  </div>
+                </div>
+
                 {/* Action Buttons */}
                 <div className="space-y-3 pt-4">
                   <button
                     onClick={handleWhatsAppClick}
                     className="w-full text-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 sm:py-4 rounded-xl transition text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3"
                   >
-                    <span>💬</span>
-                    شراء / استفسار عبر واتساب
+                    <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                    تواصل الآن للاستفسار عن السعر
                   </button>
                   
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
@@ -2192,7 +2182,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         />
                       </div>
                       <div className="text-xs sm:text-sm font-medium line-clamp-1">{product.title}</div>
-                      <div className="text-primary font-bold text-sm sm:text-base">{product.priceNew.toLocaleString()} ج.م</div>
+                      <div className="text-primary font-bold text-sm sm:text-base">{product.priceInfo}</div>
                     </div>
                   ))}
                 </div>
@@ -2208,7 +2198,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
           <span className="text-xl">⚡</span>
           <div>
             <p className="font-bold">تنويه هام</p>
-            <p className="text-sm">للتأكيد، الحجز يحتاج دفع عربون</p>
+            <p className="text-sm">سيتم تحويلك للواتساب للاستفسار عن السعر والتفاصيل</p>
           </div>
         </div>
       )}
