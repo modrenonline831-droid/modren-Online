@@ -100,7 +100,7 @@ interface AnimatedCounterProps {
 }
 
 // مكون 3D Card
-const Card3D = ({ children, className = "" }: Card3DProps) => {
+  const Card3D = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
