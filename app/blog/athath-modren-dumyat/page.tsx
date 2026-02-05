@@ -1,6 +1,4 @@
-// app/blog/athath-modren-dumyat/page.tsx
-
-"use client"; // أضف هذا في الأعلى
+"use client";
 
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -18,18 +16,23 @@ import {
   FaTwitter,
   FaLinkedinIn,
   FaInstagram,
-  FaEye
+  FaEye,
+  FaChevronRight,
+  FaCheckCircle
 } from "react-icons/fa"
 import { IoMdTimer, IoMdCheckmarkCircle } from "react-icons/io"
-import { MdWorkspacePremium, MdOutlineDesignServices } from "react-icons/md"
-import { GiWoodBeam } from "react-icons/gi"
+import { MdWorkspacePremium, MdOutlineDesignServices, MdLocalOffer } from "react-icons/md"
+import { GiWoodBeam, GiEgyptianProfile } from "react-icons/gi"
+import { RiCustomerService2Fill } from "react-icons/ri"
+import { TbTruckDelivery } from "react-icons/tb"
+import { useState, useEffect, useRef } from "react"
 
 // بيانات المقال للمخطط الهيكلي
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "الدليل الشامل للأثاث الدمياطي الأصلي: من التاريخ إلى الشراء",
-  "description": "دليل شامل عن الأثاث الدمياطي الأصلي، تاريخه، مميزاته، أنواع الخشب المستخدم، وكيفية التمييز بين الأصلي والمقلد. تعرف على أفضل مصنع أثاث دمياطي مودرن بضمان 20 سنة.",
+  "headline": "الدليل الشامل للأثاث الدمياطي الأصلي: من التاريخ للشراء",
+  "description": "دليل شامل عن الأثاث الدمياطي الأصلي، تاريخه، مميزاته، أنواع الخشب المستخدم، وكيفية التمييز بين الأصلي والمقلد. تعرف على أفضل مصنع أثاث دمياطي مودرن بضمان 5 سنوات.",
   "image": [
     "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
     "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
@@ -60,10 +63,10 @@ const articleSchema = {
 const BlogMetadata = () => {
   return (
     <>
-      <title>الأثاث الدمياطي الأصلي | مودرن أونلاين - جودة 20 سنة ضمان</title>
-      <meta name="description" content="دليل شامل عن الأثاث الدمياطي الأصلي: تاريخه، مميزاته، أنواع الخشب المستخدم، وكيفية التمييز بين الأصلي والمقلد. تعرف على أفضل مصنع أثاث دمياطي مودرن بضمان 20 سنة." />
+      <title>الأثاث الدمياطي الأصلي | مودرن أونلاين - جودة 5 سنوات ضمان</title>
+      <meta name="description" content="دليل شامل عن الأثاث الدمياطي الأصلي: تاريخه، مميزاته، أنواع الخشب المستخدم، وكيفية التمييز بين الأصلي والمقلد. تعرف على أفضل مصنع أثاث دمياطي مودرن بضمان 5 سنوات." />
       <meta name="keywords" content="أثاث دمياطي, مصنع أثاث دمياطي, أثاث دمياط مودرن, انتريهات دمياطية, غرف نوم دمياطية, أثاث منزلي دمياطي, كنب دمياطي, ركنات دمياطية, مودرن أونلاين, أثاث مصر دمياط, جودة الأثاث الدمياطي, ضمان الأثاث, خشب الزان الدمياطي, أثاث منزلي فاخر, ديكور داخلي, أثاث مودرن 2024" />
-      <meta property="og:title" content="الأثاث الدمياطي الأصلي | مودرن أونلاين - ضمان 20 سنة" />
+      <meta property="og:title" content="الأثاث الدمياطي الأصلي | مودرن أونلاين - ضمان 5 سنوات" />
       <meta property="og:description" content="دليل شامل عن الأثاث الدمياطي: تاريخ، أنواع، جودة، وكيفية الشراء من أفضل مصنع في دمياط" />
       <meta property="og:url" content="https://modrenonline.com/blog/athath-modren-dumyat" />
       <meta property="og:image" content="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
@@ -78,12 +81,204 @@ const BlogMetadata = () => {
   )
 }
 
+// مكون 3D Card
+const Card3D = ({ children, className = "" }) => {
+  const cardRef = useRef(null);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateY = ((x - centerX) / centerX) * 10;
+    const rotateX = ((centerY - y) / centerY) * 10;
+    
+    setRotation({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotation({ x: 0, y: 0 });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className={`transition-all duration-300 ${className}`}
+      style={{
+        transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+        boxShadow: isHovered 
+          ? `rgba(0, 0, 0, 0.1) 0px 20px 40px, 
+             rgba(16, 185, 129, 0.1) 0px 0px 60px` 
+          : 'rgba(0, 0, 0, 0.05) 0px 10px 30px'
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+    </div>
+  );
+};
+
+// مكون Floating Element
+const FloatingElement = ({ children, delay = 0, className = "" }) => {
+  const elementRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsVisible(true), delay);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => {
+      if (elementRef.current) {
+        observer.unobserve(elementRef.current);
+      }
+    };
+  }, [delay]);
+
+  return (
+    <div
+      ref={elementRef}
+      className={`transition-all duration-1000 ${className} ${
+        isVisible
+          ? 'opacity-100 translate-y-0'
+          : 'opacity-0 translate-y-10'
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
+
+// مكون Counter Animation
+const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+  const countRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let start = 0;
+          const increment = value / (duration / 16);
+          
+          const timer = setInterval(() => {
+            start += increment;
+            if (start >= value) {
+              setCount(value);
+              clearInterval(timer);
+            } else {
+              setCount(Math.floor(start));
+            }
+          }, 16);
+
+          return () => clearInterval(timer);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (countRef.current) {
+      observer.observe(countRef.current);
+    }
+
+    return () => {
+      if (countRef.current) {
+        observer.unobserve(countRef.current);
+      }
+    };
+  }, [value, duration]);
+
+  return (
+    <span ref={countRef} className="inline-block">
+      {count.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
 export default function DamiettaFurnitureGuide() {
-  const publishDate = "15 يناير 2024"
-  const readingTime = "12 دقيقة"
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [scrollProgress, setScrollProgress] = useState(0);
+  
+  const publishDate = "15 يناير 2024";
+  const readingTime = "8 دقائق";
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight
+      });
+    };
+
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // لهجة مصرية محببة
+  const egyptianPhrases = {
+    intro: "بقى، انت عارف ان الأثاث الدمياطي ده مش مجرد قطعة خشب؟ دا تراث وحكاية وعمر كامل!",
+    guarantee: "خلينا صريحين مع بعض، الضمان 5 سنين عندنا مش كلام في الهوا!",
+    quality: "عندنا الجودة مش بس شعار، دا أسلوب حياة!",
+    offer: "انت دلوقتي قدام فرصة، مش رفاهية!",
+    contact: "متفكرش كتير، كلمنا وهنرتبلك كل حاجة!"
+  };
+  
+  // SVG pattern as a variable
+  const svgPattern = encodeURIComponent(
+    '<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="#9C92AC" fill-opacity="0.1"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>'
+  );
   
   return (
     <>
+      {/* تأثيرات الخلفية المتحركة */}
+      <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+        <div 
+          className="absolute inset-0 opacity-5"
+          style={{
+            background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, 
+              rgba(16, 185, 129, 0.2), transparent 70%)`
+          }}
+        />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500">
+          <div 
+            className="h-full bg-gradient-to-r from-emerald-600 to-cyan-600"
+            style={{ width: `${scrollProgress}%`, transition: 'width 0.3s ease' }}
+          />
+        </div>
+      </div>
+
       {/* Schema.org للمقال */}
       <script
         type="application/ld+json"
@@ -93,838 +288,1193 @@ export default function DamiettaFurnitureGuide() {
       {/* تاجات Metadata */}
       <BlogMetadata />
       
-      <article className="max-w-4xl mx-auto px-4 py-8">
-        {/* العنوان الرئيسي مع صورة رمزية */}
-        <header className="mb-12 text-center">
-          <div className="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-90"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <GiWoodBeam className="text-white text-8xl opacity-30" />
-            </div>
-            <div className="relative z-10 h-full flex flex-col items-center justify-center text-white p-8">
-              <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-4">
-                الدليل الشامل للأثاث الدمياطي
+      <article className="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        {/* الهيدر الجديد مع تأثيرات 3D */}
+        <header className="mb-10 text-center">
+          <Card3D className="mb-6">
+            <div className="bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 text-white rounded-2xl p-8 shadow-2xl transform-gpu">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="text-right">
+                  <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-emerald-100">
+                    الدليل الكامل للأثاث الدمياطي الأصلي 🏠
+                  </h1>
+                  <p className="text-lg opacity-90 backdrop-blur-sm bg-white/10 p-3 rounded-xl">
+                    {egyptianPhrases.intro} <br />
+                    <span className="font-bold animate-pulse">هنساعدك تفرق بين الأصلي والمغشوش وتختار الصح من أول مرة!</span>
+                  </p>
+                </div>
+                <div className="relative group">
+                  <div className="relative z-10 flex items-center gap-3 bg-white/20 p-4 rounded-xl backdrop-blur-sm">
+                    <GiEgyptianProfile className="text-4xl animate-bounce" />
+                    <div className="text-right">
+                      <div className="font-bold">نصيحة مصري</div>
+                      <div className="text-sm">"الغالي رخيص والرخيص غالي"</div>
+                    </div>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-500" />
+                </div>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                الأثاث الدمياطي الأصلي: دليل الشراء الكامل 2024
-              </h1>
-              <p className="text-xl opacity-90 mb-6 max-w-3xl">
-                كل أسرار الأثاث الدمياطي من تاريخه العريق إلى أحدث تصميمات مودرن أونلاين
-              </p>
             </div>
-          </div>
+          </Card3D>
           
-          <div className="flex flex-wrap justify-center items-center gap-6 text-gray-500 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">تاريخ النشر:</span>
-              <span>{publishDate}</span>
+          {/* معلومات المقال */}
+          <FloatingElement delay={200}>
+            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-gray-600 text-sm bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-emerald-600">نشر:</span>
+                <span className="animate-pulse">{publishDate}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <IoMdTimer className="text-blue-500 animate-spin" style={{ animationDuration: '3s' }} />
+                <span>تقرأه في {readingTime}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaStar className="text-yellow-500 animate-pulse" />
+                <span>
+                  <AnimatedCounter value={4.8} suffix="/5" duration={1500} /> (247 تقييم)
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaEye className="text-purple-500 animate-pulse" />
+                <span>
+                  <AnimatedCounter value={2847} duration={2000} /> قراءة
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <IoMdTimer />
-              <span>وقت القراءة: {readingTime}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaStar className="text-yellow-500" />
-              <span>تصنيف: ⭐⭐⭐⭐⭐ (4.8/5)</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaEye className="text-blue-500" />
-              <span>تمت القراءة 2,847 مرة</span>
-            </div>
-          </div>
+          </FloatingElement>
         </header>
 
-        {/* جدول المحتويات التفاعلي */}
-        <nav className="sticky top-4 z-10 bg-white border border-gray-200 rounded-2xl p-6 mb-10 shadow-sm backdrop-blur-sm bg-white/95">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <FaRulerCombined className="text-blue-600" />
-            جدول المحتويات
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { id: "section-history", label: "التاريخ", icon: "📜" },
-              { id: "section-features", label: "المميزات", icon: "⭐" },
-              { id: "section-wood-types", label: "أنواع الخشب", icon: "🌳" },
-              { id: "section-original-vs-fake", label: "الأصلي vs المقلد", icon: "🔍" },
-              { id: "section-buying-guide", label: "دليل الشراء", icon: "🛒" },
-              { id: "section-modern-designs", label: "تصاميم 2024", icon: "🎨" },
-              { id: "section-care", label: "الصيانة", icon: "🔧" },
-              { id: "section-faq", label: "الأسئلة", icon: "❓" },
-            ].map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="flex flex-col items-center justify-center p-3 bg-gray-50 hover:bg-blue-50 rounded-lg transition-all hover:scale-105 group"
-              >
-                <span className="text-2xl mb-1">{item.icon}</span>
-                <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600">{item.label}</span>
-              </a>
-            ))}
-          </div>
-        </nav>
+        {/* جدول المحتويات المتحرك */}
+        <FloatingElement delay={300}>
+          <nav className="sticky top-4 z-10 bg-white/90 backdrop-blur-md border border-emerald-100 rounded-2xl p-5 mb-8 shadow-lg transform-gpu hover:shadow-xl transition-shadow duration-300">
+            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2 animate-slide-in-right">
+              <FaRulerCombined className="text-emerald-600 animate-pulse" />
+              هتقرأ عن إيه النهاردة؟
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { id: "section-history", label: "تاريخ دمياط", icon: "📜", color: "from-blue-400 to-cyan-400" },
+                { id: "section-features", label: "مميزاتنا", icon: "⭐", color: "from-amber-400 to-orange-400" },
+                { id: "section-wood-types", label: "أنواع الخشب", icon: "🌳", color: "from-emerald-400 to-green-400" },
+                { id: "section-original-vs-fake", label: "فرق معانا", icon: "🔍", color: "from-red-400 to-pink-400" },
+                { id: "section-buying-guide", label: "ازاي تشتري", icon: "🛒", color: "from-purple-400 to-indigo-400" },
+                { id: "section-modern-designs", label: "أحدث موديلات", icon: "🎨", color: "from-pink-400 to-rose-400" },
+                { id: "section-care", label: "صيانة سهلة", icon: "🔧", color: "from-indigo-400 to-blue-400" },
+                { id: "section-faq", label: "أسئلتك", icon: "❓", color: "from-gray-400 to-slate-400" },
+              ].map((item, index) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={`relative group overflow-hidden bg-gradient-to-br ${item.color} p-3 rounded-xl transition-all duration-300 hover:scale-105 border border-white/20`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="absolute inset-0 bg-white/10 backdrop-blur-sm group-hover:bg-white/20 transition-colors" />
+                  <div className="relative z-10 flex flex-col items-center justify-center">
+                    <span className="text-2xl mb-1 group-hover:animate-bounce">{item.icon}</span>
+                    <span className="text-sm font-medium text-white group-hover:text-yellow-200 drop-shadow-lg">
+                      {item.label}
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                </a>
+              ))}
+            </div>
+          </nav>
+        </FloatingElement>
 
         {/* المحتوى الرئيسي */}
-        <div className="prose prose-lg max-w-none">
+        <div className="space-y-10">
           
-          {/* مقدمة المقال */}
-          <section className="mb-12 bg-gradient-to-r from-blue-50 to-gray-50 p-8 rounded-2xl">
-            <div className="flex items-start gap-4">
-              <div className="text-blue-600 text-3xl">✨</div>
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">مقدمة: لماذا الأثاث الدمياطي مميز؟</h2>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  يعد <strong>الأثاث الدمياطي</strong> علامة الجودة والرفاهية في عالم الديكور والأثاث المنزلي. 
-                  ليس مجرد قطع أثاث عادية، بل هو <strong>تراث عريق</strong> يمتد لقرون من الإتقان والحرفية 
-                  المصرية الأصيلة. في هذا الدليل الشامل، سنأخذك في رحلة كاملة لاكتشاف:
-                </p>
-                <ul className="space-y-2 text-gray-700">
-                  <li className="flex items-center gap-2"><IoMdCheckmarkCircle className="text-green-500" /> تاريخ صناعة الأثاث في دمياط منذ العصر الفاطمي</li>
-                  <li className="flex items-center gap-2"><IoMdCheckmarkCircle className="text-green-500" /> مميزات الأثاث الدمياطي الأصلي التي تجعله الأفضل</li>
-                  <li className="flex items-center gap-2"><IoMdCheckmarkCircle className="text-green-500" /> كيف تفرق بين الأثاث الأصلي والمقلد؟</li>
-                  <li className="flex items-center gap-2"><IoMdCheckmarkCircle className="text-green-500" /> دليل شراء مفصل من مصنع موثوق</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* القسم 1: تاريخ صناعة الأثاث */}
-          <section id="section-history" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">📜</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-blue-600">1.</span> تاريخ صناعة الأثاث في دمياط: تراث يمتد لقرون
-              </h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <p className="text-lg leading-relaxed mb-4 text-gray-700">
-                  تعود جذور صناعة الأثاث في <strong className="text-blue-600">دمياط</strong> إلى <strong>العصر الفاطمي</strong> في القرن العاشر الميلادي، 
-                  حيث اشتهرت المدينة بصناعة السفن الخشبية التي كانت تعبر نهر النيل. 
-                  مع مرور الوقت، تحولت هذه المهارات إلى صناعة الأثاث التي نعرفها اليوم.
-                </p>
-                
-                <div className="space-y-4">
-                  <div className="bg-white p-4 rounded-lg border border-gray-200">
-                    <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
-                      <FaLeaf className="text-green-500" />
-                      حقائق تاريخية مهمة:
-                    </h3>
-                    <ul className="space-y-2 text-gray-700">
-                      <li>• القرن 10-12: بدايات صناعة الأثاث البسيط للحكام والأمراء</li>
-                      <li>• العصر المملوكي: تطور النقوش والزخارف الإسلامية على الأثاث</li>
-                      <li>• القرن 19: دخول الأدوات الحديثة والتقنيات الأوروبية</li>
-                      <li>• القرن 20: تحول دمياط إلى عاصمة الأثاث في مصر</li>
-                    </ul>
+          {/* مقدمة بسيطة مع 3D تأثير */}
+          <FloatingElement delay={400}>
+            <Card3D>
+              <section className="relative overflow-hidden bg-gradient-to-r from-blue-50 via-emerald-50 to-cyan-50 p-8 rounded-2xl border-r-4 border-emerald-400 shadow-lg">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-200 to-transparent opacity-50 rounded-full -translate-y-32 translate-x-32" />
+                <div className="relative z-10 flex items-start gap-6">
+                  <div className="text-emerald-600 text-4xl animate-bounce">
+                    ✨
                   </div>
-                </div>
-              </div>
-              
-              <div className="bg-gray-100 rounded-2xl p-6 text-center">
-                <div className="text-5xl mb-4">🏭</div>
-                <h3 className="font-bold text-gray-800 mb-2">أرقام قياسية في دمياط</h3>
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <div className="bg-white p-3 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">30,000+</div>
-                    <div className="text-sm text-gray-600">ورشة وحرفي</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">65%</div>
-                    <div className="text-sm text-gray-600">صادرات الأثاث المصري</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">120+</div>
-                    <div className="text-sm text-gray-600">دولة مستوردة</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">5 أجيال</div>
-                    <div className="text-sm text-gray-600">خبرة عائلية</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* القسم 2: مميزات الأثاث الدمياطي */}
-          <section id="section-features" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">⭐</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-green-600">2.</span> 8 مميزات تجعل الأثاث الدمياطي الأفضل عالمياً
-              </h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {[
-                {
-                  icon: "🛡️",
-                  title: "ضمان 20 سنة",
-                  desc: "أطول ضمان في صناعة الأثاث عالمياً",
-                  color: "bg-blue-50 border-blue-200",
-                  points: ["ضمان على الهيكل", "ضمان على التشطيبات", "خدمة صيانة مجانية"]
-                },
-                {
-                  icon: "🌳",
-                  title: "خامات طبيعية",
-                  desc: "100% خشب طبيعي معالج",
-                  color: "bg-green-50 border-green-200",
-                  points: ["خشب زان أوروبي", "معالجة حرارية", "مقاوم للحشرات"]
-                },
-                {
-                  icon: "👨‍🔧",
-                  title: "حرفية يدوية",
-                  desc: "تفاصيل لا تقلدها الآلات",
-                  color: "bg-orange-50 border-orange-200",
-                  points: ["دقة في التوصيل", "تفاصيل يدوية", "عمر افتراضي طويل"]
-                },
-                {
-                  icon: "📏",
-                  title: "تصميم مخصص",
-                  desc: "حسب مقاس منزلك",
-                  color: "bg-purple-50 border-purple-200",
-                  points: ["تصميم ثلاثي الأبعاد", "مراعاة المساحات", "حلول تخزين ذكية"]
-                },
-                {
-                  icon: "🎨",
-                  title: "تشطيبات فاخرة",
-                  desc: "دهانات أوروبية عالية الجودة",
-                  color: "bg-pink-50 border-pink-200",
-                  points: ["دهانات غير سامة", "لمسات نهائية دقيقة", "مقاومة للخدوش"]
-                },
-                {
-                  icon: "🚚",
-                  title: "توصيل مجاني",
-                  desc: "لجميع محافظات مصر",
-                  color: "bg-teal-50 border-teal-200",
-                  points: ["توصيل مجاني", "تركيب احترافي", "ضمان بعد التركيب"]
-                },
-                {
-                  icon: "💎",
-                  title: "تصميمات كلاسيكية وعصرية",
-                  desc: "تناسب جميع الأذواق",
-                  color: "bg-yellow-50 border-yellow-200",
-                  points: ["تصاميم كلاسيكية", "تصاميم مودرن", "خليط بين التراث والحداثة"]
-                },
-                {
-                  icon: "📞",
-                  title: "دعم فني مستمر",
-                  desc: "24/7 خدمة عملاء",
-                  color: "bg-red-50 border-red-200",
-                  points: ["دعم فني دائم", "استشارات مجانية", "متابعة بعد البيع"]
-                }
-              ].map((feature, index) => (
-                <div key={index} className={`${feature.color} border rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1`}>
-                  <div className="text-3xl mb-4">{feature.icon}</div>
-                  <h3 className="font-bold text-gray-800 mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{feature.desc}</p>
-                  <ul className="space-y-1 text-xs text-gray-500">
-                    {feature.points.map((point, i) => (
-                      <li key={i}>• {point}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* القسم 3: أنواع الخشب */}
-          <section id="section-wood-types" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🌳</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-amber-600">3.</span> دليل أنواع الخشب المستخدم في الأثاث الدمياطي
-              </h2>
-            </div>
-            
-            <div className="overflow-x-auto mb-8">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                <thead className="bg-gradient-to-r from-amber-50 to-yellow-50">
-                  <tr>
-                    <th className="py-4 px-6 text-right font-bold text-gray-700 border-b">نوع الخشب</th>
-                    <th className="py-4 px-6 text-right font-bold text-gray-700 border-b">المميزات</th>
-                    <th className="py-4 px-6 text-right font-bold text-gray-700 border-b">السعر</th>
-                    <th className="py-4 px-6 text-right font-bold text-gray-700 border-b">الاستخدام الأمثل</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      name: "خشب الزان الأوروبي",
-                      features: "أقوى أنواع الأخشاب، مقاوم للرطوبة، لا يتشقق، عمر افتراضي 50+ سنة",
-                      price: "$$$ (أعلى جودة)",
-                      use: "غرف النوم، المكتبات، قطع أثاث الثقيلة",
-                      icon: "🪵"
-                    },
-                    {
-                      name: "خشب الماهوجني (الموجنة)",
-                      features: "لونه أحمر داكن طبيعي، مقاوم للحشرات، متين، سهل التشكيل",
-                      price: "$$ (جودة فاخرة)",
-                      use: "الصالونات، طاولات الطعام، الأبواب الرئيسية",
-                      icon: "🟤"
-                    },
-                    {
-                      name: "خشب الأرو (البلوط)",
-                      features: "ملمس مميز، خطوط واضحة، عمر طويل، مقاوم للتآكل",
-                      price: "$$ (جودة عالية)",
-                      use: "الأرضيات، المطابخ، غرف المعيشة الفاخرة",
-                      icon: "🌰"
-                    },
-                    {
-                      name: "خشب السنديان",
-                      features: "صلابة عالية، نمط حبيبي جميل، مقاوم للعفن",
-                      price: "$$$ (فاخر)",
-                      use: "المكتبات التنفيذية، الصالونات الرسمية",
-                      icon: "🌲"
-                    },
-                    {
-                      name: "MDF معاكس",
-                      features: "سطح أملس، قابل للتشكيل، ثابت الأبعاد، سهل الطلاء",
-                      price: "$ (اقتصادي)",
-                      use: "واجهات الخزانات، الأسطح المسطحة، الأجزاء الديكورية",
-                      icon: "📦"
-                    }
-                  ].map((wood, index) => (
-                    <tr key={index} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-6 border-b font-semibold text-gray-800">
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{wood.icon}</span>
-                          <span>{wood.name}</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 border-b text-gray-700">{wood.features}</td>
-                      <td className="py-4 px-6 border-b">
-                        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                          wood.price.includes('$$$') ? 'bg-red-100 text-red-800' :
-                          wood.price.includes('$$') ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-green-100 text-green-800'
-                        }`}>
-                          {wood.price}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 border-b text-gray-700">{wood.use}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* القسم 4: مقارنة الأصلي vs المقلد */}
-          <section id="section-original-vs-fake" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🔍</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-red-600">4.</span> اختبار الأصلي vs المقلد: 10 علامات للتمييز
-              </h2>
-            </div>
-            
-            <div className="bg-gradient-to-r from-red-50 to-orange-50 p-8 rounded-2xl">
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* الأصلي */}
-                <div className="bg-white p-6 rounded-xl border-2 border-green-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">✅</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-green-700">الأثاث الدمياطي الأصلي</h3>
-                  </div>
-                  <ul className="space-y-4">
-                    {[
-                      {text: "الوزن الثقيل (خشب زان حقيقي)", icon: "⚖️"},
-                      {text: "رائحة خشب طبيعي مميزة", icon: "👃"},
-                      {text: "توصيلات دقيقة بدون فراغات", icon: "🔧"},
-                      {text: "شهادة ضمان مصدقة رسمياً", icon: "📄"},
-                      {text: "سعر يعكس الجودة الحقيقية", icon: "💰"}
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                        <span className="text-xl">{item.icon}</span>
-                        <span className="text-gray-700">{item.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* المقلد */}
-                <div className="bg-white p-6 rounded-xl border-2 border-red-200 shadow-lg">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">❌</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-red-700">الأثاث المقلد (التقليد)</h3>
-                  </div>
-                  <ul className="space-y-4">
-                    {[
-                      {text: "الوزن خفيف (MDF رديء)", icon: "⚖️"},
-                      {text: "رائحة كيميائية من الغراء", icon: "👃"},
-                      {text: "توصيلات غير دقيقة بفراغات", icon: "🔧"},
-                      {text: "لا يوجد ضمان أو ضمان وهمي", icon: "📄"},
-                      {text: "سعر منخفض بشكل مريب", icon: "💰"}
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-                        <span className="text-xl">{item.icon}</span>
-                        <span className="text-gray-700">{item.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              
-              {/* نصيحة هامة */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-xl">
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl">⚠️</div>
-                  <div>
-                    <h4 className="font-bold text-xl mb-2">تحذير من مودرن أونلاين:</h4>
-                    <p className="opacity-95">
-                      <strong>لا تنخدع بالسعر المنخفض!</strong> الفرق بين سعر الأثاث الأصلي والمقلد 
-                      يعكس الفرق في الجودة والعمر الافتراضي. الأثاث المقلد ينهار خلال 2-3 سنوات، 
-                      بينما الأثاث الأصلي يظل 20+ سنة.
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+                      <span className="animate-pulse">معلومة هتفرق:</span> ليه الأثاث الدمياطي دايمًا الأحسن؟
+                    </h2>
+                    <p className="text-gray-700 leading-relaxed mb-4 text-lg">
+                      <strong className="text-emerald-600">بص يا صديقي،</strong> الأثاث الدمياطي مش مجرد قطعة في البيت... دا استثمار! 
+                      علشان كده بنقولك: "اشتري دمياطي ولا تدفع تاني".
                     </p>
+                    <div className="bg-white/80 backdrop-blur-sm p-5 rounded-xl mt-4 border border-emerald-100 shadow-inner">
+                      <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                        <FaCheckCircle className="text-emerald-500 animate-pulse" />
+                        اللي هتتعلمه النهاردة:
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {[
+                          "✅ تعرف تاريخ الأثاث الدمياطي الحقيقي",
+                          "✅ تفرق بين الخشب الأصلي والمقلد",
+                          "✅ تختار التصميم اللي يناسب بيتك",
+                          "✅ تتفادى الغش في الأسعار",
+                          "✅ تعرف ازاي تحافظ عليه سنين طويلة",
+                          "✅ تاخد أفضل عرض من مودرن أونلاين"
+                        ].map((item, i) => (
+                          <div key={i} className="flex items-center gap-2 p-2 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors duration-300">
+                            <span className="text-emerald-500 animate-bounce" style={{ animationDelay: `${i * 200}ms` }}>
+                              ●
+                            </span>
+                            <span className="text-gray-700 font-medium">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </section>
+            </Card3D>
+          </FloatingElement>
+
+          {/* القسم 1: تاريخ دمياط مع Floating */}
+          <FloatingElement delay={500}>
+            <section id="section-history" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">📜</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full opacity-0 animate-ping" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                    #1
+                  </span> قصتنا في دمياط: من أيام زمان!
+                </h2>
               </div>
-            </div>
-          </section>
+              
+              <Card3D>
+                <div className="bg-gradient-to-br from-white to-blue-50 border border-gray-200 rounded-2xl p-6 shadow-xl">
+                  <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+                    <strong className="text-blue-600">دمياط</strong> دي مش مدينة عادية يا باشا... دي{' '}
+                    <strong className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                      عاصمة الأثاث في مصر
+                    </strong>! 
+                    من أيام زمان وأجدادنا بيصنعوا الأثاث بأيدهم، وكل جيل بيضيف خبرة جديدة.
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      {[
+                        {year: "من 1000 سنة", desc: "بدأنا نصنع أثاث للحكام والسلاطين"},
+                        {year: "العصر المملوكي", desc: "تعلمنا النقوش والزخارف الدقيقة"},
+                        {year: "القرن الـ19", desc: "دخلت علينا أدوات أوروبية متطورة"},
+                        {year: "النهضة الحديثة", desc: "دمياط بقى ليها اسمها في العالم كله"}
+                      ].map((item, i) => (
+                        <FloatingElement key={i} delay={i * 200}>
+                          <div className="relative group">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                            <div className="relative flex items-start gap-4 p-4 bg-white rounded-lg border border-blue-100 shadow-sm group-hover:shadow-md transition-all duration-300">
+                              <div className="flex-shrink-0">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
+                                  <span className="font-bold text-blue-600">{item.year.split(' ')[0]}</span>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-gray-800 mb-1">{item.year}</h4>
+                                <p className="text-gray-600">{item.desc}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </FloatingElement>
+                      ))}
+                    </div>
+                    
+                    <FloatingElement delay={800}>
+                      <div className="relative group">
+                        <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                        <div className="relative bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl text-center border border-emerald-100">
+                          <div className="text-5xl mb-4 animate-bounce">🏆</div>
+                          <h3 className="font-bold text-gray-800 mb-4 text-lg">أرقام بتتكلم عن نفسها</h3>
+                          <div className="grid grid-cols-2 gap-3">
+                            {[
+                              { value: 30000, label: "ورشة في دمياط", color: "from-blue-500 to-cyan-500" },
+                              { value: 65, label: "صادرات مصر من الأثاث", suffix: "%", color: "from-emerald-500 to-green-500" },
+                              { value: 120, label: "دولة بتشتري من دمياط", color: "from-purple-500 to-pink-500" },
+                              { value: 5, label: "أجيال خبرة عائلية", color: "from-orange-500 to-red-500" }
+                            ].map((stat, i) => (
+                              <div key={i} className="relative group/card overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover/card:opacity-100 transition-opacity duration-300" />
+                                <div className="relative bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
+                                  <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                                    <AnimatedCounter value={stat.value} suffix={stat.suffix || "+"} duration={2000} />
+                                  </div>
+                                  <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </FloatingElement>
+                  </div>
+                </div>
+              </Card3D>
+            </section>
+          </FloatingElement>
+
+          {/* القسم 2: مميزاتنا مع Floating Grid */}
+          <FloatingElement delay={600}>
+            <section id="section-features" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">⭐</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full opacity-0 animate-ping" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                    #2
+                  </span> ليه تشتري من مودرن أونلاين؟ علشان...
+                </h2>
+              </div>
+              
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {[
+                  {
+                    icon: "🛡️",
+                    title: "ضمان 5 سنين",
+                    desc: "مش كلام في الهوا! ضمان حقيقي على كل قطعة",
+                    color: "from-blue-500 to-cyan-500",
+                    points: ["ضمان شامل", "صيانة مجانية", "قطع غيار متوفرة"]
+                  },
+                  {
+                    icon: "🌳",
+                    title: "خشب طبيعي 100%",
+                    desc: "خشب زان أوروبي مش MDF متقلب",
+                    color: "from-emerald-500 to-green-500",
+                    points: ["مقاوم للحشرات", "لا يتشقق", "عمر طويل"]
+                  },
+                  {
+                    icon: "👨‍🔧",
+                    title: "صناعة يدوية",
+                    desc: "كل قطعة بتتلمس بأيد خبراء",
+                    color: "from-orange-500 to-red-500",
+                    points: ["دقة في التفاصيل", "جودة لا مثيل لها", "تفاني في العمل"]
+                  },
+                  {
+                    icon: "🎨",
+                    title: "تصميم حسب ذوقك",
+                    desc: "اختر اللي يعجبك وبنصممه لك",
+                    color: "from-purple-500 to-pink-500",
+                    points: ["ألوان حسب اختيارك", "مقاسات تناسب بيتك", "استشارة مجانية"]
+                  },
+                  {
+                    icon: "🚚",
+                    title: "توصيل لكل مصر",
+                    desc: "من الإسكندرية لأسوان، بنوصل لك",
+                    color: "from-teal-500 to-emerald-500",
+                    points: ["توصيل مجاني", "تركيب احترافي", "ضمان بعد التركيب"]
+                  },
+                  {
+                    icon: "💳",
+                    title: "تقسيط مريح",
+                    desc: "بدون فوائد على 12 شهر",
+                    color: "from-indigo-500 to-blue-500",
+                    points: ["بسعر الكاش", "أقساط شهرية", "شروط سهلة"]
+                  }
+                ].map((feature, index) => (
+                  <FloatingElement key={index} delay={index * 150}>
+                    <div className="relative group h-full">
+                      <div className="absolute -inset-0.5 bg-gradient-to-br rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                      <Card3D>
+                        <div className="relative bg-white border border-gray-200 rounded-xl p-6 h-full transition-all duration-300 hover:shadow-xl">
+                          <div className="text-3xl mb-4 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
+                            {feature.icon}
+                          </div>
+                          <h3 className="font-bold text-gray-800 mb-3 text-lg">{feature.title}</h3>
+                          <p className="text-gray-600 mb-4">{feature.desc}</p>
+                          <ul className="space-y-2">
+                            {feature.points.map((point, i) => (
+                              <li key={i} className="flex items-center gap-2 text-gray-600">
+                                <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full animate-pulse" />
+                                <span className="text-sm">{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </div>
+                      </Card3D>
+                    </div>
+                  </FloatingElement>
+                ))}
+              </div>
+              
+              <FloatingElement delay={900}>
+                <div className="mt-8 p-6 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-2xl shadow-xl transform-gpu hover:scale-[1.02] transition-transform duration-300">
+                  <div className="flex items-center justify-center gap-4">
+                    <MdLocalOffer className="text-3xl animate-pulse" />
+                    <div className="text-center">
+                      <p className="font-bold text-lg mb-1">خلاصة القول:</p>
+                      <p className="text-white/90">انت لما تشتري منّا، بتكون اشتريت{' '}
+                        <strong className="text-yellow-200">راحة بال</strong> مش بس أثاث!</p>
+                    </div>
+                  </div>
+                </div>
+              </FloatingElement>
+            </section>
+          </FloatingElement>
+
+          {/* القسم 3: أنواع الخشب مع 3D Cards */}
+          <FloatingElement delay={700}>
+            <section id="section-wood-types" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">🌳</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-emerald-400 to-green-400 rounded-full opacity-0 animate-ping" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                    #3
+                  </span> خشب إيه اللي يناسبك؟ دليلك البسيط
+                </h2>
+              </div>
+              
+              <div className="space-y-5">
+                {[
+                  {
+                    name: "خشب الزان الأوروبي",
+                    desc: "الأقوى والأطول عمرًا - دايمًا اختيار الأذكياء",
+                    price: "السعر: أعلى شوية، لكن عمره 20+ سنة",
+                    bestFor: "مثالي لـ: غرف النوم، المكتبات، القطع الثقيلة",
+                    tip: "نصيحة: لو عايز قطعة تبقي معاك سنين، ده اختيارك!",
+                    gradient: "from-amber-500 to-orange-500"
+                  },
+                  {
+                    name: "خشب الماهوجني (الموجنة)",
+                    desc: "لونه أحمر داكن طبيعي - أناقة من غير مجهود",
+                    price: "السعر: فاخر وعمره طويل",
+                    bestFor: "مثالي لـ: الصالونات، طاولات الطعام، الأبواب",
+                    tip: "نصيحة: بيتك هيبقى زي القصور!",
+                    gradient: "from-red-500 to-pink-500"
+                  },
+                  {
+                    name: "خشب الأرو (البلوط)",
+                    desc: "ملمس مميز وخطوط واضحة - كلاسيكي وعصري",
+                    price: "السعر: جودة عالية بسعر معقول",
+                    bestFor: "مثالي لـ: الأرضيات، المطابخ، غرف المعيشة",
+                    tip: "نصيحة: القطعة دي هتلفت نظر كل اللي يجي عندك",
+                    gradient: "from-emerald-500 to-teal-500"
+                  },
+                  {
+                    name: "MDF معاكس",
+                    desc: "سطح أملس وقابل للتشكيل - اقتصادي وجميل",
+                    price: "السعر: اقتصادي ومناسب الميزانية",
+                    bestFor: "مثالي لـ: واجهات الخزانات، الأجزاء الديكورية",
+                    tip: "نصيحة: مش كل MDF وحش، بس خلي بالك من النوعية",
+                    gradient: "from-blue-500 to-cyan-500"
+                  }
+                ].map((wood, index) => (
+                  <FloatingElement key={index} delay={index * 200}>
+                    <Card3D>
+                      <div className="relative group overflow-hidden bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full -translate-y-12 translate-x-12" />
+                        
+                        <div className="relative z-10 flex flex-col lg:flex-row gap-6">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${wood.gradient} animate-pulse`} />
+                              <h3 className="text-xl font-bold text-gray-800">{wood.name}</h3>
+                            </div>
+                            <p className="text-gray-600 mb-4">{wood.desc}</p>
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              <span className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                                {wood.price}
+                              </span>
+                              <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium hover:scale-105 transition-transform">
+                                {wood.bestFor}
+                              </span>
+                            </div>
+                          </div>
+                          
+                          <div className="lg:w-1/3">
+                            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-100 group-hover:border-emerald-200 transition-colors">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="text-emerald-500">💡</span>
+                                <div className="font-bold text-gray-700">نصيحة منّا:</div>
+                              </div>
+                              <div className="text-gray-800 font-medium">{wood.tip}</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                    </Card3D>
+                  </FloatingElement>
+                ))}
+              </div>
+            </section>
+          </FloatingElement>
+
+          {/* القسم 4: الفرق بينا وبين غيرنا مع 3D Comparison */}
+          <FloatingElement delay={800}>
+            <section id="section-original-vs-fake" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">🔍</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-red-400 to-pink-400 rounded-full opacity-0 animate-ping" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                    #4
+                  </span> اوعى تندم! فرق بين الأصلي والمغشوش
+                </h2>
+              </div>
+              
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Original */}
+                <FloatingElement delay={400}>
+                  <div className="relative group h-full">
+                    <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                    <Card3D>
+                      <div className="relative bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-200 p-6 rounded-2xl shadow-xl h-full">
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className="relative">
+                            <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg">
+                              <span className="text-2xl text-white">✅</span>
+                            </div>
+                            <div className="absolute -inset-1 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full opacity-0 animate-ping" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-emerald-800">مودرن أونلاين (الأصلي)</h3>
+                            <p className="text-emerald-600">جودة ما بعدها جودة</p>
+                          </div>
+                        </div>
+                        <ul className="space-y-3">
+                          {[
+                            {text: "خشب طبيعي ثقيل - عمره طويل", emoji: "⚖️"},
+                            {text: "رائحة خشب نقية - من غير كيماويات", emoji: "👃"},
+                            {text: "توصيلات محكمة - من غير فراغات", emoji: "🔧"},
+                            {text: "ضمان 5 سنين حقيقي - ورق رسمي", emoji: "📄"},
+                            {text: "سعر يعكس الجودة - مش غالي ولا رخيص", emoji: "💰"}
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-center gap-3 p-3 bg-white/50 rounded-lg backdrop-blur-sm hover:bg-white transition-colors duration-300">
+                              <span className="text-2xl animate-bounce" style={{ animationDelay: `${i * 200}ms` }}>
+                                {item.emoji}
+                              </span>
+                              <span className="text-gray-700 font-medium">{item.text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Card3D>
+                  </div>
+                </FloatingElement>
+
+                {/* Fake */}
+                <FloatingElement delay={600}>
+                  <div className="relative group h-full">
+                    <div className="absolute -inset-0.5 bg-gradient-to-br from-red-400 to-pink-400 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                    <Card3D>
+                      <div className="relative bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 p-6 rounded-2xl shadow-xl h-full">
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className="relative">
+                            <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                              <span className="text-2xl text-white">❌</span>
+                            </div>
+                            <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-pink-500 rounded-full opacity-0 animate-ping" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-red-800">التقليد الرخيص</h3>
+                            <p className="text-red-600">أسعار مغرية، جودة مخيبة</p>
+                          </div>
+                        </div>
+                        <ul className="space-y-3">
+                          {[
+                            {text: "MDF خفيف - بيتكسر بسرعة", emoji: "⚖️"},
+                            {text: "رائحة غراء كيماوية - بتضر صحتك", emoji: "👃"},
+                            {text: "توصيلات متهاوية - بيفضل يهتز", emoji: "🔧"},
+                            {text: "ضمان وهمي - أو مش موجود", emoji: "📄"},
+                            {text: "سعر مغري - بس عمره قصير", emoji: "💰"}
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-center gap-3 p-3 bg-white/50 rounded-lg backdrop-blur-sm hover:bg-white transition-colors duration-300">
+                              <span className="text-2xl animate-shake" style={{ animationDelay: `${i * 200}ms` }}>
+                                {item.emoji}
+                              </span>
+                              <span className="text-gray-700 font-medium">{item.text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Card3D>
+                  </div>
+                </FloatingElement>
+              </div>
+              
+              {/* Warning Message */}
+              <FloatingElement delay={800}>
+                <div className="mt-8 p-6 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-2xl shadow-xl transform-gpu hover:scale-[1.02] transition-transform duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="text-3xl animate-pulse">⚠️</div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">تنبيه مهم منّا:</h4>
+                      <p className="text-white/90">
+                        <strong className="text-yellow-200">بلاش تغرّك الأسعار الرخيصة!</strong> الفرق في السعر هو فرق في الجودة والعمر. 
+                        الأثاث المغشوش بيخلص خلال 2-3 سنين، والأصلي بيكمل معاك 10+ سنين!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </FloatingElement>
+            </section>
+          </FloatingElement>
 
           {/* القسم 5: دليل الشراء */}
-          <section id="section-buying-guide" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🛒</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-purple-600">5.</span> دليل الشراء من مصنع أثاث دمياطي موثوق
-              </h2>
-            </div>
-            
-            <div className="space-y-8">
-              {/* خطوات الشراء */}
-              <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">6 خطوات للشراء الآمن من مودرن أونلاين:</h3>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {[
-                    {step: "١", title: "استشارة مجانية", desc: "تواصل مع خبرائنا عبر الواتساب أو الهاتف", icon: "📞"},
-                    {step: "٢", title: "اختيار التصميم", desc: "اختر من 100+ تصميم أو اطلب تصميم مخصص", icon: "🎨"},
-                    {step: "٣", title: "توقيع العقد", desc: "عقد رسمي مع تفاصيل المواصفات والضمان", icon: "📝"},
-                    {step: "٤", title: "التصنيع في المصنع", desc: "تصنيع تحت إشراف فنيين متخصصين", icon: "🏭"},
-                    {step: "٥", title: "التفتيش النهائي", desc: "فحص كل قطعة قبل التغليف", icon: "🔍"},
-                    {step: "٦", title: "التوصيل والتركيب", desc: "توصيل مجاني وتركيب احترافي", icon: "🚚"}
-                  ].map((item) => (
-                    <div key={item.step} className="text-center p-6 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors">
-                      <div className="text-4xl mb-3">{item.icon}</div>
-                      <div className="text-3xl font-bold text-purple-600 mb-2">{item.step}</div>
-                      <h4 className="font-bold text-gray-800 mb-2">{item.title}</h4>
-                      <p className="text-gray-600 text-sm">{item.desc}</p>
-                    </div>
-                  ))}
+          <FloatingElement delay={900}>
+            <section id="section-buying-guide" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">🛒</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-0 animate-ping" />
                 </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    #5
+                  </span> عايز تشتري؟ خد الخطوات دي
+                </h2>
               </div>
               
-              {/* جدول الأسعار */}
-              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">أسعار تقديرية للأثاث الدمياطي 2024</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white rounded-xl overflow-hidden shadow-sm">
-                    <thead className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
-                      <tr>
-                        <th className="py-4 px-6 text-right font-bold">القطعة</th>
-                        <th className="py-4 px-6 text-right font-bold">المقاس</th>
-                        <th className="py-4 px-6 text-right font-bold">خشب الزان</th>
-                        <th className="py-4 px-6 text-right font-bold">خشب الماهوجني</th>
-                        <th className="py-4 px-6 text-right font-bold">مدة التصنيع</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+              <div className="space-y-6">
+                {/* خطوات الشراء */}
+                <Card3D>
+                  <div className="bg-gradient-to-br from-white to-purple-50 p-8 rounded-2xl border border-purple-100 shadow-xl">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
+                      اشتري من مودرن أونلاين في 6 خطوات:
+                    </h3>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                       {[
-                        {item: "غرفة نوم كاملة", size: "سرير + دولاب + كنبة", zan: "٢٥,٠٠٠ - ٤٠,٠٠٠", mahogany: "٣٠,٠٠٠ - ٥٠,٠٠٠", time: "١٥-٢٠ يوم"},
-                        {item: "صالون ٦ قطع", size: "كنبة ٣+٢+١", zan: "٣٠,٠٠٠ - ٥٠,٠٠٠", mahogany: "٤٠,٠٠٠ - ٦٥,٠٠٠", time: "٢٠-٢٥ يوم"},
-                        {item: "طاولة طعام", size: "٦ كراسي", zan: "١٥,٠٠٠ - ٢٥,٠٠٠", mahogany: "٢٠,٠٠٠ - ٣٥,٠٠٠", time: "١٠-١٥ يوم"},
-                        {item: "مكتب إداري", size: "١٨٠×٨٠ سم", zan: "٨,٠٠٠ - ١٥,٠٠٠", mahogany: "١٢,٠٠٠ - ٢٠,٠٠٠", time: "٧-١٠ أيام"},
-                        {item: "دولاب ملابس", size: "٢٠٠×١٨٠ سم", zan: "١٢,٠٠٠ - ٢٠,٠٠٠", mahogany: "١٨,٠٠٠ - ٢٨,٠٠٠", time: "١٢-١٨ يوم"}
-                      ].map((row, index) => (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                          <td className="py-4 px-6 font-semibold text-gray-800">{row.item}</td>
-                          <td className="py-4 px-6 text-gray-700">{row.size}</td>
-                          <td className="py-4 px-6 text-blue-600 font-bold">{row.zan} ج.م</td>
-                          <td className="py-4 px-6 text-purple-600 font-bold">{row.mahogany} ج.م</td>
-                          <td className="py-4 px-6 text-gray-700">{row.time}</td>
-                        </tr>
+                        {step: "١", title: "كلمنا", desc: "اتصل أو واتساب علشان نفهم احتياجاتك", icon: "📞", color: "from-blue-500 to-cyan-500"},
+                        {step: "٢", title: "اختار تصميم", desc: "من كتالوجاتنا أو صمم معانا", icon: "🎨", color: "from-purple-500 to-pink-500"},
+                        {step: "٣", title: "اتفق على السعر", desc: "أسعارنا ثابتة وواضحة من الأول", icon: "💰", color: "from-emerald-500 to-green-500"},
+                        {step: "٤", title: "ابعتلنا المساحة", desc: "ابعث مقاسات غرفك عشان نناسبها", icon: "📏", color: "from-amber-500 to-orange-500"},
+                        {step: "٥", title: "استلم في مصنعنا", desc: "تصنيع تحت إشراف خبراء", icon: "🏭", color: "from-red-500 to-pink-500"},
+                        {step: "٦", title: "استلم في بيتك", desc: "توصيل وتركيب مجاني", icon: "🚚", color: "from-teal-500 to-emerald-500"}
+                      ].map((item, index) => (
+                        <FloatingElement key={item.step} delay={index * 150}>
+                          <div className="relative group">
+                            <div className="absolute -inset-0.5 bg-gradient-to-br rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                            <div className="relative text-center p-6 bg-white rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300">
+                              <div className="text-4xl mb-3 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
+                                {item.icon}
+                              </div>
+                              <div className="text-3xl font-bold mb-2 bg-gradient-to-r bg-clip-text text-transparent">
+                                {item.step}
+                              </div>
+                              <h4 className="font-bold text-gray-800 mb-2 text-lg">{item.title}</h4>
+                              <p className="text-gray-600 text-sm">{item.desc}</p>
+                              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </div>
+                          </div>
+                        </FloatingElement>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-sm text-gray-500 mt-4 text-center">* الأسعار تشمل التوصيل والتركيب داخل القاهرة الكبرى</p>
+                    </div>
+                  </div>
+                </Card3D>
+                
+                {/* أسعار تقريبية */}
+                <FloatingElement delay={800}>
+                  <Card3D>
+                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border border-cyan-100 shadow-xl">
+                      <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">
+                        أسعار تقريبية - علشان متتفاجئش!
+                      </h3>
+                      <div className="overflow-hidden rounded-xl border border-gray-200">
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full bg-white">
+                            <thead>
+                              <tr className="bg-gradient-to-r from-blue-600 to-cyan-600">
+                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">القطعة</th>
+                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">خشب الزان</th>
+                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">خشب الماهوجني</th>
+                                <th className="py-4 px-6 text-right font-bold text-white text-sm">مدة التصنيع</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {[
+                                {item: "غرفة نوم كاملة", zan: "١٥,٠٠٠ - ٣٠,٠٠٠", mahogany: "٢٠,٠٠٠ - ٤٠,٠٠٠", time: "١٥-٢٠ يوم"},
+                                {item: "صالون ٦ قطع", zan: "٢٠,٠٠٠ - ٤٠,٠٠٠", mahogany: "٣٠,٠٠٠ - ٥٠,٠٠٠", time: "١٥-٢٥ يوم"},
+                                {item: "طاولة طعام ٦ كراسي", zan: "١٠,٠٠٠ - ٢٠,٠٠٠", mahogany: "١٥,٠٠٠ - ٢٥,٠٠٠", time: "١٠-١٥ يوم"},
+                                {item: "مكتب إداري", zan: "٥,٠٠٠ - ١٠,٠٠٠", mahogany: "٨,٠٠٠ - ١٥,٠٠٠", time: "٧-١٠ أيام"},
+                                {item: "دولاب ملابس كبير", zan: "٨,٠٠٠ - ١٥,٠٠٠", mahogany: "١٢,٠٠٠ - ٢٠,٠٠٠", time: "١٠-١٥ يوم"}
+                              ].map((row, index) => (
+                                <tr 
+                                  key={index} 
+                                  className={`border-t border-gray-100 hover:bg-blue-50 transition-colors duration-200 ${
+                                    index % 2 === 0 ? 'bg-gray-50/50' : 'bg-white'
+                                  }`}
+                                >
+                                  <td className="py-4 px-6 font-semibold text-gray-800 border-r">{row.item}</td>
+                                  <td className="py-4 px-6 text-blue-600 font-bold border-r">{row.zan} ج.م</td>
+                                  <td className="py-4 px-6 text-purple-600 font-bold border-r">{row.mahogany} ج.م</td>
+                                  <td className="py-4 px-6 text-gray-700">{row.time}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-3 border-t border-gray-200">
+                          <p className="text-sm text-gray-600 text-center">
+                            * الأسعار تشمل التوصيل والتركيب في القاهرة الكبرى
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card3D>
+                </FloatingElement>
               </div>
-            </div>
-          </section>
+            </section>
+          </FloatingElement>
 
-          {/* القسم 6: تصاميم مودرن */}
-          <section id="section-modern-designs" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🎨</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-teal-600">6.</span> أحدث تصاميم الأثاث المودرن 2024
-              </h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "المودرن الكلاسيكي",
-                  desc: "مزيج بين الأناقة الكلاسيكية والخطوط الحديثة",
-                  features: ["ألوان خشب طبيعية", "خطوط نظيفة", "تفاصيل ذهبية"],
-                  ideal: "الفيلات والشقق الفاخرة",
-                  icon: "👑"
-                },
-                {
-                  title: "الاسكندنافي المينيمالست",
-                  desc: "بساطة وأناقة مع التركيز على الوظيفية",
-                  features: ["ألوان فاتحة", "تخزين ذكي", "إضاءة مدمجة"],
-                  ideal: "الشقق الصغيرة والمكاتب",
-                  icon: "🏢"
-                },
-                {
-                  title: "اللاتري الصناعي",
-                  desc: "خشب مع معدن لإطلالة عصرية وجريئة",
-                  features: ["خشب مع معدن", "ألوان داكنة", "إضاءة صناعية"],
-                  ideal: "لوبي الفلل والمطاعم",
-                  icon: "🏭"
-                },
-                {
-                  title: "البوهيمي المعاصر",
-                  desc: "ألوان زاهية مع خطوط منحنية وأنماط نباتية",
-                  features: ["ألوان متنوعة", "خطوط منحنية", "لمسات نباتية"],
-                  ideal: "غرف المعيشة والاستقبال",
-                  icon: "🌿"
-                },
-                {
-                  title: "التكنولوجي الذكي",
-                  desc: "أثاث مدمج مع التكنولوجيا الحديثة",
-                  features: ["شواحن لاسلكية", "إضاءة ذكية", "تخزين متحرك"],
-                  ideal: "غرف النوم والمكاتب الذكية",
-                  icon: "📱"
-                },
-                {
-                  title: "الإيكولوجي المستدام",
-                  desc: "أثاث صديق للبيئة مع مواد معاد تدويرها",
-                  features: ["مواد مستدامة", "تصاميم عضوية", "صديق للبيئة"],
-                  ideal: "المنازل العصرية الواعية",
-                  icon: "🌍"
-                }
-              ].map((design, index) => (
-                <div key={index} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2">
-                  <div className="text-4xl mb-4">{design.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">{design.title}</h3>
-                  <p className="text-gray-600 mb-4">{design.desc}</p>
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-700 mb-2">المميزات:</h4>
-                    <ul className="space-y-1 text-gray-600">
-                      {design.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 bg-teal-500 rounded-full"></div>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+          {/* القسم 6: التصاميم */}
+          <FloatingElement delay={1000}>
+            <section id="section-modern-designs" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-emerald-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">🎨</span>
                   </div>
-                  <div className="pt-4 border-t">
-                    <h4 className="font-semibold text-gray-700 mb-1">مثالي لـ:</h4>
-                    <p className="text-gray-600">{design.ideal}</p>
-                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-teal-400 to-emerald-400 rounded-full opacity-0 animate-ping" />
                 </div>
-              ))}
-            </div>
-          </section>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                    #6
+                  </span> اخر صيحة في التصميمات
+                </h2>
+              </div>
+              
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {[
+                  {
+                    title: "الكلاسيكي المودرن",
+                    desc: "كلاسيكي مع لمسات عصرية - دايمًا راقي",
+                    features: ["ألوان خشب طبيعية", "خطوط أنيقة", "لمسات ذهبية"],
+                    ideal: "البيوت الفاخرة والشقق الحديثة",
+                    gradient: "from-amber-500 to-yellow-500"
+                  },
+                  {
+                    title: "البسيط والأنيق",
+                    desc: "مينيمال وجميل - مش محتاج مجهود",
+                    features: ["ألوان فاتحة", "تخزين ذكي", "شكل هادي"],
+                    ideal: "الشقق الصغيرة والمكاتب",
+                    gradient: "from-blue-500 to-cyan-500"
+                  },
+                  {
+                    title: "الخشب مع المعدن",
+                    desc: "خشب قوي مع معدن أنيق - عصري وجريء",
+                    features: ["مزيج جميل", "شكل مختلف", "قوة متكاملة"],
+                    ideal: "الصالات والمطاعم",
+                    gradient: "from-gray-500 to-slate-500"
+                  },
+                  {
+                    title: "الألوان الزاهية",
+                    desc: "خشب طبيعي مع ألوان حيوية - بيتفرح",
+                    features: ["ألوان متنوعة", "طاقة إيجابية", "شبابي"],
+                    ideal: "غرف الشباب والأطفال",
+                    gradient: "from-pink-500 to-rose-500"
+                  },
+                  {
+                    title: "الذكي والمتطور",
+                    desc: "أثاث مع تكنولوجيا - من الآخر",
+                    features: ["شواحن لاسلكية", "إضاءة ذكية", "تخزين متحرك"],
+                    ideal: "غرف النوم والمكاتب الذكية",
+                    gradient: "from-purple-500 to-indigo-500"
+                  },
+                  {
+                    title: "الصديق للبيئة",
+                    desc: "خشب معاد تدويره - بتفكر في المستقبل",
+                    features: ["مواد طبيعية", "صديق للبيئة", "شعور رائع"],
+                    ideal: "البيوت الواعية",
+                    gradient: "from-emerald-500 to-green-500"
+                  }
+                ].map((design, index) => (
+                  <FloatingElement key={index} delay={index * 150}>
+                    <div className="relative group h-full">
+                      <div className="absolute -inset-0.5 bg-gradient-to-br rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                      <Card3D>
+                        <div className="relative bg-white border border-gray-200 rounded-xl p-6 h-full transition-all duration-300 hover:shadow-xl">
+                          <div className="text-4xl mb-4 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
+                            {["👑","🏢","🏭","🌿","📱","🌍"][index]}
+                          </div>
+                          <h3 className="text-lg font-bold text-gray-800 mb-3">{design.title}</h3>
+                          <p className="text-gray-600 text-sm mb-4">{design.desc}</p>
+                          <div className="mb-4">
+                            <div className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                              <span className="w-2 h-2 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full animate-pulse" />
+                              المميزات:
+                            </div>
+                            <ul className="space-y-1.5 text-xs text-gray-600">
+                              {design.features.map((feature, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  <span className="text-teal-500">●</span>
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="pt-3 border-t border-gray-100">
+                            <div className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-2">
+                              <span className="w-2 h-2 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full animate-pulse" />
+                              مثالي لـ:
+                            </div>
+                            <p className="text-gray-600 text-sm">{design.ideal}</p>
+                          </div>
+                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </div>
+                      </Card3D>
+                    </div>
+                  </FloatingElement>
+                ))}
+              </div>
+            </section>
+          </FloatingElement>
 
           {/* القسم 7: الصيانة */}
-          <section id="section-care" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">🔧</span>
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-indigo-600">7.</span> دليل صيانة الأثاث الدمياطي
-              </h2>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">نصائح الصيانة اليومية:</h3>
-                <div className="space-y-6">
-                  {[
-                    {title: "التنظيف اليومي", desc: "استخدم قطعة قماش ناعمة وجافة - تجنب الماء المباشر", icon: "🧹"},
-                    {title: "التنظيف الأسبوعي", desc: "استخدم منظف الأخشاب الخاص مرة أسبوعياً", icon: "🧽"},
-                    {title: "الحماية من الشمس", desc: "تجنب التعرض المباشر لأشعة الشمس لفترات طويلة", icon: "☀️"},
-                    {title: "الرطوبة المثالية", desc: "حافظ على رطوبة 40-60% في الغرفة", icon: "💧"},
-                    {title: "معالجة الخدوش", desc: "استخدم مواد التلميع المناسبة فور ظهور الخدوش", icon: "🔨"}
-                  ].map((tip, i) => (
-                    <div key={i} className="flex items-start gap-4 p-4 bg-white/50 rounded-xl">
-                      <div className="text-2xl">{tip.icon}</div>
-                      <div>
-                        <h4 className="font-bold text-gray-800 mb-1">{tip.title}</h4>
-                        <p className="text-gray-600 text-sm">{tip.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+          <FloatingElement delay={1100}>
+            <section id="section-care" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">🔧</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full opacity-0 animate-ping" />
                 </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    #7
+                  </span> ابقى احفظ أثاثك سنين
+                </h2>
               </div>
               
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">خدمات مودرن أونلاين:</h3>
-                <div className="space-y-6">
-                  {[
-                    {title: "صيانة دورية مجانية", desc: "فحص مجاني كل سنتين خلال فترة الضمان", icon: "🛠️", color: "text-green-600"},
-                    {title: "خدمة الترميم الشامل", desc: "تجديد كامل للقطع القديمة بأسعار مميزة", icon: "🔄", color: "text-blue-600"},
-                    {title: "ضمان 20 سنة", desc: "أطول ضمان في السوق على الهيكل والتشطيب", icon: "🛡️", color: "text-purple-600"},
-                    {title: "قطع الغيار الأصلية", desc: "توفر جميع قطع الغيار لمدة 20 سنة", icon: "⚙️", color: "text-orange-600"},
-                    {title: "فريق متخصص", desc: "فريق صيانة متخصص في الأثاث الدمياطي", icon: "👨‍🔧", color: "text-red-600"}
-                  ].map((service, i) => (
-                    <div key={i} className="flex items-start gap-4 p-4 bg-white/50 rounded-xl">
-                      <div className={`text-2xl ${service.color}`}>{service.icon}</div>
-                      <div>
-                        <h4 className="font-bold text-gray-800 mb-1">{service.title}</h4>
-                        <p className="text-gray-600 text-sm">{service.desc}</p>
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* نصائح */}
+                <FloatingElement delay={400}>
+                  <Card3D>
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl border border-purple-100 shadow-xl">
+                      <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <span className="text-2xl">✨</span>
+                        نصائح سهلة للحفاظ:
+                      </h3>
+                      <div className="space-y-3">
+                        {[
+                          {title: "تنظيف يومي", desc: "قطعة قماش ناعمة وجافة - متحطش مياه", icon: "🧹"},
+                          {title: "تنظيف أسبوعي", desc: "منظف خشب خاص مرة في الأسبوع", icon: "🧽"},
+                          {title: "بعد الشمس", desc: "متخليهوش في الشمس المباشرة طول اليوم", icon: "☀️"},
+                          {title: "الرطوبة المناسبة", desc: "حافظ على جو معتدل في الغرفة", icon: "💧"},
+                          {title: "علاج الخدوش", desc: "عالج الخدوش الصغيرة على طول", icon: "🔨"}
+                        ].map((tip, i) => (
+                          <div key={i} className="group flex items-start gap-3 p-3 bg-white/50 rounded-lg backdrop-blur-sm hover:bg-white transition-all duration-300">
+                            <div className="text-2xl animate-bounce" style={{ animationDelay: `${i * 200}ms` }}>
+                              {tip.icon}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">
+                                {tip.title}
+                              </h4>
+                              <p className="text-gray-600 text-sm">{tip.desc}</p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
+                  </Card3D>
+                </FloatingElement>
 
-          {/* القسم 8: الأسئلة الشائعة */}
-          <section id="section-faq" className="mb-16 scroll-mt-20">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                <span className="text-2xl">❓</span>
+                {/* خدمات */}
+                <FloatingElement delay={600}>
+                  <Card3D>
+                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border border-cyan-100 shadow-xl">
+                      <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <span className="text-2xl">⚡</span>
+                        خدماتنا لك:
+                      </h3>
+                      <div className="space-y-3">
+                        {[
+                          {title: "صيانة مجانية", desc: "فحص مجاني كل سنتين في الضمان", icon: "🛠️"},
+                          {title: "ترميم شامل", desc: "تجديد القطع القديمة بأسعار خاصة", icon: "🔄"},
+                          {title: "ضمان 5 سنين", desc: "أطول ضمان في السوق على الهيكل", icon: "🛡️"},
+                          {title: "قطع غيار", desc: "توفر جميع القطع لمدة 5 سنين", icon: "⚙️"},
+                          {title: "فريق متخصص", desc: "فريق صيانة خبراء في دمياطي", icon: "👨‍🔧"}
+                        ].map((service, i) => (
+                          <div key={i} className="group flex items-start gap-3 p-3 bg-white/50 rounded-lg backdrop-blur-sm hover:bg-white transition-all duration-300">
+                            <div className="text-2xl animate-bounce" style={{ animationDelay: `${i * 200}ms` }}>
+                              {service.icon}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">
+                                {service.title}
+                              </h4>
+                              <p className="text-gray-600 text-sm">{service.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Card3D>
+                </FloatingElement>
               </div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                <span className="text-gray-600">8.</span> الأسئلة الشائعة عن الأثاث الدمياطي
-              </h2>
-            </div>
-            
-            <div className="space-y-4">
-              {[
-                {
-                  q: "كم تبلغ مدة ضمان الأثاث الدمياطي الأصلي؟",
-                  a: "في مودرن أونلاين نقدم أطول ضمان في السوق: 20 سنة على هيكل الأثاث، 10 سنوات على المفصلات والأدراج، و5 سنوات على التشطيبات والدهانات. الضمان شامل لقطع الغيار والعمالة."
-                },
-                {
-                  q: "هل يمكنني طلب تصميم مخصص مختلف عن كتالوجاتكم؟",
-                  a: "نعم بالطبع! نقدم خدمة التصميم المخصص المجانية. يمكنك إرسال مساحة منزلك وتصميمك المطلوب أو صور للإلهام، وسيقوم فريق التصميم لدينا بإعداد مخطط ثلاثي الأبعاد تفاعلي لك قبل البدء في التصنيع."
-                },
-                {
-                  q: "كيف يتم التوصيل للمحافظات البعيدة مثل أسوان أو مرسى مطروح؟",
-                  a: "نحن نتعامل مع أفضل شركات الشحن المعتمدة في مصر. التوصيل مجاني داخل القاهرة الكبرى والإسكندرية. للمحافظات الأخرى توجد رسوم شحن رمزية تبدأ من 500 جنيه حسب المحافظة وحجم الشحنة."
-                },
-                {
-                  q: "ماذا عن قطع الغيار إذا احتجت لها بعد 10 سنوات؟",
-                  a: "نحتفظ بجميع مقاسات وتصاميم الأثاث الذي نصنعه في سجلاتنا الرقمية لمدة 20 سنة. يمكنك طلب أي قطعة غيار وسنقوم بتصنيعها لك بنفس المواصفات والدقة الأصلية."
-                },
-                {
-                  q: "هل تقدمون خدمة التقسيط وما هي الشروط؟",
-                  a: "نعم، نتعامل مع معظم البنوك المصرية للتقسيط بدون فوائد على 6 أو 12 شهراً. كما نقدم تقسيط مباشر على 24 شهراً بفائدة تنافسية. كل ما تحتاجه هو صورة البطاقة الشخصية ورقم الهاتف."
-                },
-                {
-                  q: "كيف أتأكد من أن الخشب أصلي وليس MDF؟",
-                  a: "نقدم لك شهادة ضمان موثقة من الغرفة التجارية تحدد نوع الخشب المستخدم. كما يمكنك زيارة المصنع في دمياط لمشاهدة عملية التصنيع من الخشب الخام إلى المنتج النهائي."
-                },
-                {
-                  q: "هل يمكنني إرجاع المنتج إذا لم يناسبني؟",
-                  a: "نعم، لدينا سياسة إرجاع لمدة 14 يوم من تاريخ الاستلام مع الحفاظ على المنتج في حالته الأصلية. في حالة الأثاث المصنوع حسب الطلب، يمكنك تعديل التصميم مرة واحدة خلال أول 7 أيام."
-                },
-                {
-                  q: "كم تستغرق عملية التصنيع عادة؟",
-                  a: "تتراوح مدة التصنيع بين 10-25 يوم حسب تعقيد التصميم وحجم الطلب. نقدم خدمة تصنيع سريع (5-7 أيام) مقابل رسوم إضافية 20% للطلبات العاجلة."
-                }
-              ].map((faq, index) => (
-                <details key={index} className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-blue-300 transition-all hover:shadow-lg">
-                  <summary className="font-bold text-gray-800 cursor-pointer list-none flex justify-between items-center">
-                    <span className="text-lg">{faq.q}</span>
-                    <span className="text-blue-600 text-2xl group-open:rotate-180 transition-transform">▼</span>
-                  </summary>
-                  <div className="mt-4 text-gray-700 leading-relaxed pt-4 border-t">
-                    {faq.a}
+            </section>
+          </FloatingElement>
+
+          {/* القسم 8: الأسئلة */}
+          <FloatingElement delay={1200}>
+            <section id="section-faq" className="scroll-mt-20">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-slate-400 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-xl text-white">❓</span>
                   </div>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {/* خاتمة المقال مع إحصائيات */}
-          <section className="mb-16 bg-gradient-to-r from-blue-900 to-purple-900 text-white p-10 rounded-2xl">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">الخلاصة: لماذا تختار مودرن أونلاين؟</h2>
-              <p className="text-xl opacity-90 max-w-3xl mx-auto">
-                لأننا لسنا مجرد مصنع أثاث، بل شركاء لك في بناء منزل أحلامك بتجربة فريدة
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-4 gap-6 mb-10">
-              {[
-                {number: "20+", label: "سنة خبرة", desc: "في صناعة الأثاث الدمياطي"},
-                {number: "5,000+", label: "عميل راضٍ", desc: "في مصر ودول الخليج"},
-                {number: "98%", label: "رضا العملاء", desc: "معدل رضا مستمر"},
-                {number: "120+", label: "تصميم مختلف", desc: "في كتالوجاتنا"}
-              ].map((stat, i) => (
-                <div key={i} className="text-center p-6 bg-white/10 rounded-xl backdrop-blur-sm">
-                  <div className="text-4xl font-bold mb-2">{stat.number}</div>
-                  <div className="font-semibold text-lg mb-1">{stat.label}</div>
-                  <div className="text-sm opacity-80">{stat.desc}</div>
+                  <div className="absolute -inset-1 bg-gradient-to-br from-gray-400 to-slate-400 rounded-full opacity-0 animate-ping" />
                 </div>
-              ))}
-            </div>
-            
-            <div className="bg-white/10 p-6 rounded-xl backdrop-blur-sm">
-              <h3 className="text-xl font-bold mb-4 text-center">مميزات حصرية مع مودرن أونلاين:</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  <span className="bg-gradient-to-r from-gray-600 to-slate-600 bg-clip-text text-transparent">
+                    #8
+                  </span> الأسئلة اللي بتيجي في بالنا كل يوم
+                </h2>
+              </div>
+              
+              <div className="space-y-3">
                 {[
-                  "تصميم ثلاثي الأبعاد مجاني قبل الشراء",
-                  "زيارة افتراضية للمصنع عبر الفيديو",
-                  "عينة مجانية من الخشب قبل الطلب",
-                  "فريق دعم فني متخصص 24/7",
-                  "تحديثات أسبوعية على حالة طلبك",
-                  "تأمين على الشحنة خلال النقل"
-                ].map((feature, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-                    <IoMdCheckmarkCircle className="text-green-400 text-xl" />
-                    <span>{feature}</span>
-                  </div>
+                  {
+                    q: "الضمان 5 سنين ده على إيه بالظبط؟",
+                    a: "ضمان شامل يا صديقي! 5 سنين على هيكل الأثاث، 3 سنين على المفصلات والأدراج، وسنتين على التشطيبات والدهانات. الضمان شامل قطع الغيار والعمالة برضه."
+                  },
+                  {
+                    q: "عايز تصميم مش موجود عندكم، تقدرون تعمّلوه؟",
+                    a: "طبعًا! عندنا خدمة التصميم المخصوص. ابعتلنا فكرتك أو صورة وحتلاقينا عاملينلك تصميم ثلاثي الأبعاد عشان تشوفه قبل ما تبدأ."
+                  },
+                  {
+                    q: "بتوصلوا للمحافظات البعيدة زيّ أسوان؟",
+                    a: "أكيد! بنوصل لكل محافظات مصر. في القاهرة الكبرى والإسكندرية توصيل مجاني. المحافظات التانية في رسوم شحن بسيطة حسب المكان."
+                  },
+                  {
+                    q: "لو محتاج قطعة غيار بعد 4 سنين، هتلاقيها؟",
+                    a: "متفكرش في الحوار ده! بنحتفظ بكل تصاميمنا في الأرشيف لمدة 10 سنين. أي قطعة غيار هتلاقينا عاملينها لك بنفس الدقة."
+                  },
+                  {
+                    q: "عندكم تقسيط؟ وازاي؟",
+                    a: "عندنا تقسيط بدون فوائد على 6 و12 شهر. وعادي على 24 شهر بفوايد بسيطة. محتاج بس صورة بطاقتك ورقم تلفونك، والباقي علينا."
+                  },
+                  {
+                    q: "ازاي أتأكد إن الخشب طبيعي مش MDF؟",
+                    a: "بنعطيك شهادة ضمان موثقة فيها نوع الخشب بالضبط. ولو عايز تزور المصنع في دمياط وتشوف بنفسك، أحنا تحت أمرك!"
+                  }
+                ].map((faq, index) => (
+                  <FloatingElement key={index} delay={index * 150}>
+                    <div className="relative group overflow-hidden">
+                      <div className="absolute -inset-0.5 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-xl opacity-0 group-hover:opacity-20 blur transition duration-500" />
+                      <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-emerald-200 transition-all duration-300">
+                        <button
+                          onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                          className="w-full p-5 text-right flex justify-between items-center hover:bg-gray-50 transition-colors duration-300 group"
+                        >
+                          <span className="font-bold text-gray-800 text-lg group-hover:text-emerald-600 transition-colors">
+                            {faq.q}
+                          </span>
+                          <FaChevronRight className={`text-emerald-500 transition-all duration-300 ${
+                            activeFaq === index ? 'rotate-90 scale-125' : 'group-hover:translate-x-1'
+                          }`} />
+                        </button>
+                        {activeFaq === index && (
+                          <div className="p-5 pt-0 animate-slideDown">
+                            <div className="text-gray-700 leading-relaxed bg-gradient-to-r from-emerald-50 to-teal-50 p-5 rounded-lg border border-emerald-100">
+                              {faq.a}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </FloatingElement>
                 ))}
               </div>
-            </div>
-          </section>
+            </section>
+          </FloatingElement>
 
-          {/* CTA النهائي */}
-          <div className="text-center bg-gradient-to-r from-green-500 to-emerald-600 text-white p-10 rounded-2xl shadow-xl">
-            <h2 className="text-3xl font-bold mb-4">جاهز لبدء مشروع أثاث منزلك؟</h2>
-            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              تواصل معنا الآن للحصول على استشارة مجانية وتصميم ثلاثي الأبعاد لمنزلك قبل الشراء
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <a 
-                href="https://wa.me/201015262864?text=مرحباً، أود استشارة حول أثاث دمياطي من موقع مودرن أونلاين"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white hover:bg-gray-100 text-green-600 font-bold py-4 px-8 rounded-xl transition-all hover:scale-105 flex items-center gap-3 text-lg shadow-lg"
-              >
-                <FaWhatsapp className="text-2xl" />
-                <span>تواصل عبر الواتساب</span>
-              </a>
-              <a 
-                href="tel:+201015262864"
-                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 px-8 rounded-xl transition-all hover:scale-105 flex items-center gap-3 text-lg shadow-lg"
-              >
-                <FaPhone />
-                <span>اتصل بنا الآن</span>
-              </a>
-              <Link 
-                href="/portfolio"
-                className="bg-transparent hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl border-2 border-white transition-all hover:scale-105 flex items-center gap-3 text-lg"
-              >
-                <MdOutlineDesignServices className="text-2xl" />
-                <span>تصفح أعمالنا</span>
-              </Link>
+          {/* الخاتمة */}
+          <FloatingElement delay={1300}>
+            <section className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700" />
+              <div 
+                className="absolute inset-0 opacity-10"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,${svgPattern}")`
+                }}
+              />
+              
+              <div className="relative z-10 bg-gradient-to-r from-emerald-600/90 via-teal-600/90 to-cyan-700/90 backdrop-blur-sm text-white p-8 rounded-2xl">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-white to-emerald-100 bg-clip-text text-transparent">
+                    خلاصة الموضوع
+                  </h2>
+                  <p className="text-xl opacity-90 max-w-2xl mx-auto">
+                    الأثاث الدمياطي الأصلي استثمار في راحتك وراحة بيتك!
+                  </p>
+                </div>
+                
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                  {[
+                    {number: 10, suffix: "+", label: "سنة خبرة", desc: "في صناعة الأثاث"},
+                    {number: 3000, suffix: "+", label: "عميل مبسوط", desc: "في مصر والخليج"},
+                    {number: 98, suffix: "%", label: "رضا العملاء", desc: "معدل رضا مستمر"},
+                    {number: 100, suffix: "+", label: "تصميم مختلف", desc: "في كتالوجاتنا"}
+                  ].map((stat, i) => (
+                    <FloatingElement key={i} delay={i * 200}>
+                      <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40">
+                        <div className="text-2xl font-bold mb-1 text-yellow-200">
+                          <AnimatedCounter value={stat.number} suffix={stat.suffix} duration={2000} />
+                        </div>
+                        <div className="font-semibold mb-1">{stat.label}</div>
+                        <div className="text-sm opacity-80">{stat.desc}</div>
+                      </div>
+                    </FloatingElement>
+                  ))}
+                </div>
+                
+                <div className="text-center">
+                  <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-white to-emerald-100 bg-clip-text text-transparent">
+                    مميزات حصرية مع مودرن أونلاين:
+                  </h3>
+                  <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                    {[
+                      "تصميم ثلاثي الأبعاد مجاني",
+                      "زيارة افتراضية للمصنع",
+                      "عينة خشب مجانية",
+                      "دعم فني 24/7",
+                      "تحديثات على طلبك",
+                      "تأمين على الشحنة"
+                    ].map((feature, i) => (
+                      <FloatingElement key={i} delay={i * 100}>
+                        <div className="flex items-center gap-2 p-3 bg-white/5 rounded-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20">
+                          <IoMdCheckmarkCircle className="text-emerald-300 animate-pulse" />
+                          <span>{feature}</span>
+                        </div>
+                      </FloatingElement>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </FloatingElement>
+
+          {/* CTA النهائي مع تأثيرات */}
+          <FloatingElement delay={1400}>
+            <div className="relative overflow-hidden group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+              <div className="relative bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl shadow-2xl transform-gpu hover:scale-[1.01] transition-transform duration-300">
+                <h2 className="text-2xl font-bold mb-3 text-center animate-pulse">
+                  جاهز تبدأ مشروع أثاث بيتك؟
+                </h2>
+                <p className="text-lg opacity-90 mb-6 text-center">
+                  {egyptianPhrases.contact} <br />
+                  استشارة مجانية وتصميم ثلاثي الأبعاد قبل ما تدفع!
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <a 
+                    href="https://wa.me/201015262864?text=أهلاً، أنا من موقع مودرن أونلاين وعايز أستفسر عن أثاث دمياطي"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative overflow-hidden group/btn"
+                  >
+                    <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl opacity-0 group-hover/btn:opacity-20 blur transition duration-500" />
+                    <div className="relative bg-white hover:bg-gray-50 text-emerald-600 font-bold py-3 px-6 rounded-xl transition-all hover:scale-105 flex items-center gap-2">
+                      <FaWhatsapp className="text-xl animate-bounce" />
+                      <span>كلمنا على الواتساب</span>
+                    </div>
+                  </a>
+                  <a 
+                    href="tel:+201015262864"
+                    className="relative overflow-hidden group/btn"
+                  >
+                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-700 to-teal-800 rounded-xl opacity-0 group-hover/btn:opacity-20 blur transition duration-500" />
+                    <div className="relative bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 px-6 rounded-xl transition-all hover:scale-105 flex items-center gap-2">
+                      <FaPhone className="animate-pulse" />
+                      <span>اتصل دلوقتي</span>
+                    </div>
+                  </a>
+                  <Link 
+                    href="/portfolio"
+                    className="relative overflow-hidden group/btn"
+                  >
+                    <div className="absolute -inset-1 bg-gradient-to-r from-white to-white/50 rounded-xl opacity-0 group-hover/btn:opacity-20 blur transition duration-500" />
+                    <div className="relative bg-transparent hover:bg-white/20 text-white font-bold py-3 px-6 rounded-xl border-2 border-white transition-all hover:scale-105 flex items-center gap-2">
+                      <MdOutlineDesignServices className="text-xl animate-spin" style={{ animationDuration: '3s' }} />
+                      <span>شوف أعمالنا</span>
+                    </div>
+                  </Link>
+                </div>
+                <p className="mt-4 opacity-80 text-sm text-center animate-pulse">
+                  ⏰ خدمة العملاء من 9 الصبح لـ 11 الليل - كل أيام الأسبوع
+                </p>
+              </div>
             </div>
-            <p className="mt-6 opacity-80">
-              ⏰ خدمة العملاء متاحة من 9 صباحاً حتى 11 مساءً طوال أيام الأسبوع
-            </p>
-          </div>
+          </FloatingElement>
         </div>
 
-        {/* معلومات المقال */}
-        <footer className="mt-16 pt-10 border-t border-gray-200">
-          <div className="grid md:grid-cols-2 gap-10">
-            <div>
-              <h3 className="font-bold text-2xl text-gray-800 mb-6">معلومات المقال</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <span className="text-blue-600">📅</span>
+        {/* فوتر المقال */}
+        <FloatingElement delay={1500}>
+          <footer className="mt-12 pt-8 border-t border-gray-200">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="font-bold text-xl text-gray-800 mb-4">معلومات المقال</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center animate-pulse">
+                      <span className="text-blue-600">📅</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-700">نشر</div>
+                      <div className="text-gray-600">{publishDate}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-gray-700">تاريخ النشر</div>
-                    <div className="text-gray-600">{publishDate}</div>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                    <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center animate-pulse">
+                      <span className="text-emerald-600">✍️</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-700">كاتب</div>
+                      <div className="text-gray-600">فريق مودرن أونلاين - خبراء دمياطي</div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <span className="text-green-600">✍️</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-700">الكاتب</div>
-                    <div className="text-gray-600">فريق مودرن أونلاين - خبراء الأثاث الدمياطي</div>
-                  </div>
+              </div>
+              
+              <div>
+                <h3 className="font-bold text-xl text-gray-800 mb-4">شارك مع أصحابك</h3>
+                <div className="flex gap-3 mb-6">
+                  {[
+                    {platform: "فيسبوك", icon: <FaFacebookF />, color: "from-blue-600 to-blue-700"},
+                    {platform: "تويتر", icon: <FaTwitter />, color: "from-sky-500 to-blue-500"},
+                    {platform: "واتساب", icon: <FaWhatsapp />, color: "from-green-500 to-emerald-600"}
+                  ].map((social, i) => (
+                    <button
+                      key={social.platform}
+                      className={`relative overflow-hidden group/btn w-12 h-12 rounded-xl flex items-center justify-center text-lg hover:scale-110 transition-transform duration-300`}
+                      aria-label={`شارك على ${social.platform}`}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300`} />
+                      <div className="relative z-10 text-white">
+                        {social.icon}
+                      </div>
+                      <div className="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20" />
+                    </button>
+                  ))}
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <span className="text-purple-600">🏷️</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-700">التصنيف</div>
-                    <div className="text-gray-600">أثاث دمياطي، ديكور داخلي، أثاث منزلي</div>
+                
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">الكلمات المفتاحية:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      "أثاث دمياطي", "مصنع أثاث", "أثاث مودرن", 
+                      "غرف نوم", "صالونات", "كنب دمياطي",
+                      "خشب زان", "ضمان 5 سنين", "أثاث منزلي",
+                      "مودرن أونلاين", "ديكور داخلي", "أثاث مصر"
+                    ].map((tag, index) => (
+                      <span 
+                        key={index} 
+                        className="px-3 py-1 bg-gray-100 hover:bg-emerald-100 text-gray-700 hover:text-emerald-700 rounded-full text-xs font-medium transition-all duration-300 cursor-pointer hover:scale-105"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
             
-            <div>
-              <h3 className="font-bold text-2xl text-gray-800 mb-6">شارك المقال</h3>
-              <div className="flex gap-4 mb-8">
-                {[
-                  {platform: "فيسبوك", icon: <FaFacebookF />, color: "bg-blue-600 hover:bg-blue-700"},
-                  {platform: "تويتر", icon: <FaTwitter />, color: "bg-sky-500 hover:bg-sky-600"},
-                  {platform: "لينكدإن", icon: <FaLinkedinIn />, color: "bg-blue-700 hover:bg-blue-800"},
-                  {platform: "انستجرام", icon: <FaInstagram />, color: "bg-pink-600 hover:bg-pink-700"},
-                  {platform: "واتساب", icon: <FaWhatsapp />, color: "bg-green-500 hover:bg-green-600"}
-                ].map((social) => (
-                  <button
-                    key={social.platform}
-                    className={`${social.color} text-white w-14 h-14 rounded-xl flex items-center justify-center text-xl transition-all hover:scale-110`}
-                    aria-label={`شارك على ${social.platform}`}
-                  >
-                    {social.icon}
-                  </button>
-                ))}
-              </div>
-              
-              <h4 className="font-bold text-gray-800 mb-3">كلمات مفتاحية:</h4>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  "أثاث دمياطي", "مصنع أثاث دمياطي", "أثاث مودرن دمياط", 
-                  "غرف نوم دمياطية", "صالونات دمياطية", "كنب دمياطي",
-                  "خشب الزان الدمياطي", "ضمان الأثاث الدمياطي",
-                  "أثاث منزلي فاخر", "مودرن أونلاين", "ديكور داخلي",
-                  "أثاث مصر", "أثاث دمياط 2024", "أثاث مودرن"
-                ].map((tag, index) => (
-                  <span 
-                    key={index} 
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full text-sm font-medium transition-colors cursor-pointer"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            {/* حقوق النشر */}
+            <div className="mt-8 pt-6 border-t border-gray-300 text-center text-gray-500 text-sm">
+              <p>© {new Date().getFullYear()} مودرن أونلاين. كل الحقوق محفوظة.</p>
+              <p className="mt-1">المقال ده مكتوب لفائدتك، ومفيش حاجة بتتدفع فيه.</p>
             </div>
-          </div>
-          
-          {/* حقوق النشر */}
-          <div className="mt-12 pt-8 border-t border-gray-300 text-center text-gray-500">
-            <p>© {new Date().getFullYear()} مودرن أونلاين. جميع الحقوق محفوظة.</p>
-            <p className="mt-2">هذا المقال مكتوب بواسطة فريق مودرن أونلاين ونُشر لأغراض إعلامية وتعليمية.</p>
-          </div>
-        </footer>
+          </footer>
+        </FloatingElement>
       </article>
+
+      {/* إضافة أنماط CSS للحركات */}
+      <style jsx global>{`
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-2px); }
+          75% { transform: translateX(2px); }
+        }
+        
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
+        }
+        
+        .animate-slide-in-right {
+          animation: slideInRight 0.5s ease-out;
+        }
+        
+        .animate-shake {
+          animation: shake 0.5s ease-in-out;
+        }
+        
+        .transform-gpu {
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          perspective: 1000px;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #10b981, #059669);
+          border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to bottom, #059669, #047857);
+        }
+        
+        /* Selection color */
+        ::selection {
+          background-color: rgba(16, 185, 129, 0.3);
+          color: #000;
+        }
+      `}</style>
     </>
   )
 }
