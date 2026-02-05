@@ -25,7 +25,7 @@ import { MdWorkspacePremium, MdOutlineDesignServices, MdLocalOffer } from "react
 import { GiWoodBeam, GiEgyptianProfile } from "react-icons/gi"
 import { RiCustomerService2Fill } from "react-icons/ri"
 import { TbTruckDelivery } from "react-icons/tb"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, ReactNode } from "react"
 
 // بيانات المقال للمخطط الهيكلي
 const articleSchema = {
@@ -81,13 +81,31 @@ const BlogMetadata = () => {
   )
 }
 
+// تعريف الأنواع
+interface Card3DProps {
+  children: ReactNode;
+  className?: string;
+}
+
+interface FloatingElementProps {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}
+
+interface AnimatedCounterProps {
+  value: number;
+  suffix?: string;
+  duration?: number;
+}
+
 // مكون 3D Card
-const Card3D = ({ children, className = "" }) => {
-  const cardRef = useRef(null);
+const Card3D = ({ children, className = "" }: Card3DProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     
     const card = cardRef.current;
@@ -130,8 +148,8 @@ const Card3D = ({ children, className = "" }) => {
 };
 
 // مكون Floating Element
-const FloatingElement = ({ children, delay = 0, className = "" }) => {
-  const elementRef = useRef(null);
+const FloatingElement = ({ children, delay = 0, className = "" }: FloatingElementProps) => {
+  const elementRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -170,9 +188,9 @@ const FloatingElement = ({ children, delay = 0, className = "" }) => {
 };
 
 // مكون Counter Animation
-const AnimatedCounter = ({ value, suffix = "", duration = 2000 }) => {
+const AnimatedCounter = ({ value, suffix = "", duration = 2000 }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
-  const countRef = useRef(null);
+  const countRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -831,112 +849,63 @@ export default function DamiettaFurnitureGuide() {
           </FloatingElement>
 
           {/* القسم 5: دليل الشراء */}
-          <FloatingElement delay={900}>
-            <section id="section-buying-guide" className="scroll-mt-20">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-xl text-white">🛒</span>
+<FloatingElement delay={900}>
+  <section id="section-buying-guide" className="scroll-mt-20">
+    <div className="flex items-center gap-3 mb-8">
+      <div className="relative">
+        <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center shadow-lg">
+          <span className="text-xl text-white">🛒</span>
+        </div>
+        <div className="absolute -inset-1 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-0 animate-ping" />
+      </div>
+      <h2 className="text-2xl font-bold text-gray-900">
+        <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          #5
+        </span> عايز تشتري؟ خد الخطوات دي
+      </h2>
+    </div>
+    
+    <div className="space-y-6">
+      {/* خطوات الشراء */}
+      <Card3D>
+        <div className="bg-gradient-to-br from-white to-purple-50 p-8 rounded-2xl border border-purple-100 shadow-xl">
+          <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
+            اشتري من مودرن أونلاين في 6 خطوات:
+          </h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              {step: "١", title: "كلمنا", desc: "اتصل أو واتساب علشان نفهم احتياجاتك", icon: "📞", color: "from-blue-500 to-cyan-500"},
+              {step: "٢", title: "اختار تصميم", desc: "من كتالوجاتنا أو صمم معانا", icon: "🎨", color: "from-purple-500 to-pink-500"},
+              {step: "٣", title: "اتفق على السعر", desc: "أسعارنا ثابتة وواضحة من الأول", icon: "💰", color: "from-emerald-500 to-green-500"},
+              {step: "٤", title: "ابعتلنا المساحة", desc: "ابعث مقاسات غرفك عشان نناسبها", icon: "📏", color: "from-amber-500 to-orange-500"},
+              {step: "٥", title: "استلم في مصنعنا", desc: "تصنيع تحت إشراف خبراء", icon: "🏭", color: "from-red-500 to-pink-500"},
+              {step: "٦", title: "استلم في بيتك", desc: "توصيل وتركيب مجاني", icon: "🚚", color: "from-teal-500 to-emerald-500"}
+            ].map((item, index) => (
+              <FloatingElement key={item.step} delay={index * 150}>
+                <div className="relative group">
+                  <div className="absolute -inset-0.5 bg-gradient-to-br rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
+                  <div className="relative text-center p-6 bg-white rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300">
+                    <div className="text-4xl mb-3 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
+                      {item.icon}
+                    </div>
+                    <div className="text-3xl font-bold mb-2 bg-gradient-to-r bg-clip-text text-transparent">
+                      {item.step}
+                    </div>
+                    <h4 className="font-bold text-gray-800 mb-2 text-lg">{item.title}</h4>
+                    <p className="text-gray-600 text-sm">{item.desc}</p>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                  <div className="absolute -inset-1 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full opacity-0 animate-ping" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    #5
-                  </span> عايز تشتري؟ خد الخطوات دي
-                </h2>
-              </div>
-              
-              <div className="space-y-6">
-                {/* خطوات الشراء */}
-                <Card3D>
-                  <div className="bg-gradient-to-br from-white to-purple-50 p-8 rounded-2xl border border-purple-100 shadow-xl">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">
-                      اشتري من مودرن أونلاين في 6 خطوات:
-                    </h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {[
-                        {step: "١", title: "كلمنا", desc: "اتصل أو واتساب علشان نفهم احتياجاتك", icon: "📞", color: "from-blue-500 to-cyan-500"},
-                        {step: "٢", title: "اختار تصميم", desc: "من كتالوجاتنا أو صمم معانا", icon: "🎨", color: "from-purple-500 to-pink-500"},
-                        {step: "٣", title: "اتفق على السعر", desc: "أسعارنا ثابتة وواضحة من الأول", icon: "💰", color: "from-emerald-500 to-green-500"},
-                        {step: "٤", title: "ابعتلنا المساحة", desc: "ابعث مقاسات غرفك عشان نناسبها", icon: "📏", color: "from-amber-500 to-orange-500"},
-                        {step: "٥", title: "استلم في مصنعنا", desc: "تصنيع تحت إشراف خبراء", icon: "🏭", color: "from-red-500 to-pink-500"},
-                        {step: "٦", title: "استلم في بيتك", desc: "توصيل وتركيب مجاني", icon: "🚚", color: "from-teal-500 to-emerald-500"}
-                      ].map((item, index) => (
-                        <FloatingElement key={item.step} delay={index * 150}>
-                          <div className="relative group">
-                            <div className="absolute -inset-0.5 bg-gradient-to-br rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
-                            <div className="relative text-center p-6 bg-white rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300">
-                              <div className="text-4xl mb-3 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
-                                {item.icon}
-                              </div>
-                              <div className="text-3xl font-bold mb-2 bg-gradient-to-r bg-clip-text text-transparent">
-                                {item.step}
-                              </div>
-                              <h4 className="font-bold text-gray-800 mb-2 text-lg">{item.title}</h4>
-                              <p className="text-gray-600 text-sm">{item.desc}</p>
-                              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </div>
-                          </div>
-                        </FloatingElement>
-                      ))}
-                    </div>
-                  </div>
-                </Card3D>
-                
-                {/* أسعار تقريبية */}
-                <FloatingElement delay={800}>
-                  <Card3D>
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border border-cyan-100 shadow-xl">
-                      <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">
-                        أسعار تقريبية - علشان متتفاجئش!
-                      </h3>
-                      <div className="overflow-hidden rounded-xl border border-gray-200">
-                        <div className="overflow-x-auto">
-                          <table className="min-w-full bg-white">
-                            <thead>
-                              <tr className="bg-gradient-to-r from-blue-600 to-cyan-600">
-                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">القطعة</th>
-                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">خشب الزان</th>
-                                <th className="py-4 px-6 text-right font-bold text-white text-sm border-r border-blue-700">خشب الماهوجني</th>
-                                <th className="py-4 px-6 text-right font-bold text-white text-sm">مدة التصنيع</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {[
-                                {item: "غرفة نوم كاملة", zan: "١٥,٠٠٠ - ٣٠,٠٠٠", mahogany: "٢٠,٠٠٠ - ٤٠,٠٠٠", time: "١٥-٢٠ يوم"},
-                                {item: "صالون ٦ قطع", zan: "٢٠,٠٠٠ - ٤٠,٠٠٠", mahogany: "٣٠,٠٠٠ - ٥٠,٠٠٠", time: "١٥-٢٥ يوم"},
-                                {item: "طاولة طعام ٦ كراسي", zan: "١٠,٠٠٠ - ٢٠,٠٠٠", mahogany: "١٥,٠٠٠ - ٢٥,٠٠٠", time: "١٠-١٥ يوم"},
-                                {item: "مكتب إداري", zan: "٥,٠٠٠ - ١٠,٠٠٠", mahogany: "٨,٠٠٠ - ١٥,٠٠٠", time: "٧-١٠ أيام"},
-                                {item: "دولاب ملابس كبير", zan: "٨,٠٠٠ - ١٥,٠٠٠", mahogany: "١٢,٠٠٠ - ٢٠,٠٠٠", time: "١٠-١٥ يوم"}
-                              ].map((row, index) => (
-                                <tr 
-                                  key={index} 
-                                  className={`border-t border-gray-100 hover:bg-blue-50 transition-colors duration-200 ${
-                                    index % 2 === 0 ? 'bg-gray-50/50' : 'bg-white'
-                                  }`}
-                                >
-                                  <td className="py-4 px-6 font-semibold text-gray-800 border-r">{row.item}</td>
-                                  <td className="py-4 px-6 text-blue-600 font-bold border-r">{row.zan} ج.م</td>
-                                  <td className="py-4 px-6 text-purple-600 font-bold border-r">{row.mahogany} ج.م</td>
-                                  <td className="py-4 px-6 text-gray-700">{row.time}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className="bg-gradient-to-r from-blue-100 to-cyan-100 p-3 border-t border-gray-200">
-                          <p className="text-sm text-gray-600 text-center">
-                            * الأسعار تشمل التوصيل والتركيب في القاهرة الكبرى
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Card3D>
-                </FloatingElement>
-              </div>
-            </section>
-          </FloatingElement>
+              </FloatingElement>
+            ))}
+          </div>
+        </div>
+      </Card3D>
+      
+      {/* تم إزالة جدول الأسعار هنا */}
+    </div>
+  </section>
+</FloatingElement>
 
           {/* القسم 6: التصاميم */}
           <FloatingElement delay={1000}>
