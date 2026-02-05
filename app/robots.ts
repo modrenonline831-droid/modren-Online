@@ -1,4 +1,6 @@
-import { MetadataRoute } from 'next'
+export const dynamic = 'force-static'
+
+mport { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   return {
