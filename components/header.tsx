@@ -22,6 +22,9 @@ export function Header() {
   // القوائم
   const navLinks = [
     { label: "الرئيسية", href: "/", icon: "🏠" },
+	{ label: "عنا", href: "/about", icon: "👥" },
+	{ label: "سياسة الشحن", href: "/Delivery Policy", icon: "🚚" },
+	{ label: "سياسة الأسترجاع", href: "/return-policy", icon: "↩️" },
     { 
       label: "المنتجات", 
       href: "/portfolio",
