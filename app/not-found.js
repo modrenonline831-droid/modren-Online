@@ -2,12 +2,23 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function NotFound() {
+  const [particles, setParticles] = useState([])
+
   useEffect(() => {
     // إضافة تأثير صوتي بسيط عند تحميل الصفحة
     console.log('🌳 صفحة 404 محملة - تصميم خشب مودرن أونلاين')
+    
+    // توليد الجزيئات مرة واحدة فقط بعد تحميل الصفحة (على العميل)
+    const newParticles = [...Array(15)].map((_, i) => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDuration: `${15 + Math.random() * 10}s`,
+      animationDelay: `${Math.random() * 5}s`
+    }))
+    setParticles(newParticles)
   }, [])
 
   return (
@@ -182,17 +193,17 @@ export default function NotFound() {
       <div className="fixed top-1/3 left-8 text-xl sm:text-2xl text-amber-600/20 dark:text-amber-500/15 animate-float-slow" style={{animationDelay: '2s'}}>🚪</div>
       <div className="fixed bottom-1/3 right-8 text-xl sm:text-2xl text-amber-600/20 dark:text-amber-500/15 animate-float-slow" style={{animationDelay: '3s'}}>🪟</div>
 
-      {/* جزيئات خشب عائمة */}
+      {/* جزيئات خشب عائمة - تم تعديلها */}
       <div className="fixed inset-0 pointer-events-none z-10">
-        {[...Array(15)].map((_, i) => (
+        {particles.map((particle, i) => (
           <div 
             key={i}
             className="absolute w-1 h-1 sm:w-1.5 sm:h-1.5 bg-amber-600/10 dark:bg-amber-500/10 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `particle-float ${15 + Math.random() * 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`
+              left: particle.left,
+              top: particle.top,
+              animation: `particle-float ${particle.animationDuration} linear infinite`,
+              animationDelay: particle.animationDelay
             }}
           ></div>
         ))}

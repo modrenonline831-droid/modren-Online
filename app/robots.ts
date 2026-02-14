@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      disallow: ['/_next/static/media/', '/manifest.webmanifest'], // منع الزحف للملفات التقنية
     },
     sitemap: 'https://modrenonline.com/sitemap.xml',
   }

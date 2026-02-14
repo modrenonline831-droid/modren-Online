@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Phone, MessageCircle, MapPin, ExternalLink, Globe, ChevronRight, Star, Shield, Truck, Clock, Award, Heart } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, ExternalLink, Globe, ChevronRight, Star, Shield, Truck, Clock, Award, Heart, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -83,6 +83,28 @@ const About = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
+          {/* Breadcrumb and Back Button */}
+          <div className="mb-6 flex items-center justify-between">
+            {/* Breadcrumb navigation */}
+            <nav className="text-sm text-muted-foreground">
+              <Link href="/" className="hover:text-primary transition-colors">
+                الرئيسية
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-foreground font-semibold">من نحن</span>
+            </nav>
+
+            {/* Back button */}
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2 px-4 py-2 bg-secondary/20 hover:bg-secondary/30 text-foreground rounded-lg transition-all duration-300 border border-border"
+              aria-label="العودة للصفحة السابقة"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <span>رجوع</span>
+            </button>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -457,6 +479,23 @@ const About = () => {
               </a>
             </div>
           </div>
+        </motion.div>
+
+        {/* Back to Home Card (Optional but added for consistency) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-8 text-center"
+        >
+          <Link 
+            href="/"
+            className="group inline-flex items-center gap-3 bg-secondary/20 hover:bg-secondary/30 text-foreground border border-border px-8 py-4 rounded-xl text-lg font-semibold transition-all hover:scale-105"
+          >
+            <Home className="w-5 h-5" />
+            <span>العودة إلى الرئيسية</span>
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+          </Link>
         </motion.div>
       </div>
 

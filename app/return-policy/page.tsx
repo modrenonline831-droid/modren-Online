@@ -103,7 +103,6 @@ const ReturnPolicy = () => {
       coverage: 'أعطال التركيب والتثبيت',
       icon: <Home className="w-8 h-8" />
     },
-   
     {
       title: 'دعم فني',
       duration: 'مدى الحياة',
@@ -195,6 +194,28 @@ const ReturnPolicy = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
+          {/* Breadcrumb and Back Button - NEW */}
+          <div className="mb-6 flex items-center justify-between">
+            {/* Breadcrumb navigation */}
+            <nav className="text-sm text-amber-700/70">
+              <Link href="/" className="hover:text-amber-900 transition-colors">
+                الرئيسية
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-amber-900 font-semibold">سياسة الإرجاع والضمان</span>
+            </nav>
+
+            {/* Back button */}
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-lg transition-all duration-300 border border-amber-300"
+              aria-label="العودة للصفحة السابقة"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <span>رجوع</span>
+            </button>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -765,7 +786,7 @@ const ReturnPolicy = () => {
           viewport={{ once: true }}
           className="mt-12"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Link 
               href="/Delivery Policy"
               className="group bg-gradient-to-b from-amber-50 to-white rounded-2xl p-6 border border-amber-200 hover:border-amber-500 transition-all hover:shadow-lg"
@@ -806,6 +827,20 @@ const ReturnPolicy = () => {
               </div>
               <p className="text-amber-900/80 text-sm">تصفح مجموعتنا الكاملة من الأثاث الدمياطي الفاخر</p>
             </a>
+
+            {/* NEW: Back to Home card */}
+            <Link 
+              href="/"
+              className="group bg-gradient-to-b from-amber-50 to-white rounded-2xl p-6 border border-amber-200 hover:border-amber-500 transition-all hover:shadow-lg"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Home className="w-6 h-6 text-amber-700" />
+                </div>
+                <h3 className="text-lg font-bold text-amber-900 group-hover:text-amber-700 transition-colors">العودة للرئيسية</h3>
+              </div>
+              <p className="text-amber-900/80 text-sm">تصفح الموقع واطلع على أحدث منتجاتنا وعروضنا</p>
+            </Link>
           </div>
         </motion.div>
       </div>

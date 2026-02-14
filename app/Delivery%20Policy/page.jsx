@@ -26,7 +26,7 @@ import {
 import { TypeAnimation } from 'react-type-animation';
 import Link from 'next/link';
 
-const ShippingInfo = () => {
+const DeliveryPolicy = () => {
   const [activeTab, setActiveTab] = useState('delivery');
   const [selectedCity, setSelectedCity] = useState('القاهرة');
 
@@ -153,6 +153,25 @@ const ShippingInfo = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
+          {/* Breadcrumb and Back Button */}
+          <div className="mb-6 flex items-center justify-between">
+            <nav className="text-sm text-amber-700/70">
+              <Link href="/" className="hover:text-amber-900 transition-colors">
+                الرئيسية
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-amber-900 font-semibold">سياسة التوصيل</span>
+            </nav>
+            <button
+              onClick={() => window.history.back()}
+              className="flex items-center gap-2 px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-lg transition-all duration-300 border border-amber-300"
+              aria-label="العودة للصفحة السابقة"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <span>رجوع</span>
+            </button>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,9 +186,9 @@ const ShippingInfo = () => {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-800 via-teal-800 to-rose-900 bg-clip-text text-transparent">
               <TypeAnimation
                 sequence={[
-                  'توصيل الأثاث الفاخر',
+                  'سياسة التوصيل',
                   1000,
-                  'Shipping Luxury Furniture',
+                  'Delivery Policy',
                   1000,
                   'توصيل لجميع المحافظات',
                   1000,
@@ -213,6 +232,7 @@ const ShippingInfo = () => {
           </div>
         </motion.div>
 
+        {/* باقي المحتوى كما هو - لم يتغير */}
         {/* Delivery Options */}
         {activeTab === 'delivery' && (
           <motion.div
@@ -720,4 +740,4 @@ const ShippingInfo = () => {
   );
 };
 
-export default ShippingInfo;
+export default DeliveryPolicy;
