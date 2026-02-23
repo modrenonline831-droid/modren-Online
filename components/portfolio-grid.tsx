@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Share2, Heart, Filter, Eye, ShoppingBag, Clock, Shield, Truck, Star, GitCompare as Compare, ChevronDown, ChevronUp, Search, X, MessageCircle, Phone, Tag, Award, Zap, Sparkles, Gift } from "lucide-react"
 
-// واجهة Props - نضيف products
+// واجهة Props
 interface PortfolioGridProps {
   viewMode: 'grid' | 'list';
-  products: any[]; // البيانات القادمة من Supabase
+  products: any[];
 }
 
 const sortOptions = [
@@ -46,7 +46,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const itemsPerPage = 9
 
-  // ✅ حساب العدد الفعلي لكل فئة من المنتجات
+  // حساب العدد الفعلي لكل فئة
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {
       "الكل": products.length,
@@ -58,7 +58,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
       "كراسي": 0
     }
 
-    products.forEach(item => {
+    products.forEach((item: any) => {
       if (counts.hasOwnProperty(item.category)) {
         counts[item.category]++
       }
@@ -67,7 +67,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
     return counts
   }, [products])
 
-  // ✅ الفئات مع الأرقام الفعلية
+  // الفئات مع الأرقام الفعلية
   const categories = useMemo(() => [
     { id: "الكل", name: "الكل", icon: "📦", count: categoryCounts["الكل"] },
     { id: "أنترية مغلف", name: "أنترية مغلف", icon: "🛋️", count: categoryCounts["أنترية مغلف"] },
@@ -96,7 +96,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
     localStorage.setItem('viewedItems', JSON.stringify(viewedItems))
   }, [favoriteItems, compareItems, viewedItems])
 
-  // دالة نسخ رابط المنتج مع تأثير
+  // دالة نسخ رابط المنتج
   const copyProductLink = (id: number) => {
     const link = `${window.location.origin}/portfolio?product=${id}`
     navigator.clipboard
@@ -110,7 +110,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
       })
   }
 
-  // زر شغل العمولة - يتجه مباشرة للواتساب
+  // زر شغل العمولة
   const handleCommissionClick = () => {
     const whatsappLink = `https://wa.me/201015262864?text=${encodeURIComponent("مرحبا، أريد الاستفسار عن تصنيع قطعة خاصة (شغل عمولة)")}`
     window.open(whatsappLink, "_blank")
@@ -170,17 +170,16 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
     setShowShareMenu(null)
   }
 
-  // قراءة الـ URL parameters عند التحميل الأول
+  // قراءة الـ URL parameters
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const productId = params.get("product")
     
     if (productId) {
-      const item = products.find((p) => p.id === Number(productId))
+      const item = products.find((p: any) => p.id === Number(productId))
       if (item) {
         setSelectedItem(item)
         setActiveImage(item.image)
-        // إضافة للمنتجات التي تم عرضها
         setViewedItems(prev => {
           if (!prev.includes(item.id)) {
             return [item.id, ...prev.slice(0, 9)]
@@ -200,7 +199,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
   // فلترة وترتيب المنتجات
   const filteredItems = useMemo(() => {
     return products
-      .filter((item) => {
+      .filter((item: any) => {
         const matchesCategory = activeCategory === "الكل" || item.category === activeCategory
         const matchesSearch = searchQuery === "" || 
           item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -210,7 +209,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         
         return matchesCategory && matchesSearch && matchesStock
       })
-      .sort((a, b) => {
+      .sort((a: any, b: any) => {
         switch (sortBy) {
           case "popular":
             return b.orders - a.orders
@@ -307,18 +306,18 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
   // المنتجات التي تم عرضها مؤخراً
   const recentlyViewed = useMemo(() => {
     return viewedItems
-      .map(id => products.find(item => item.id === id))
+      .map(id => products.find((item: any) => item.id === id))
       .filter(item => item !== undefined)
   }, [viewedItems, products])
 
-  // منتجات مشابهة للمنتج المحدد
+  // منتجات مشابهة - هنا تم إصلاح الخطأ
   const similarProducts = useMemo(() => {
     if (!selectedItem) return []
     return products
-      .filter(item => 
+      .filter((item: any) => 
         item.id !== selectedItem.id && 
         (item.category === selectedItem.category || 
-         item.tags?.some(tag => selectedItem.tags?.includes(tag)))
+         item.tags?.some((tag: string) => selectedItem.tags?.includes(tag)))
       )
       .slice(0, 4)
   }, [selectedItem, products])
@@ -355,7 +354,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
             {showCompare && (
               <div className="space-y-3 mb-3">
                 {compareItems.map(id => {
-                  const item = products.find(p => p.id === id)
+                  const item = products.find((p: any) => p.id === id)
                   if (!item) return null
                   
                   return (
@@ -400,8 +399,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                     alert("يجب اختيار منتجين على الأقل للمقارنة")
                     return
                   }
-                  // تنفيذ المقارنة
-                  const items = compareItems.map(id => products.find(p => p.id === id))
+                  const items = compareItems.map(id => products.find((p: any) => p.id === id))
                   console.log("مقارنة المنتجات:", items)
                 }}
                 className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm md:text-base"
@@ -424,7 +422,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
           : '📋 عرض القائمة: تفاصيل أكثر للمنتجات'}
       </div>
 
-      {/* 🔧 زر شغل العمولة - ثابت في الأعلى */}
+      {/* زر شغل العمولة */}
       <div className="flex justify-center mb-4 sticky top-4 z-40">
         <button
           onClick={handleCommissionClick}
@@ -434,7 +432,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         </button>
       </div>
 
-      {/* 📞 شريط الاتصال السريع */}
+      {/* شريط الاتصال السريع */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-100 border border-green-200 rounded-xl p-4 mb-6 text-center">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -473,7 +471,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
             </button>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-3">
-            {recentlyViewed.map(item => (
+            {recentlyViewed.map((item: any) => (
               <div 
                 key={item.id}
                 onClick={() => {
@@ -637,7 +635,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         </div>
       )}
 
-      {/* Breadcrumbs - مخفي على الموبايل */}
+      {/* Breadcrumbs */}
       <div className="hidden lg:block text-sm text-muted-foreground mb-6 bg-secondary/30 p-3 rounded-lg">
         <button 
           onClick={() => router.push("/")} 
@@ -657,7 +655,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         )}
       </div>
 
-      {/* 🔍 Search and Filters Header - للشاشات الكبيرة فقط */}
+      {/* Search and Filters */}
       <div className="hidden lg:flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex-1">
           <div className="relative max-w-md">
@@ -707,7 +705,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         </div>
       </div>
 
-      {/* Advanced Filters - للشاشات الكبيرة فقط */}
+      {/* Advanced Filters */}
       {showFilters && (
         <div className="hidden lg:block bg-secondary/20 p-4 rounded-lg mb-6 animate-fadeIn">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -729,14 +727,14 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                 {filteredItems.length} منتج
               </div>
               <div className="text-xs text-gray-500 mt-1">
-                {filteredItems.filter(item => item.inStock).length} متوفر
+                {filteredItems.filter((item: any) => item.inStock).length} متوفر
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Category Filter - مع الأعداد الفعلية */}
+      {/* Category Filter */}
       <div className="mb-8">
         <h3 className="text-lg font-bold mb-4 text-center hidden sm:block">تصفح مجموعاتنا</h3>
         <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
@@ -783,7 +781,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
           {viewMode === 'grid' ? (
             // Grid View
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {currentItems.map((item) => {
+              {currentItems.map((item: any) => {
                 const isFavorite = favoriteItems.includes(item.id)
                 const inCompare = compareItems.includes(item.id)
                 const isRecentlyViewed = viewedItems.includes(item.id)
@@ -806,13 +804,11 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                       </div>
                     )}
                     
-                    {/* Image Container */}
                     <div
                       onClick={() => {
                         setSelectedItem(item)
                         setActiveImage(item.image)
                         setSelectedColor("")
-                        // إضافة للمنتجات التي تم عرضها
                         setViewedItems(prev => {
                           if (!prev.includes(item.id)) {
                             return [item.id, ...prev.slice(0, 9)]
@@ -823,7 +819,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                       }}
                       className="cursor-pointer relative"
                     >
-                      {/* Tags */}
                       {item.tags && item.tags.length > 0 && (
                         <div className="absolute top-3 right-3 z-10 flex flex-col gap-1">
                           {item.tags.map((tag: string, idx: number) => (
@@ -837,7 +832,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       )}
                       
-                      {/* Action Buttons Overlay */}
                       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
                         <button
                           onClick={(e) => toggleFavorite(item.id, e)}
@@ -907,7 +901,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       </div>
                       
-                      {/* Stock Status */}
                       {!item.inStock && (
                         <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
                           <span className="bg-white text-black px-4 py-2 rounded-lg font-bold">
@@ -929,7 +922,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                       </div>
                     </div>
 
-                    {/* Content */}
                     <div className="p-4 space-y-3">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -948,7 +940,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       </div>
 
-                      {/* Features */}
                       {item.features && item.features.length > 0 && (
                         <div className="space-y-1">
                           {item.features.slice(0, 2).map((feature: string, idx: number) => (
@@ -960,7 +951,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       )}
 
-                      {/* Rating and Stats */}
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-1">
                           <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -975,7 +965,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       </div>
 
-                      {/* Price Info - جاذبة للعميل */}
                       <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-3 rounded-lg">
                         <div className="flex items-center gap-2 mb-1">
                           <Tag className="w-4 h-4 text-primary" />
@@ -986,7 +975,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </p>
                       </div>
 
-                      {/* Details */}
                       <div className="text-xs text-gray-600 space-y-1">
                         <div className="flex items-center gap-2">
                           <Clock className="w-3 h-3" />
@@ -998,7 +986,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex gap-2 pt-2">
                         <button
                           onClick={(e) => {
@@ -1034,7 +1021,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
           ) : (
             // List View
             <div className="space-y-4">
-              {currentItems.map((item) => {
+              {currentItems.map((item: any) => {
                 const isFavorite = favoriteItems.includes(item.id)
                 const inCompare = compareItems.includes(item.id)
                 const isNew = new Date(item.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -1044,7 +1031,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                     key={item.id} 
                     className="group flex flex-col md:flex-row gap-4 rounded-xl overflow-hidden bg-card border hover:shadow-xl transition-all duration-300 p-4"
                   >
-                    {/* Image Container */}
                     <div className="cursor-pointer relative md:w-1/3">
                       {isNew && (
                         <div className="absolute top-3 right-3 z-10 px-2 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
@@ -1057,7 +1043,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           setSelectedItem(item)
                           setActiveImage(item.image)
                           setSelectedColor("")
-                          // إضافة للمنتجات التي تم عرضها
                           setViewedItems(prev => {
                             if (!prev.includes(item.id)) {
                               return [item.id, ...prev.slice(0, 9)]
@@ -1067,7 +1052,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           router.push(`/portfolio?product=${item.id}`, { scroll: false })
                         }}
                       >
-                        {/* Action Buttons Overlay */}
                         <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
                           <button
                             onClick={(e) => toggleFavorite(item.id, e)}
@@ -1090,7 +1074,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           </button>
                         </div>
                         
-                        {/* Stock Status */}
                         {!item.inStock && (
                           <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
                             <span className="bg-white text-black px-4 py-2 rounded-lg font-bold">
@@ -1112,7 +1095,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                       </div>
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1 p-2 space-y-4">
                       <div>
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3">
@@ -1146,7 +1128,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           </div>
                         </div>
                         
-                        {/* Rating and Stats */}
                         <div className="flex items-center gap-4 mb-3">
                           <div className="flex items-center gap-1">
                             <Star className="w-4 h-4 text-yellow-500 fill-current" />
@@ -1167,7 +1148,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           {item.description}
                         </p>
                         
-                        {/* Features */}
                         {item.features && item.features.length > 0 && (
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
                             {item.features.map((feature: string, idx: number) => (
@@ -1179,7 +1159,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           </div>
                         )}
                         
-                        {/* Details */}
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
                           <div className="flex items-center gap-2 text-sm">
                             <Clock className="w-4 h-4 text-gray-400" />
@@ -1200,7 +1179,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           </div>
                         </div>
                         
-                        {/* Details List */}
                         {item.details && item.details[0] && (
                           <div className="space-y-1 mb-4">
                             <h4 className="font-semibold text-sm">المواصفات:</h4>
@@ -1215,7 +1193,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                           </div>
                         )}
                         
-                        {/* Colors */}
                         {item.colors && item.colors.length > 0 && (
                           <div className="mb-4">
                             <h4 className="font-semibold text-sm mb-2">الألوان المتاحة:</h4>
@@ -1233,7 +1210,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                         )}
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex flex-wrap gap-2 pt-2">
                         <button
                           onClick={(e) => {
@@ -1385,7 +1361,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   
                   <p className="text-gray-600">{quickViewItem.description}</p>
                   
-                  {/* Price Info */}
                   <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Tag className="w-6 h-6 text-primary" />
@@ -1398,7 +1373,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                     </div>
                   </div>
                   
-                  {/* Features */}
                   {quickViewItem.features && quickViewItem.features.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-semibold">المميزات:</h4>
@@ -1433,7 +1407,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
         </div>
       )}
 
-      {/* Modal - المعدل ليكون مناسباً لجميع الأجهزة */}
+      {/* Selected Item Modal */}
       {selectedItem && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-start sm:items-center justify-center p-0 sm:p-4 overflow-auto">
           <div className="bg-background w-full h-full sm:h-auto sm:max-w-4xl sm:max-h-[95vh] sm:rounded-2xl relative sm:my-8 overflow-y-auto">
@@ -1524,7 +1498,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 </div>
 
-                {/* Price Info - جاذبة للعميل */}
                 <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="bg-primary text-white p-2 rounded-lg">
@@ -1540,7 +1513,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </p>
                 </div>
 
-                {/* Features */}
                 {selectedItem.features && selectedItem.features.length > 0 && (
                   <div className="space-y-3">
                     <h4 className="font-semibold text-base sm:text-lg flex items-center gap-2">
@@ -1558,7 +1530,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 )}
 
-                {/* Details List */}
                 {selectedItem.details && selectedItem.details[0] && (
                   <div className="space-y-2">
                     <h4 className="font-semibold text-base sm:text-lg">تفاصيل المنتج:</h4>
@@ -1573,7 +1544,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 )}
 
-                {/* Colors */}
                 {selectedItem.colors && selectedItem.colors.length > 0 && (
                   <div>
                     <h4 className="font-semibold text-base sm:text-lg mb-3">اختر اللون:</h4>
@@ -1595,7 +1565,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 )}
 
-                {/* Delivery Info */}
                 <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
                   <h4 className="font-semibold text-base sm:text-lg mb-2 flex items-center gap-2">
                     <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
@@ -1624,7 +1593,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 </div>
 
-                {/* Call to Action Banner */}
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
@@ -1635,7 +1603,6 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
                   </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="space-y-3 pt-4">
                   <button
                     onClick={handleWhatsAppClick}
@@ -1681,7 +1648,7 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
               <div className="border-t mt-6 pt-6 px-3 sm:px-4 md:px-6 pb-6">
                 <h3 className="text-lg sm:text-xl font-bold mb-4">منتجات مشابهة</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-                  {similarProducts.map((product) => (
+                  {similarProducts.map((product: any) => (
                     <div
                       key={product.id}
                       onClick={() => {
@@ -1775,18 +1742,16 @@ export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps
           -webkit-line-clamp: 2;
         }
 
-        /* تحسينات للموبايل */
         @media (max-width: 640px) {
           .sm\:hidden {
             display: none !important;
           }
           
           input, select, button {
-            font-size: 16px !important; /* منع التكبير في iOS */
+            font-size: 16px !important;
           }
         }
 
-        /* تحسينات للتابلت */
         @media (min-width: 641px) and (max-width: 1024px) {
           .md\:hidden {
             display: none !important;
