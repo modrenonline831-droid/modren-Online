@@ -94,10 +94,24 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
   
-  // ⭐ **نفس الأسماء اللي بعتها** ⭐
+  // ⭐ **صور الموقع اللي لسه في public** ⭐
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/logo-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "logo",
+        url: "/logo.png",
+      },
+    ],
   },
   
   robots: {
@@ -159,25 +173,28 @@ export default function RootLayout({
         <link rel="canonical" href={SITE_URL} />
         <meta name="format-detection" content="telephone=yes" />
         
-        {/* ⭐ **إضافة كل روابط الصور بنفس الأسماء** ⭐ */}
+        {/* ⭐ **صور الموقع اللي لسه في public** ⭐ */}
         
-        {/* Favicon */}
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        {/* Favicon - جميع الأحجام */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         
         {/* Apple Touch Icon */}
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
         
-        {/* Android/Chrome Icons */}
+        {/* Android/Chrome Icons - PWA */}
         <link rel="icon" href="/logo-192x192.png" type="image/png" sizes="192x192" />
         <link rel="icon" href="/logo-512x512.png" type="image/png" sizes="512x512" />
         
         {/* Logo */}
         <link rel="logo" href="/logo.png" type="image/png" />
         
-        {/* OG Image */}
+        {/* OG Image للمشاركة */}
         <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={`${SITE_NAME} - أثاث منزلي مودرن`} />
         
         {/* WhatsApp Button Animation */}
         <style>{`
