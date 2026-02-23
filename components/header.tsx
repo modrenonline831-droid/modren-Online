@@ -1,5 +1,6 @@
 "use client"
 
+import { supabase } from "@/lib/supabaseClient"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Menu, X, Phone, MessageCircle, ShoppingCart, Search, User, ChevronDown, Truck, Shield } from "lucide-react"
@@ -18,30 +19,74 @@ export function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+// القوائم
+const [navLinks, setNavLinks] = useState([
+  { label: "الرئيسية", href: "/", icon: "🏠" },
+  { label: "عنا", href: "/about", icon: "👥" },
+  { label: "سياسة الشحن", href: "/Delivery Policy", icon: "🚚" },
+  { label: "سياسة الأسترجاع", href: "/return-policy", icon: "↩️" },
+  { 
+    label: "المنتجات", 
+    href: "/portfolio",
+    icon: "🛋️",
+    submenu: [
+      { label: "أنترية مغلف", href: "/portfolio?category=أنترية مغلف", count: 0 },
+      { label: "ركن", href: "/portfolio?category=ركن", count: 0 },
+      { label: "طرابيزات", href: "/portfolio?category=طرابيزات", count: 0 },
+      { label: "جزمات", href: "/portfolio?category=جزمات", count: 0 },
+      { label: "فوتية", href: "/portfolio?category=فوتية", count: 0 },
+      { label: "كراسي", href: "/portfolio?category=كراسي", count: 0 }
+    ]
+  },
+  { label: "صمم بنفسك", href: "/pricing", icon: "🎨" },
+  { label: "اتصل بنا", href: "/contact", icon: "📞" }
+])
 
-  // القوائم
-  const navLinks = [
-    { label: "الرئيسية", href: "/", icon: "🏠" },
-	{ label: "عنا", href: "/about", icon: "👥" },
-	{ label: "سياسة الشحن", href: "/Delivery Policy", icon: "🚚" },
-	{ label: "سياسة الأسترجاع", href: "/return-policy", icon: "↩️" },
-    { 
-      label: "المنتجات", 
-      href: "/portfolio",
-      icon: "🛋️",
-      submenu: [
-        { label: "أنترية مغلف", href: "/portfolio?category=أنترية مغلف", count: 12 },
-        { label: "ركن", href: "/portfolio?category=ركن", count: 8 },
-        { label: "طرابيزات", href: "/portfolio?category=طرابيزات", count: 15 },
-        { label: "جزمات", href: "/portfolio?category=جزمات", count: 10 },
-        { label: "فوتية", href: "/portfolio?category=فوتية", count: 7 },
-        { label: "كراسي", href: "/portfolio?category=كراسي", count: 9 }
-      ]
-    },
-    { label: "صمم بنفسك", href: "/pricing", icon: "🎨" },
+// جلب الأعداد الفعلية من Supabase
+useEffect(() => {
+  async function fetchCategoryCounts() {
+    const { data, error } = await supabase
+      .from('products')
+      .select('category')
     
-    { label: "اتصل بنا", href: "/contact", icon: "📞" }
-  ]
+    if (error) {
+      console.error('Error fetching categories:', error)
+      return
+    }
+
+    // حساب عدد المنتجات في كل فئة
+    const counts: Record<string, number> = {
+      "أنترية مغلف": 0,
+      "ركن": 0,
+      "طرابيزات": 0,
+      "جزمات": 0,
+      "فوتية": 0,
+      "كراسي": 0
+    }
+
+    data?.forEach(item => {
+      if (counts.hasOwnProperty(item.category)) {
+        counts[item.category]++
+      }
+    })
+
+    // تحديث القوائم بالأعداد الفعلية
+    setNavLinks(prevLinks => prevLinks.map(link => {
+      if (link.label === "المنتجات" && link.submenu) {
+        return {
+          ...link,
+          submenu: link.submenu.map(subItem => ({
+            ...subItem,
+            count: counts[subItem.label] || 0
+          }))
+        }
+      }
+      return link
+    }))
+  }
+
+  fetchCategoryCounts()
+}, [])
 
   const handleContactClick = (method: string) => {
     if (method === 'whatsapp') {

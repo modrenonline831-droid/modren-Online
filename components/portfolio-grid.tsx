@@ -5,529 +5,11 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Share2, Heart, Filter, Eye, ShoppingBag, Clock, Shield, Truck, Star, GitCompare as Compare, ChevronDown, ChevronUp, Search, X, MessageCircle, Phone, Tag, Award, Zap, Sparkles, Gift } from "lucide-react"
 
-// أضف واجهة Props
+// واجهة Props - نضيف products
 interface PortfolioGridProps {
   viewMode: 'grid' | 'list';
+  products: any[]; // البيانات القادمة من Supabase
 }
-
-const portfolioItems = [
-  {
-    id: 1,
-    title: "طقم روسكي",
-    category: "أنترية مغلف",
-    description: "مكون من 4 قطع 2 كنب 2 فوتية - تصنيع فاخر بجودة عالية",
-    image: "/1515.jpg",
-    images: ["/1515.jpg", "/1516.jpg", "/3224.jpg", "/4456.jpg", "/5928.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر عالي الجودة", "سفنج: درجة أولى 38", "قماش: وتر بروف مقاوم للمياه والبقع"],
-    priceInfo: "اسعار تنافسية جداً",
-    features: ["ضمان 5 سنوات", "تصميم عصري فاخر", "سهولة في التركيب", "خدمة ما بعد البيع"],
-    inStock: true,
-    tags: ["أفضل مبيع", "الأكثر طلباً"],
-    dimensions: "متاح جميع المقاسات حسب طلبك",
-    estimatedDelivery: "15-20 يوم",
-    views: 245,
-    orders: 18,
-    rating: 4.8,
-    reviews: 24,
-    createdAt: "2023-12-15",
-    lastOrder: "2 يوم مضى",
-    icon: "🛋️"
-  },
-  {
-    id: 2,
-    title: "طقم بلو باك",
-    category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 2 فوتية - أناقة واستدامة",
-    image: "/momo.jpg",
-    images: ["/momo.jpg", "/refo.jpg","/koko.jpg","/elzox.jpg","/plmk.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر صلب", "سفنج: ألماني 38", "قماش: وتر بروف مقاوم للماء"],
-    priceInfo: "عروض خاصة للكميات",
-    features: ["توصيل مجاني", "تركيب مجاني", "ضمان شامل"],
-    inStock: true,
-    tags: ["جديد", "مميز"],
-    dimensions: "متاح جميع المقاسات",
-    estimatedDelivery: "15-20 يوم",
-    views: 189,
-    orders: 12,
-    rating: 4.5,
-    reviews: 18,
-    createdAt: "2024-01-10",
-    lastOrder: "3 يوم مضى",
-    icon: "🛋️"
-  },
-  {
-    id: 3,
-    title: "طقم أنترية مودرن",
-    category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 2 فوتية - تصميم عصري راقي",
-    image: "/zezo.jpg",
-    images: ["/zezo.jpg", "/kkj.jpg", "/zezoo.jpg", "/008866.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر درجة أولى", "سفنج: 38 عالي الكثافة", "قماش: وتر بروف ممتاز"],
-    priceInfo: "خصومات للطلبات الكبيرة",
-    features: ["تصميم أوروبي", "مواد صديقة للبيئة", "سهولة الصيانة"],
-    inStock: true,
-    tags: ["جديد", "عصري"],
-    dimensions: "متاح جميع المقاسات",
-    estimatedDelivery: "15-20 يوم",
-    views: 321,
-    orders: 25,
-    rating: 4.9,
-    reviews: 32,
-    createdAt: "2024-01-05",
-    lastOrder: "1 يوم مضى",
-    icon: "🛋️"
-  },
-  {
-    id: 6,
-    title: "ركنة ميكانيزم مودرين",
-    category: "ركن",
-    description: "ركنة مكانيزم - راحة لا مثيل لها",
-    image: "/8879.jpg",
-    images: ["/8879.jpg", "/98609.jpg", "/0099.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر قوي", "سفنج: طبي 38", "قماش: وتر بروف فاخر"],
-    priceInfo: "عروض تمويل متاحة",
-    features: ["ميكانيزم ألماني", "ضمان 7 سنوات", "خدمة صيانة سريعة"],
-    inStock: false,
-    tags: ["مميز"],
-    dimensions: "2×3 - متاح مقاسات أخرى",
-    estimatedDelivery: "15-20 يوم",
-    views: 156,
-    orders: 8,
-    rating: 4.2,
-    reviews: 12,
-    createdAt: "2023-11-20",
-    lastOrder: "10 يوم مضى",
-    icon: "🪑"
-  },
-  {
-    id: 4,
-    title: "ركنة بلو باك",
-    category: "ركن",
-    description: "ركنة ميكانيزم - أناقة وعملية",
-    image: "/2345.jpg",
-    images: ["/2345.jpg", "/5647.jpg", "/7777.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر ممتاز", "سفنج: 38 مريح", "قماش: وتر بروف مقاوم"],
-    priceInfo: "خصم خاص لأول طلب",
-    features: ["توصيل سريع", "تركيب احترافي", "ضمان شامل"],
-    inStock: true,
-    tags: ["جديد","أفضل مبيع"],
-    dimensions: "2×3",
-    estimatedDelivery: "15-20 يوم",
-    views: 278,
-    orders: 20,
-    rating: 4.7,
-    reviews: 28,
-    createdAt: "2024-01-15",
-    lastOrder: "2 يوم مضى",
-    icon: "🪑"
-  },
-  {
-    id: 5,
-    title: "ركنة بابلز",
-    category: "ركن",
-    description: "ركنة بابلز - تصميم فريد ومميز",
-    image: "/9987.jpg",
-    images: ["/9987.jpg", "/0934.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر عالي الجودة", "سفنج: 38 فاخر", "قماش: وتر بروف راقي"],
-    priceInfo: "عروض مخفضة لفترة محدودة",
-    features: ["تصميم متميز", "جودة فائقة", "خدمة عملاء ممتازة"],
-    inStock: true,
-    tags: ["جديد"],
-    dimensions: "2×3",
-    estimatedDelivery: "15-20 يوم",
-    views: 194,
-    orders: 14,
-    rating: 4.6,
-    reviews: 16,
-    createdAt: "2024-01-12",
-    lastOrder: "4 يوم مضى",
-    icon: "🪑"
-  },
-  {
-    id: 7,
-    title: "انترية لاريكس",
-    category: "أنترية مغلف",
-    description: "مكون من 2 كنبة و 1 فوتية - فخامة وإبداع",
-    image: "/amr.jpg",
-    images: ["/amr.jpg", "/09km.jpg", "/moon.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب: زان أحمر صلب", "سفنج: 38 عالي الجودة", "قماش: وتر بروف فاخر"],
-    priceInfo: "أسعار لا تقبل المنافسة",
-    features: ["تصميم كلاسيكي", "متانة عالية", "راحة مطلقة"],
-    inStock: true,
-    tags: ["مميز"],
-    dimensions: "متاح جميع المقاسات",
-    estimatedDelivery: "15-20 يوم",
-    views: 167,
-    orders: 9,
-    rating: 4.3,
-    reviews: 14,
-    createdAt: "2023-12-25",
-    lastOrder: "6 يوم مضى",
-    icon: "🛋️"
-  },
-  {
-    id: 9,
-    title: "طرابيزة الريشة",
-    category: "طرابيزات",
-    description: "من طرابيزة متفرغة علي شكل ريشة - إبداع في التصميم",
-    image: "/n1.jpg",
-    images: ["/n1.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم فني مبتكر", "خشب زان طبيعي", "تشطيب فاخر"],
-    priceInfo: "عروض شاملة مع الكراسي",
-    features: ["تصميم فريد", "جودة تصنيع عالية", "مناسب لكل المساحات"],
-    inStock: true,
-    tags: ["تصميم فريد"],
-    dimensions: "120×80 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 89,
-    orders: 15,
-    rating: 4.4,
-    reviews: 10,
-    createdAt: "2024-01-08",
-    lastOrder: "3 يوم مضى",
-    icon: "🪵"
-  },
-  {
-    id: 10,
-    title: "طرابيزة قطعتين",
-    category: "طرابيزات",
-    description: "طرابيزة زان كبس - متانة وأناقة",
-    image: "/zse.jpg",
-    images: ["/zse.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["زان كبس عالي الجودة", "تشطيب احترافي", "تصميم عملي"],
-    priceInfo: "عروض تركيب مجاني",
-    features: ["متعددة الاستخدامات", "سهلة التنظيف", "مقاسات متنوعة"],
-    inStock: true,
-    tags: ["عملي"],
-    dimensions: "100×60 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 76,
-    orders: 11,
-    rating: 4.1,
-    reviews: 8,
-    createdAt: "2023-12-30",
-    lastOrder: "5 يوم مضى",
-    icon: "🪵"
-  },
-  {
-    id: 11,
-    title: "طرابيزة مربعة زان كبس",
-    category: "طرابيزات",
-    description: "طرابيزة زان كبس - كلاسيكية وأنيقة",
-    image: "/esz.jpg",
-    images: ["/esz.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب زان كبس ممتاز", "تشطيب عالي الجودة", "تصميم متناسق"],
-    priceInfo: "خصم عند الشراء بالجملة",
-    features: ["مناسبة للمكاتب", "تصميم عصري", "سهولة الحركة"],
-    inStock: true,
-    tags: ["عملي"],
-    dimensions: "90×90 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 67,
-    orders: 9,
-    rating: 4.0,
-    reviews: 7,
-    createdAt: "2024-01-03",
-    lastOrder: "7 يوم مضى",
-    icon: "🪵"
-  },
-  {
-    id: 12,
-    title: "كولكشن جديد",
-    category: "طرابيزات",
-    description: "طرابيزة زان كبس - مجموعة مميزة",
-    image: "/wasd.jpg",
-    images: ["/wasd.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم مبتكر", "جودة عالية", "ألوان متنوعة"],
-    priceInfo: "عروض تمويل مرنة",
-    features: ["مجموعة متكاملة", "تشطيب فاخر", "ضمان الجودة"],
-    inStock: true,
-    tags: ["جديد", "مجموعة"],
-    dimensions: "110×70 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 92,
-    orders: 13,
-    rating: 4.5,
-    reviews: 11,
-    createdAt: "2024-01-20",
-    lastOrder: "1 يوم مضى",
-    icon: "🪵"
-  },
-  {
-    id: 13,
-    title: "جزامة جرار",
-    category: "جزمات",
-    description: "جزامة جرار بمراية - تنظيم وتخزين مثالي",
-    image: "/mn.jpg",
-    images: ["/mn.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم جرار عملي", "مرآة كبيرة", "سعة تخزين كبيرة"],
-    priceInfo: "عروض تركيب مجاني",
-    features: ["تنظيم محكم", "سهولة الوصول", "تصميم مدمج"],
-    inStock: true,
-    tags: ["عملي"],
-    dimensions: "100×40×180 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 123,
-    orders: 17,
-    rating: 4.6,
-    reviews: 19,
-    createdAt: "2024-01-02",
-    lastOrder: "2 يوم مضى",
-    icon: "👞"
-  },
-  {
-    id: 14,
-    title: "جزامة مودرن",
-    category: "جزمات",
-    description: "رف أحذية شديد التحمل ذو سعة كبيرة - أناقة وعملية",
-    image: "/qwe.jpg",
-    images: ["/qwe.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم عصري", "متانة عالية", "سعة تخزين كبيرة"],
-    priceInfo: "خصم خاص للتصميمات المخصصة",
-    features: ["تصميم مودرن", "تنظيم ذكي", "سهولة التركيب"],
-    inStock: true,
-    tags: ["مودرن", "عملي"],
-    dimensions: "120×45×190 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 145,
-    orders: 21,
-    rating: 4.8,
-    reviews: 22,
-    createdAt: "2024-01-18",
-    lastOrder: "1 يوم مضى",
-    icon: "👞"
-  },
-  {
-    id: 15,
-    title: "جزامة مودرن",
-    category: "جزمات",
-    description: "جزامة مودرن 100*120 = كعب 10cm - تصميم عصري",
-    image: "/moka.jpg",
-    images: ["/moka.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم عصري", "قاس مناسب", "جودة تصنيع"],
-    priceInfo: "عروض للطلبات المتعددة",
-    features: ["تصميم فريد", "تنظيم محكم", "سهولة الصيانة"],
-    inStock: false,
-    tags: ["مودرن"],
-    dimensions: "100×40×120 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 98,
-    orders: 14,
-    rating: 4.3,
-    reviews: 13,
-    createdAt: "2024-01-09",
-    lastOrder: "8 يوم مضى",
-    icon: "👞"
-  },
-  {
-    id: 16,
-    title: "فوتية مودرن",
-    category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - راحة وأناقة",
-    image: "/qwert.jpg",
-    images: ["/qwert.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["خشب زان أحمر", "تشطيب فاخر", "تصميم مريح"],
-    priceInfo: "عروض شاملة مع الطقم",
-    features: ["راحة فائقة", "تصميم عصري", "جودة مواد عالية"],
-    inStock: true,
-    tags: ["مريح"],
-    dimensions: "60×60 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 112,
-    orders: 16,
-    rating: 4.4,
-    reviews: 15,
-    createdAt: "2024-01-14",
-    lastOrder: "3 يوم مضى",
-    icon: "🛋"
-  },
-  {
-    id: 17,
-    title: "فوتية مودرن2",
-    category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - تصميم عملي",
-    image: "/poiu.jpg",
-    images: ["/poiu.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم مدمج", "راحة مثالية", "جودة تصنيع"],
-    priceInfo: "عروض للكميات",
-    features: ["تصميم عملي", "سهولة الحركة", "متانة عالية"],
-    inStock: true,
-    tags: ["عملي"],
-    dimensions: "55×55 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 87,
-    orders: 12,
-    rating: 4.2,
-    reviews: 11,
-    createdAt: "2023-12-28",
-    lastOrder: "6 يوم مضى",
-    icon: "🛋"
-  },
-  {
-    id: 18,
-    title: "فوتية مودرن3",
-    category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - أناقة وبساطة",
-    image: "/sss.jpg",
-    images: ["/sss.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم متناسق", "راحة مطلقة", "تشطيب دقيق"],
-    priceInfo: "خصومات موسمية",
-    features: ["تصميم متناسق", "جودة فائقة", "سهولة التنظيف"],
-    inStock: true,
-    tags: ["أنيق"],
-    dimensions: "65×65 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 94,
-    orders: 13,
-    rating: 4.1,
-    reviews: 9,
-    createdAt: "2024-01-06",
-    lastOrder: "4 يوم مضى",
-    icon: "🛋"
-  },
-  {
-    id: 19,
-    title: "فوتية مودرن4",
-    category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - فخامة وجودة",
-    image: "/plm.jpg",
-    images: ["/plm.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["مواد فاخرة", "تصميم متميز", "راحة استثنائية"],
-    priceInfo: "عروض تمويل مريحة",
-    features: ["فخامة وجودة", "تصميم متميز", "ضمان طويل الأمد"],
-    inStock: true,
-    tags: ["فاخر"],
-    dimensions: "70×70 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 103,
-    orders: 14,
-    rating: 4.5,
-    reviews: 12,
-    createdAt: "2024-01-16",
-    lastOrder: "2 يوم مضى",
-    icon: "🛋"
-  },
-  {
-    id: 20,
-    title: "فوتية مودرن5",
-    category: "فوتية",
-    description: "فوتي مودرن خشب زان أحمر تشطيب أعلى فنش - عملي ومريح",
-    image: "/klm.jpg",
-    images: ["/klm.jpg", "/klm2.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم مبتكر", "راحة فائقة", "جودة تصنيع"],
-    priceInfo: "عروض خاصة للمشاريع",
-    features: ["تصميم مبتكر", "متانة عالية", "تنوع في الألوان"],
-    inStock: true,
-    tags: ["مبتكر"],
-    dimensions: "50×50 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 118,
-    orders: 17,
-    rating: 4.7,
-    reviews: 16,
-    createdAt: "2024-01-22",
-    lastOrder: "1 يوم مضى",
-    icon: "🛋"
-  },
-  {
-    id: 21,
-    title: "كرسي مودرن",
-    category: "كراسي",
-    description: "كرسي زان قماشة فوطة - راحة وأناقة",
-    image: "/meca.jpg",
-    images: ["/meca.jpg", "/meca2.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["زان عالي الجودة", "قماشة فوطة مريحة", "تصميم عصري"],
-    priceInfo: "عروض عند الشراء بكميات",
-    features: ["راحة استثنائية", "تصميم عصري", "متانة فائقة"],
-    inStock: true,
-    tags: ["أفضل مبيع", "مريح"],
-    dimensions: "50×50×85 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 156,
-    orders: 22,
-    rating: 4.9,
-    reviews: 26,
-    createdAt: "2024-01-11",
-    lastOrder: "1 يوم مضى",
-    icon: "💺"
-  },
-  {
-    id: 22,
-    title: "كرسي مودرن2",
-    category: "كراسي",
-    description: "كرسي زان قماشة فوطة - تصميم كلاسيكي معاصر",
-    image: "/ioi.jpg",
-    images: ["/ioi.jpg", "/ioi2.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم متميز", "مواد عالية الجودة", "راحة مثالية"],
-    priceInfo: "خصومات للمطاعم والمقاهي",
-    features: ["مناسب للمكاتب", "راحة طويلة الأمد", "تصميم أنيق"],
-    inStock: true,
-    tags: ["عملي"],
-    dimensions: "55×55×90 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 134,
-    orders: 19,
-    rating: 4.6,
-    reviews: 18,
-    createdAt: "2024-01-13",
-    lastOrder: "3 يوم مضى",
-    icon: "💺"
-  },
-  {
-    id: 23,
-    title: "كرسي مودرن3",
-    category: "كراسي",
-    description: "كرسي زان قماشة فوطة - بساطة وأناقة",
-    image: "/asd.jpg",
-    images: ["/asd.jpg"],
-    colors: ["متاح جميع الألوان"],
-    details: ["تصميم بسيط وأنيق", "راحة عملية", "جودة تصنيع"],
-    priceInfo: "عروض التوصيل المجاني",
-    features: ["تصميم مدمج", "سهولة التخزين", "متعدد الاستخدامات"],
-    inStock: true,
-    tags: ["بسيط"],
-    dimensions: "45×45×80 سم",
-    estimatedDelivery: "10-15 يوم",
-    views: 109,
-    orders: 15,
-    rating: 4.3,
-    reviews: 13,
-    createdAt: "2024-01-07",
-    lastOrder: "5 يوم مضى",
-    icon: "💺"
-  },
-]
-
-const categories = [
-  { id: "الكل", name: "الكل", icon: "📦", count: 23 },
-  { id: "أنترية مغلف", name: "أنترية مغلف", icon: "🛋️", count: 7 },
-  { id: "ركن", name: "ركن", icon: "🪑", count: 3 },
-  { id: "طرابيزات", name: "طرابيزات", icon: "🪵", count: 4 },
-  { id: "جزمات", name: "جزمات", icon: "👞", count: 3 },
-  { id: "فوتية", name: "فوتية", icon: "🛋", count: 6 },
-  { id: "كراسي", name: "كراسي", icon: "💺", count: 3 }
-]
 
 const sortOptions = [
   { value: "default", label: "الترتيب الافتراضي" },
@@ -537,7 +19,7 @@ const sortOptions = [
   { value: "views", label: "الأكثر مشاهدة" }
 ]
 
-export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
+export default function PortfolioGrid({ viewMode, products }: PortfolioGridProps) {
   const router = useRouter()
   const observerRef = useRef<IntersectionObserver | null>(null)
 
@@ -563,6 +45,38 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
   const itemsPerPage = 9
+
+  // ✅ حساب العدد الفعلي لكل فئة من المنتجات
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      "الكل": products.length,
+      "أنترية مغلف": 0,
+      "ركن": 0,
+      "طرابيزات": 0,
+      "جزمات": 0,
+      "فوتية": 0,
+      "كراسي": 0
+    }
+
+    products.forEach(item => {
+      if (counts.hasOwnProperty(item.category)) {
+        counts[item.category]++
+      }
+    })
+
+    return counts
+  }, [products])
+
+  // ✅ الفئات مع الأرقام الفعلية
+  const categories = useMemo(() => [
+    { id: "الكل", name: "الكل", icon: "📦", count: categoryCounts["الكل"] },
+    { id: "أنترية مغلف", name: "أنترية مغلف", icon: "🛋️", count: categoryCounts["أنترية مغلف"] },
+    { id: "ركن", name: "ركن", icon: "🪑", count: categoryCounts["ركن"] },
+    { id: "طرابيزات", name: "طرابيزات", icon: "🪵", count: categoryCounts["طرابيزات"] },
+    { id: "جزمات", name: "جزمات", icon: "👞", count: categoryCounts["جزمات"] },
+    { id: "فوتية", name: "فوتية", icon: "🛋", count: categoryCounts["فوتية"] },
+    { id: "كراسي", name: "كراسي", icon: "💺", count: categoryCounts["كراسي"] }
+  ], [categoryCounts])
 
   // تحميل المفضلة والمقارنة من localStorage
   useEffect(() => {
@@ -662,7 +176,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
     const productId = params.get("product")
     
     if (productId) {
-      const item = portfolioItems.find((p) => p.id === Number(productId))
+      const item = products.find((p) => p.id === Number(productId))
       if (item) {
         setSelectedItem(item)
         setActiveImage(item.image)
@@ -681,16 +195,16 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
     if (categoryParam) {
       setActiveCategory(decodeURIComponent(categoryParam))
     }
-  }, [])
+  }, [products])
 
   // فلترة وترتيب المنتجات
   const filteredItems = useMemo(() => {
-    return portfolioItems
+    return products
       .filter((item) => {
         const matchesCategory = activeCategory === "الكل" || item.category === activeCategory
         const matchesSearch = searchQuery === "" || 
           item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.category.toLowerCase().includes(searchQuery.toLowerCase())
         const matchesStock = !inStockOnly || item.inStock
         
@@ -710,7 +224,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             return 0
         }
       })
-  }, [activeCategory, searchQuery, sortBy, inStockOnly])
+  }, [products, activeCategory, searchQuery, sortBy, inStockOnly])
 
   // حساب الصفحات
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
@@ -793,21 +307,21 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
   // المنتجات التي تم عرضها مؤخراً
   const recentlyViewed = useMemo(() => {
     return viewedItems
-      .map(id => portfolioItems.find(item => item.id === id))
+      .map(id => products.find(item => item.id === id))
       .filter(item => item !== undefined)
-  }, [viewedItems])
+  }, [viewedItems, products])
 
   // منتجات مشابهة للمنتج المحدد
   const similarProducts = useMemo(() => {
     if (!selectedItem) return []
-    return portfolioItems
+    return products
       .filter(item => 
         item.id !== selectedItem.id && 
         (item.category === selectedItem.category || 
-         item.tags.some(tag => selectedItem.tags.includes(tag)))
+         item.tags?.some(tag => selectedItem.tags?.includes(tag)))
       )
       .slice(0, 4)
-  }, [selectedItem])
+  }, [selectedItem, products])
 
   return (
     <div className="space-y-8 px-3 md:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -841,7 +355,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
             {showCompare && (
               <div className="space-y-3 mb-3">
                 {compareItems.map(id => {
-                  const item = portfolioItems.find(p => p.id === id)
+                  const item = products.find(p => p.id === id)
                   if (!item) return null
                   
                   return (
@@ -887,7 +401,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                     return
                   }
                   // تنفيذ المقارنة
-                  const items = compareItems.map(id => portfolioItems.find(p => p.id === id))
+                  const items = compareItems.map(id => products.find(p => p.id === id))
                   console.log("مقارنة المنتجات:", items)
                 }}
                 className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm md:text-base"
@@ -1222,7 +736,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
         </div>
       )}
 
-      {/* Category Filter - تصميم جديد مع أيقونات كبيرة */}
+      {/* Category Filter - مع الأعداد الفعلية */}
       <div className="mb-8">
         <h3 className="text-lg font-bold mb-4 text-center hidden sm:block">تصفح مجموعاتنا</h3>
         <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
@@ -1310,9 +824,9 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                       className="cursor-pointer relative"
                     >
                       {/* Tags */}
-                      {item.tags.length > 0 && (
+                      {item.tags && item.tags.length > 0 && (
                         <div className="absolute top-3 right-3 z-10 flex flex-col gap-1">
-                          {item.tags.map((tag, idx) => (
+                          {item.tags.map((tag: string, idx: number) => (
                             <span 
                               key={idx}
                               className="px-2 py-1 text-xs font-bold rounded-full bg-red-500 text-white"
@@ -1687,7 +1201,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         </div>
                         
                         {/* Details List */}
-                        {item.details[0] && (
+                        {item.details && item.details[0] && (
                           <div className="space-y-1 mb-4">
                             <h4 className="font-semibold text-sm">المواصفات:</h4>
                             <ul className="text-sm space-y-1">
@@ -1702,19 +1216,21 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                         )}
                         
                         {/* Colors */}
-                        <div className="mb-4">
-                          <h4 className="font-semibold text-sm mb-2">الألوان المتاحة:</h4>
-                          <div className="flex gap-2 flex-wrap">
-                            {item.colors.map((color: string, index: number) => (
-                              <span
-                                key={index}
-                                className="px-3 py-1 rounded-full bg-secondary text-sm"
-                              >
-                                {color}
-                              </span>
-                            ))}
+                        {item.colors && item.colors.length > 0 && (
+                          <div className="mb-4">
+                            <h4 className="font-semibold text-sm mb-2">الألوان المتاحة:</h4>
+                            <div className="flex gap-2 flex-wrap">
+                              {item.colors.map((color: string, index: number) => (
+                                <span
+                                  key={index}
+                                  className="px-3 py-1 rounded-full bg-secondary text-sm"
+                                >
+                                  {color}
+                                </span>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* Action Buttons */}
@@ -1952,7 +1468,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                 </div>
                 
                 <div className="flex gap-2 overflow-x-auto pb-2 px-1">
-                  {selectedItem.images.map((img: string, index: number) => (
+                  {selectedItem.images && selectedItem.images.map((img: string, index: number) => (
                     <div
                       key={index}
                       onClick={() => setActiveImage(img)}
@@ -2043,7 +1559,7 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                 )}
 
                 {/* Details List */}
-                {selectedItem.details[0] && (
+                {selectedItem.details && selectedItem.details[0] && (
                   <div className="space-y-2">
                     <h4 className="font-semibold text-base sm:text-lg">تفاصيل المنتج:</h4>
                     <ul className="space-y-1 text-sm sm:text-base">
@@ -2058,24 +1574,26 @@ export default function PortfolioGrid({ viewMode }: PortfolioGridProps) {
                 )}
 
                 {/* Colors */}
-                <div>
-                  <h4 className="font-semibold text-base sm:text-lg mb-3">اختر اللون:</h4>
-                  <div className="flex gap-2 sm:gap-3 flex-wrap">
-                    {selectedItem.colors.map((color: string, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedColor(color)}
-                        className={`px-3 sm:px-4 py-2 rounded-full border text-sm transition-all ${
-                          selectedColor === color
-                            ? "bg-primary text-primary-foreground border-primary scale-105"
-                            : "bg-secondary hover:bg-secondary/80"
-                        }`}
-                      >
-                        {color}
-                      </button>
-                    ))}
+                {selectedItem.colors && selectedItem.colors.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-base sm:text-lg mb-3">اختر اللون:</h4>
+                    <div className="flex gap-2 sm:gap-3 flex-wrap">
+                      {selectedItem.colors.map((color: string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedColor(color)}
+                          className={`px-3 sm:px-4 py-2 rounded-full border text-sm transition-all ${
+                            selectedColor === color
+                              ? "bg-primary text-primary-foreground border-primary scale-105"
+                              : "bg-secondary hover:bg-secondary/80"
+                          }`}
+                        >
+                          {color}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Delivery Info */}
                 <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">

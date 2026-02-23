@@ -1,14 +1,36 @@
 "use client"
 
-import { Suspense, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import PortfolioGrid from "@/components/portfolio-grid"
 import { Sparkles, Shield, Truck, Award, ChevronDown, Filter, Grid, List } from "lucide-react"
+import { supabase } from "@/lib/supabaseClient"
 
 export default function PortfolioPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [products, setProducts] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // جلب المنتجات من Supabase
+  useEffect(() => {
+    async function fetchProducts() {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('createdAt', { ascending: false })
+      
+      if (error) {
+        console.error('Error fetching products:', error)
+      } else {
+        setProducts(data || [])
+      }
+      setLoading(false)
+    }
+
+    fetchProducts()
+  }, [])
 
   // تتبع التمرير لزر العودة للأعلى
   useEffect(() => {
@@ -23,6 +45,17 @@ export default function PortfolioPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">جاري تحميل المنتجات...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-secondary/5 to-background">
       <Header />
@@ -30,7 +63,6 @@ export default function PortfolioPage() {
       <main className="flex-1">
         {/* Page Header */}
         <section className="relative py-12 md:py-20 overflow-hidden">
-          {/* Background Effects */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full -translate-x-48 -translate-y-48"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full translate-x-48 translate-y-48"></div>
@@ -93,7 +125,7 @@ export default function PortfolioPage() {
                   <span className="text-sm font-medium text-gray-700">فلتر المنتجات</span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  <span className="font-bold text-primary">23</span> منتج متاح
+                  <span className="font-bold text-primary">{products.length}</span> منتج متاح
                 </div>
               </div>
               
@@ -123,23 +155,7 @@ export default function PortfolioPage() {
         {/* Portfolio Grid Section */}
         <section className="py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-            <Suspense fallback={
-              <div className="text-center py-20 space-y-6">
-                <div className="relative inline-block">
-                  <div className="w-20 h-20 border-4 border-primary/20 rounded-full"></div>
-                  <div className="absolute top-0 left-0 w-20 h-20 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                </div>
-                <div>
-                  <p className="text-xl font-semibold text-gray-900 mb-2">جاري تحميل المنتجات...</p>
-                  <p className="text-gray-600">نعدك بأفضل تجربة تسوق</p>
-                </div>
-                <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden mx-auto">
-                  <div className="h-full bg-gradient-to-r from-primary to-primary/60 animate-pulse"></div>
-                </div>
-              </div>
-            }>
-              <PortfolioGrid viewMode={viewMode} />
-            </Suspense>
+            <PortfolioGrid viewMode={viewMode} products={products} />
           </div>
         </section>
 
